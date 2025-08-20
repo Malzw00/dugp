@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",  
+        "paths": {
+            "*" : ["types/*"],
+            "@root/*": ["./*"],
+            "@utils/*": ["src/utils/*"],
+            "@controllers/*": ["src/controllers/*"],
+            "@config/*": ["src/config/*"],
+            "@middlewares/*": ["src/middlewares/*"],
+            "@routes/*": ["src/routes/*"],
+            "@models/*": ["src/models/*"]
+        }
+    },
+    "include": ["**/*", "types"]
+}
