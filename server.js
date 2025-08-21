@@ -13,13 +13,16 @@ const HOST = process.env.HOST || '0.0.0.0';
 async function startServer() {
     try {
         // Test database connection
+        console.log('Test Database Connection ...')
         const connected = await testConnection();
         if (!connected) throw new Error('Database connection failed');
-
+        
         // Sync models (create/update tables)
+        console.log('Sync Database ...')
         await syncDatabase();
-
+        
         // Start Express server
+        console.log('Start Server ...')
         const server = expressApp.listen(PORT, HOST, () => {
             console.log(`Server is running on http://${HOST}:${PORT}`);
         });
