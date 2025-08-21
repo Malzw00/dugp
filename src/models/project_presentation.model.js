@@ -13,11 +13,11 @@ module.exports = function (sequelize) {
         project_id: { 
             type: DataTypes.INTEGER, 
             allowNull: false,
-            references: { model: 'projects_tb', key: 'project_id' },
-            onDelete: 'CASCADE'
+            // references: { model: 'projects_tb', key: 'project_id' },
+            // onDelete: 'CASCADE'
         },
     }, {
-        tableName: 'project_presentation_tb',
+        tableName: 'project_presentations_tb',
         timestamps: true,
         underscored: true,
     });

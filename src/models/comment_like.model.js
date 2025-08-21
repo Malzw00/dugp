@@ -8,14 +8,14 @@ module.exports = function (sequelize) {
         account_id: { 
             type: DataTypes.INTEGER, 
             allowNull: true, 
-            references: { model: 'accounts_tb', key: 'account_id' },
-            onDelete: 'CASCADE'
+            // references: { model: 'accounts_tb', key: 'account_id' },
+            // onDelete: 'CASCADE'
         },
         comment_id: { 
             type: DataTypes.INTEGER, 
             allowNull: true, 
-            references: { model: 'comments_tb', key: 'comment_id' },
-            onDelete: 'CASCADE'
+            // references: { model: 'comments_tb', key: 'comment_id' },
+            // onDelete: 'CASCADE'
         },
     }, {
         tableName: 'comment_likes_tb',

@@ -17,22 +17,22 @@ module.exports = function (sequelize) {
         department_id: { 
             type: DataTypes.INTEGER, 
             allowNull: false,
-            references: { model: 'departments_tb', key: 'department_id' },
-            onDelete: 'RESTRICT'
+            // references: { model: 'departments_tb', key: 'department_id' },
+            // onDelete: 'RESTRICT'
         },
         account_id: { 
             type: DataTypes.INTEGER, 
             allowNull: true, 
             defaultValue: null,
-            references: { model: 'accounts_tb', key: 'account_id' },
-            onDelete: 'SET NULL'
+            // references: { model: 'accounts_tb', key: 'account_id' },
+            // onDelete: 'SET NULL'
         },
         profile_image_id: { 
             type: DataTypes.INTEGER, 
             allowNull: true, 
             defaultValue: null,
-            references: { model: 'images_tb', key: 'image_id' },
-            onDelete: 'SET NULL'
+            // references: { model: 'images_tb', key: 'image_id' },
+            // onDelete: 'SET NULL'
         },
     }, {
         tableName: 'students_tb',

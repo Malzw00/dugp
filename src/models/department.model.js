@@ -13,11 +13,11 @@ module.exports = function (sequelize) {
         collage_id: { 
             type: DataTypes.INTEGER, 
             allowNull: false,
-            references: { model: 'collages_tb', key: 'collage_id' },
-            onDelete: 'RESTRICT'
+            // references: { model: 'collages_tb', key: 'collage_id' },
+            // onDelete: 'RESTRICT'
         }
     }, {
-        tableName: 'department_tb',
+        tableName: 'departments_tb',
         timestamps: true,
         underscored: true,
     });

@@ -13,14 +13,14 @@ module.exports = function (sequelize) {
         reporter_id: { 
             type: DataTypes.INTEGER, 
             allowNull: false, 
-            references: { model: 'accounts_tb', key: 'account_id' },
-            onDelete: 'CASCADE'
+            // references: { model: 'accounts_tb', key: 'account_id' },
+            // onDelete: 'CASCADE'
         },
         project_id: { 
             type: DataTypes.INTEGER, 
             allowNull: false,
-            references: { model: 'projects_tb', key: 'project_id' },
-            onDelete: 'CASCADE'
+            // references: { model: 'projects_tb', key: 'project_id' },
+            // onDelete: 'CASCADE'
         },
     }, {
         tableName: 'project_reports_tb',

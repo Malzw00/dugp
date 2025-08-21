@@ -12,14 +12,14 @@ module.exports = function (sequelize) {
         reporter_id: { 
             type: DataTypes.INTEGER, 
             allowNull: false,
-            references: { models: 'accounts_tb', key: 'account_id', }, 
-            onDelete: 'CASCADE',
+            // references: { models: 'accounts_tb', key: 'account_id', }, 
+            // onDelete: 'CASCADE',
         },
         comment_id: { 
             type: DataTypes.INTEGER, 
             allowNull: false,
-            references: { models: 'comments_tb', key: 'commnet_id', },
-            onDelete: 'CASCADE',
+            // references: { models: 'comments_tb', key: 'commnet_id', },
+            // onDelete: 'CASCADE',
         },
     }, {
         tableName: 'comment_reports_tb',

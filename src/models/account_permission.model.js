@@ -17,8 +17,8 @@ module.exports = function (sequelize) {
         permission_id: { 
             type: DataTypes.INTEGER, 
             allowNull: false, 
-            references: { model: 'permissions_tb', key: 'permission_id' },
-            onDelete: 'CASCADE',
+            // references: { model: 'permissions_tb', key: 'permission_id' },
+            // onDelete: 'CASCADE',
         },
     }, {
         tableName: 'account_permissions_tb',

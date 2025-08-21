@@ -17,7 +17,7 @@ module.exports =  function (sequelize) {
         profile_image_id: { 
             type: DataTypes.INTEGER, 
             allowNull: true, 
-            references: { model: 'images_tb', key: 'image_id', },
+            // references: { model: 'images_tb', key: 'image_id', },
         },
     }, {
         tableName: 'accounts_tb',

@@ -9,14 +9,14 @@ module.exports = function (sequelize) {
         reporter_id: { 
             type: DataTypes.INTEGER, 
             allowNull: false,
-            references: { model: 'accounts_tb', key: 'account_id' },
-            onDelete: 'CASCADE'
+            // references: { model: 'accounts_tb', key: 'account_id' },
+            // onDelete: 'CASCADE'
         },
         account_id: { 
             type: DataTypes.INTEGER, 
             allowNull: false,
-            references: { model: 'accounts_tb', key: 'account_id' },
-            onDelete: 'CASECADE'
+            // references: { model: 'accounts_tb', key: 'account_id' },
+            // onDelete: 'CASECADE'
         },
         report_reason: { type: DataTypes.STRING(512), allowNull: false },
         is_report_reviewed: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false, },

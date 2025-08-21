@@ -11,7 +11,7 @@ module.exports = function (sequelize) {
         permission_id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true }, 
         permission_name: { type: DataTypes.STRING(100), allowNull: false, unique: true }
     }, {
-        tableName: 'permission_tb',
+        tableName: 'permissions_tb',
         timestamps: true,
         underscored: true,
     });
@@ -20,7 +20,7 @@ module.exports = function (sequelize) {
 
         Permission.belongsToMany(models.Account, { 
             through: models.AccountPermission, 
-            foreignKey: 'permissions_id', 
+            foreignKey: 'permission_id',
             onDelete: 'CASCADE'
         });
     }
