@@ -8,6 +8,12 @@ const { DataTypes } = require("sequelize");
 module.exports = function (sequelize) {
 
     const AccountPermission = sequelize.define('AccountPermission', {
+        account_permission_id: {
+            type: DataTypes.INTEGER,
+            primaryKey: true,
+            autoIncrement: true,
+            allowNull: true,
+        },
         account_id: { 
             type: DataTypes.INTEGER, 
             allowNull: false, 
@@ -16,15 +22,20 @@ module.exports = function (sequelize) {
         },
         permission_id: { 
             type: DataTypes.INTEGER, 
-            allowNull: false, 
-            // references: { model: 'permissions_tb', key: 'permission_id' },
-            // onDelete: 'CASCADE',
+            allowNull: false,
         },
     }, {
         tableName: 'account_permissions_tb',
         timestamps: true,
         underscored: true,
     });
+
+    AccountPermission.associate = function (models) {
+        AccountPermission.hasMany(models.PermissionScope, {
+            foreignKey: 'account_permission_id',
+            onDelete: 'CASCADE',
+        });
+    }
 
     return AccountPermission;
 }

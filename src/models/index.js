@@ -23,6 +23,7 @@ const ProjectStudentModel = require('@models/project_student.model');
 const RatingModel = require('@models/rating.model');
 const StudentModel = require('@models/student.model');
 const SupervisorModel = require('@models/supervisor.model');
+const PermissionScopeModel = require('@models/permission_scope.model');
 
 
 
@@ -41,6 +42,7 @@ module.exports = function initModels(sequelize) {
         Account: AccountModel(sequelize),
         Department: DepartmentModel(sequelize),
         AccountPermission: AccountPermissionModel(sequelize),
+        PermissionScope: PermissionScopeModel(sequelize),
         AccountReport: AccountReportModel(sequelize),
         Student: StudentModel(sequelize),
         Supervisor: SupervisorModel(sequelize),

@@ -12,21 +12,16 @@ module.exports = function (sequelize) {
         comment_content: { type: DataTypes.STRING(512), allowNull: false },
         project_id: { 
             type: DataTypes.INTEGER, 
-            allowNull: false, 
-            // references: { model: 'projects_tb', key: 'project_id' }
+            allowNull: false,
         },
         account_id: { 
             type: DataTypes.INTEGER, 
             allowNull: true,
-            // references: { model: 'accounts_tb', key: 'account_id' },
-            // onDelete: 'CASCADE'
         },
         parent_id: { 
             type: DataTypes.INTEGER, 
             allowNull: true, 
             defaultValue: null, 
-            // references: { model: 'comments_tb', key: 'comment_id' },
-            // onDelete: 'CASCADE'
         }
     }, {
         tableName: 'comments_tb',
