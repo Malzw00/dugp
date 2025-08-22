@@ -18,7 +18,7 @@ module.exports = function (sequelize) {
 
     Collage.associate = function(models) {
         Collage.hasMany(models.Department, { foreignKey: 'collage_id', onDelete: 'RESTRICT' });
-        Collage.hasMany(models.Cateogry, { foreignKey: 'collage_id', onDelete: 'CASCADE' });
+        Collage.hasMany(models.Category, { foreignKey: 'collage_id', onDelete: 'CASCADE' });
         Collage.hasMany(models.PermissionScope, { foreignKey: 'collage_id', onDelete: 'CASCADE' });
     }
 
