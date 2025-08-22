@@ -38,9 +38,9 @@ async function testConnection() {
 }
 
 // Sync models: create tables automatically
-async function syncDatabase() {
+async function syncDatabase({ force }) {
     try {
-        await sequelize.sync({ force: false, alter: true });
+        await sequelize.sync({ force: force, alter: !force });
         return true;
     } catch (error) {
         return false;

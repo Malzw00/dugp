@@ -13,18 +13,21 @@ const HOST = process.env.HOST || '0.0.0.0';
 async function startServer() {
     try {
         // Test database connection
-        console.log('Test Database Connection ...')
+        console.log('+ Test Database Connection ...')
         const connected = await testConnection();
         if (!connected) throw new Error('Database connection failed');
+        console.log('\u2713 Database Connected Successfully.')
         
         // Sync models (create/update tables)
-        console.log('Sync Database ...')
-        await syncDatabase();
+        console.log('+ Sync Database ...')
+        await syncDatabase({ force: false });
+        console.log('\u2713 Database Ready')
         
         // Start Express server
-        console.log('Start Server ...')
+        console.log('+ Start Server ...')
         const server = expressApp.listen(PORT, HOST, () => {
-            console.log(`Server is running on http://${HOST}:${PORT}`);
+            console.log(`\u2713 Server is running.`);
+            console.log(`\u2022 Server is running on http://${HOST}:${PORT}`);
         });
 
         // Handle shutdown signals
@@ -32,7 +35,7 @@ async function startServer() {
         process.on('SIGINT', () => ShutdownProcess(server));
 
     } catch (error) {
-        console.error('Failed to start server:', error.message);
+        console.error('\u2716 Failed to start server:', error.message);
         process.exit(1);
     }
 }

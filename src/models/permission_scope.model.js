@@ -11,7 +11,7 @@ module.exports = function (sequelize) {
         account_permission_id: { type: DataTypes.INTEGER, allowNull: false, },
         collage_id: { type: DataTypes.INTEGER, allowNull: false, }
     }, {
-        tableName: 'account_permissions_tb',
+        tableName: 'permission_scopes_tb',
         timestamps: true,
         underscored: true,
     });

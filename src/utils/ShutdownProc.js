@@ -1,11 +1,11 @@
 async function ShutdownProcess(server) {
 
     let error;
-    console.log('shutting down...');
+    console.log('+ shutting down...');
 
     closeServer(server).then(
         _ => {
-            console.log('Server closed successfully.');
+            console.log('\u2713 Server closed successfully.');
 
             // here you can close database or anything else
             // await closeDatabaseConnection();
@@ -14,7 +14,7 @@ async function ShutdownProcess(server) {
         },
         err => {
             error = err;
-            console.error('Error during server shutdown:', err);
+            console.error('\u2716 Error during server shutdown:', err);
         }
 
     ).finally(() => process.exit(0));
