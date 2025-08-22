@@ -4,12 +4,14 @@
         "paths": {
             "*" : ["types/*"],
             "@root/*": ["./*"],
-            "@utils/*": ["src/utils/*"],
-            "@controllers/*": ["src/controllers/*"],
-            "@config/*": ["src/config/*"],
-            "@middlewares/*": ["src/middlewares/*"],
             "@routes/*": ["src/routes/*"],
-            "@models/*": ["src/models/*"]
+            "@middlewares/*": ["src/middlewares/*"],
+            "@controllers/*": ["src/controllers/*"],
+            "@services/*": ["src/services/*"],
+            "@models/*": ["src/models/*"],
+            "@config/*": ["src/config/*"],
+            "@utils/*": ["src/utils/*"],
+            "@seeders/*": ["src/seeders/*"]
         }
     },
     "include": ["**/*", "types"]
