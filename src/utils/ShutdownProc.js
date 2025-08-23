@@ -1,7 +1,7 @@
 async function ShutdownProcess(server) {
 
     let error;
-    console.log('+ shutting down...');
+    console.log('\u23F3 Shutting down');
 
     closeServer(server).then(
         _ => {

@@ -1,0 +1,56 @@
+// models.d.ts
+
+import { Sequelize, Model } from 'sequelize';
+import { CollageModel } from '@models/Collage.model';
+import { ImageModel } from '@models/Image.model';
+import { KeywordModel } from '@models/Keyword.model';
+import { CategoryModel } from '@models/Category.model';
+import { PermissionModel } from '@models/Permission.model';
+import { AccountModel } from '@models/Account.model';
+import { DepartmentModel } from '@models/Department.model';
+import { AccountPermissionModel } from '@models/AccountPermission.model';
+import { PermissionScopeModel } from '@models/PermissionScope.model';
+import { AccountReportModel } from '@models/AccountReport.model';
+import { StudentModel } from '@models/Student.model';
+import { SupervisorModel } from '@models/Supervisor.model';
+import { ProjectModel } from '@models/Project.model';
+import { ProjectStudentModel } from '@models/ProjectStudent.model';
+import { RatingModel } from '@models/Rating.model';
+import { CommentModel } from '@models/Comment.model';
+import { ProjectReferenceModel } from '@models/ProjectReference.model';
+import { ProjectBookModel } from '@models/ProjectBook.model';
+import { ProjectPresentationModel } from '@models/ProjectPresentation.model';
+import { ProjectCategoryModel } from '@models/ProjectCategory.model';
+import { ProjectKeywordModel } from '@models/ProjectKeyword.model';
+import { ProjectLikeModel } from '@models/ProjectLike.model';
+import { CommentLikeModel } from '@models/CommentLike.model';
+import { ProjectReportModel } from '@models/ProjectReport.model';
+import { CommentReportModel } from '@models/CommentReport.model';
+
+export type Models = {
+    Collage: ReturnType<typeof CollageModel>;
+    Image: ReturnType<typeof ImageModel>;
+    Keyword: ReturnType<typeof KeywordModel>;
+    Category: ReturnType<typeof CategoryModel>;
+    Permission: ReturnType<typeof PermissionModel>;
+    Account: ReturnType<typeof AccountModel>;
+    Department: ReturnType<typeof DepartmentModel>;
+    AccountPermission: ReturnType<typeof AccountPermissionModel>;
+    PermissionScope: ReturnType<typeof PermissionScopeModel>;
+    AccountReport: ReturnType<typeof AccountReportModel>;
+    Student: ReturnType<typeof StudentModel>;
+    Supervisor: ReturnType<typeof SupervisorModel>;
+    Project: ReturnType<typeof ProjectModel>;
+    ProjectStudent: ReturnType<typeof ProjectStudentModel>;
+    Rating: ReturnType<typeof RatingModel>;
+    Comment: ReturnType<typeof CommentModel>;
+    ProjectReference: ReturnType<typeof ProjectReferenceModel>;
+    ProjectBook: ReturnType<typeof ProjectBookModel>;
+    ProjectPresentation: ReturnType<typeof ProjectPresentationModel>;
+    ProjectCategory: ReturnType<typeof ProjectCategoryModel>;
+    ProjectKeyword: ReturnType<typeof ProjectKeywordModel>;
+    ProjectLike: ReturnType<typeof ProjectLikeModel>;
+    CommentLike: ReturnType<typeof CommentLikeModel>;
+    ProjectReport: ReturnType<typeof ProjectReportModel>;
+    CommentReport: ReturnType<typeof CommentReportModel>;
+};

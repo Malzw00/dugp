@@ -1,33 +1,68 @@
 require('module-alias/register');
 require('dotenv').config();
-const ShutdownProcess = require('@root/src/utils/ShutdownProc');
+const ShutdownProcess = require('@utils/ShutdownProc');
 const expressApp = require('@root/src/app');
 // مجرد إستدعاء هذا الملف ينشيء إتصال مع قاعدة البيانات عن طريق Sequelize ORM
-const { testConnection, syncDatabase } = require('@config/database');
+const { initDatabase } = require('@config/database');
+const { createContainer, updateElement, renderContainer } = require('@root/src/utils/StartResultRenderer');
 
 
 
 const PORT = parseInt(process.env.PORT) || 5000;
 const HOST = process.env.HOST || '0.0.0.0';
 
+
+
 async function startServer() {
+    
+    // Render Start Result.
+    createContainer('start_server');
+    
     try {
-        // Test database connection
-        console.log('+ Test Database Connection ...')
-        const connected = await testConnection();
-        if (!connected) throw new Error('Database connection failed');
-        console.log('\u2713 Database Connected Successfully.')
-        
-        // Sync models (create/update tables)
-        console.log('+ Sync Database ...')
-        await syncDatabase({ force: false });
-        console.log('\u2713 Database Ready')
-        
+
+        await initDatabase({
+            syncOptions: { alter: false, force: false, },
+            onTestConnection: () => { 
+                updateElement('start_server', { key: 'test_conn', value: '\u23F3 Test Database Connection' });
+                renderContainer('start_server');
+            },
+            onTestConnectionSuccess: () => {
+                updateElement('start_server', { key: 'test_conn', value: '\u2713 Test Database Connection' });
+                renderContainer('start_server');
+            },
+            onSync: () => {
+                updateElement('start_server', { key: 'sync_db', value: '\u23F3 Sync Database' });
+                renderContainer('start_server');
+            },
+            onSyncSuccess: () => {
+                updateElement('start_server', { key: 'sync_db', value: '\u2713 Sync Database' });
+                renderContainer('start_server');
+            },
+            onInitSeedData: () => {
+                updateElement('start_server', { key: 'init_seed', value: '\u23F3 Init Seed Data' });
+                renderContainer('start_server');
+            },
+            onInitSeedDataSuccess: () => {
+                updateElement('start_server', { key: 'init_seed', value: '\u2713 Init Seed Data' });
+                renderContainer('start_server');
+            },
+            onDatabaseReady: () => {
+                updateElement('start_server', { key: 'database_state', value: '\u2713 Database is Ready' });
+                renderContainer('start_server');
+            }
+        });
+
         // Start Express server
-        console.log('+ Start Server ...')
+        updateElement('start_server', { key: 'server', value: '\u23F3 Start Server' });
+        renderContainer('start_server');
+
         const server = expressApp.listen(PORT, HOST, () => {
-            console.log(`\u2713 Server is running.`);
-            console.log(`\u2022 Server is running on http://${HOST}:${PORT}`);
+            updateElement('start_server', { key: 'server', value: '\u2713 Start Server' });
+            updateElement('start_server', { 
+                key: 'server_run', 
+                value: `\u2022 Server is Running on: ${HOST}:${PORT}` 
+            });
+            renderContainer('start_server');
         });
 
         // Handle shutdown signals
@@ -35,7 +70,11 @@ async function startServer() {
         process.on('SIGINT', () => ShutdownProcess(server));
 
     } catch (error) {
-        console.error('\u2716 Failed to start server:', error.message);
+        updateElement('start_server', { 
+            key: 'server_run', 
+            value: `\u2717 Start Server Failed: ${error}` 
+        });
+        renderContainer('start_server');
         process.exit(1);
     }
 }

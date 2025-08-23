@@ -1,5 +1,6 @@
 const { Sequelize } = require('sequelize');
 const initModels = require('@models/index');
+const { initializeSeedData } = require('@seeders/index');
 
 
 // Initialize Sequelize database connection
@@ -22,35 +23,55 @@ const sequelize = new Sequelize(
     }
 );
 
+
 // init database models
 const models = initModels(sequelize);
 
-// Test Connection
-async function testConnection() {
+
+// this function used to:
+// - test database connection.
+// - run sync function to create tables automatically.
+// - initialize Seed Data.
+async function initDatabase({ 
+    onTestConnection, 
+    onSync,
+    onInitSeedData, 
+    onTestConnectionSuccess, 
+    onSyncSuccess, 
+    onInitSeedDataSuccess,
+    onDatabaseReady,
+    syncOptions = { alter: false, force: false },
+}) {
     
     try {
+        
+        // Test database connection.
+        onTestConnection?.();
         await sequelize.authenticate();
-        return true;
-    
+        onTestConnectionSuccess?.();
+
+        
+        // Sync models (create/update tables).
+        onSync?.();
+        await sequelize.sync(syncOptions);
+        onSyncSuccess?.();
+
+        // initialize database seeders.
+        onInitSeedData?.();
+        await initializeSeedData(models);
+        onInitSeedDataSuccess?.();
+
+        onDatabaseReady?.();
+
     } catch (error) {
-        return false;
+        throw new Error("initialize database: " + error);
     }
 }
 
-// Sync models: create tables automatically
-async function syncDatabase({ force }) {
-    try {
-        await sequelize.sync({ force: force, alter: !force });
-        return true;
-    } catch (error) {
-        return false;
-    }
-}
 
 
 module.exports = {
     sequelize, 
     models,
-    testConnection,
-    syncDatabase,
+    initDatabase,
 };

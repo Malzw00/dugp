@@ -16,14 +16,37 @@ module.exports =  function (sequelize) {
         account_role: { type: DataTypes.ENUM('user', 'admin', 'manager'), allowNull: false },
         profile_image_id: { 
             type: DataTypes.INTEGER, 
-            allowNull: true, 
-            // references: { model: 'images_tb', key: 'image_id', },
+            allowNull: true,
         },
     }, {
         tableName: 'accounts_tb',
         timestamps: true,
         underscored: true,
     });
+
+    Account.addHook('beforeCreate', async (account, options) => {
+        if (account.account_role === 'manager') {
+        const managerExists = await Account.findOne({ where: { account_role: 'manager' } });
+            if (managerExists) {
+                throw new Error('Only one manager account is allowed.');
+            }
+        }
+    });
+
+    Account.addHook('beforeUpdate', async (account, options) => {
+        if (account.account_role === 'manager') {
+            const managerExists = await Account.findOne({
+                where: {
+                    account_role: 'manager',
+                    account_id: { [sequelize.Op.ne]: account.account_id } // استثني الحساب نفسه
+                }
+            });
+            if (managerExists) {
+                throw new Error('Only one manager account is allowed.');
+            }
+        }
+    });
+
 
     Account.associate = function (models) {
         
