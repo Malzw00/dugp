@@ -21,7 +21,7 @@ async function startServer() {
     try {
 
         await initDatabase({
-            syncOptions: { alter: false, force: false, },
+            syncOptions: { alter: true, force: true, },
             onTestConnection: () => { 
                 updateElement('start_server', { key: 'test_conn', value: '\u23F3 Test Database Connection' });
                 renderContainer('start_server');

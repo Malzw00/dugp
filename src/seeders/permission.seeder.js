@@ -7,31 +7,33 @@ async function seedPermissions(models) {
          * including books, presentations, references, student documentation, 
          * supervisor documentation, and keywords.
          */
-        { permission_name: 'create_project' },
-        { permission_name: 'delete_project' },
-        { permission_name: 'update_project' },
+        { permission_id: 'create_project',  permission_name: 'اضافة مشروع او احد تبعياته' },
+        { permission_id: 'delete_project',  permission_name: 'حذف مشروع او احد تبعياته' },
+        { permission_id: 'update_project',  permission_name: 'تحديث بيانات مشروع او بيانات احد تبعياته' },
 
-        { permission_name: 'create_category' },
-        { permission_name: 'delete_category' },
-        { permission_name: 'update_category' },
+        { permission_id: 'create_category',  permission_name: 'انشاء فئة' },
+        { permission_id: 'delete_category',  permission_name: 'حذف فئة' },
+        { permission_id: 'update_category',  permission_name: 'تحديث فئة' },
+
+        { permission_id: 'create_project_image',  permission_name: 'رفع صورة غلاف مشروع' },
+        { permission_id: 'delete_project_image',  permission_name: 'حذف صورة غلاف مشروع' },
+        { permission_id: 'update_project_image',  permission_name: 'تحديث صورة غلاف مشروع' },
+
+        { permission_id: 'delete_comment',  permission_name: 'حذف تعليق' },
+
+        { permission_id: 'delete_account',  permission_name: 'حذف حساب' },
         
+        { permission_id: 'delete_account_image',  permission_name: 'حذف صورة حساب' },
 
-        { permission_name: 'create_project_image' },
-        { permission_name: 'delete_project_image' },
-        { permission_name: 'update_project_image' },
-
-        { permission_name: 'delete_comment' },
-
-        { permission_name: 'delete_account' },
+        { permission_id: 'read_account_report',  permission_name: 'عرض بلاغ حساب' },
+        { permission_id: 'delete_account_report',  permission_name: 'حذف بلاغ حساب' },
         
-        { permission_name: 'delete_account_image' },
-
-        { permission_name: 'delete_account_report' },
-
-        { permission_name: 'delete_project_report' },
+        { permission_id: 'read_project_report',  permission_name: 'عرض بلاغ حساب' },
+        { permission_id: 'delete_project_report',  permission_name: 'حذف بلاغ مشروع' },
         
-        { permission_name: 'delete_comment_report' },
-
+        { permission_id: 'read_comment_report',  permission_name: 'عرض بلاغ تعليق' },
+        { permission_id: 'delete_comment_report',  permission_name: 'حذف بلاغ تعليق' },
+        
     ], { ignoreDuplicates: true });
 }
 

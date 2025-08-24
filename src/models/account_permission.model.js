@@ -21,7 +21,7 @@ module.exports = function (sequelize) {
             onDelete: 'CASCADE',
         },
         permission_id: { 
-            type: DataTypes.INTEGER, 
+            type: DataTypes.STRING(25), 
             allowNull: false,
         },
     }, {

@@ -8,12 +8,10 @@ const { DataTypes } = require("sequelize");
 module.exports = function (sequelize) {
 
     const Permission = sequelize.define('Permission', {
-        permission_id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true }, 
+        permission_id: { type: DataTypes.STRING(25), primaryKey: true, }, 
         permission_name: { type: DataTypes.STRING(100), allowNull: false, unique: true }
     }, {
         tableName: 'permissions_tb',
-        timestamps: true,
-        underscored: true,
     });
 
     Permission.associate = function(models) {
