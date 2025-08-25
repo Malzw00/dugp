@@ -11,14 +11,10 @@ module.exports = function (sequelize) {
         project_id: { 
             type: DataTypes.INTEGER, 
             allowNull: false,
-            // references: { model: 'projects_tb', key: 'project_id', },
-            // onDelete: 'CASCADE'
         },
         account_id: { 
             type: DataTypes.INTEGER, 
-            allowNull: false, 
-            // references: { model: 'accounts_tb', key: 'account_id', },
-            // onDelete: 'CASCADE'
+            allowNull: false,
         },
         rate: { type: DataTypes.INTEGER, allowNull: false, validate: { min: 1, max: 5 } },
     }, {

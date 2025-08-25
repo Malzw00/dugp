@@ -11,8 +11,6 @@ module.exports = function (sequelize) {
         project_id: { 
             type: DataTypes.INTEGER, 
             allowNull: false,
-            // references: { model: 'projects_tb', key: 'project_id' },
-            // onDelete: 'CASCADE',
         },
     }, {
         tableName: 'project_books_tb',

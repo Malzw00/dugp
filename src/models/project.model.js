@@ -13,26 +13,10 @@ module.exports = function (sequelize) {
         project_description: { type: DataTypes.STRING(512), allowNull: true, },
         project_year: { type: DataTypes.DATEONLY, allowNull: false },
         project_semester: { type: DataTypes.ENUM('Winter', 'Spring', 'Summer', 'Autumn'), allowNull: false },
-        project_grade: { type: DataTypes.DECIMAL(5, 2), allowNull: false, validate: { min: 0.00, max: 100.00 } },
-        department_id: { 
-            type: DataTypes.INTEGER, 
-            allowNull: false,
-            // references: { model: 'departments_tb', key: 'department_id' },
-            // onDelete: 'RESTRICT'
-        },
-        cover_image_id: { 
-            type: DataTypes.INTEGER, 
-            allowNull: true,
-            defaultValue: null,
-            // references: { model: 'images_tb', key: 'image_id' },
-            // onDelete: 'SET NULL'
-        },
-        supervisor_id: { 
-            type: DataTypes.INTEGER, 
-            allowNull: true,
-            // references: { model: 'supervisors_tb', key: 'supervisor_id' },
-            // onDelete: 'SET NULL'
-        },
+        project_grade: { type: DataTypes.DECIMAL(5, 2), allowNull: true, validate: { min: 0.00, max: 100.00 } },
+        department_id: { type: DataTypes.INTEGER, allowNull: false, },
+        cover_image_id: { type: DataTypes.INTEGER, allowNull: true,defaultValue: null, },
+        supervisor_id: { type: DataTypes.INTEGER, allowNull: true, },
     }, {
         tableName: 'projects_tb',
         timestamps: true,

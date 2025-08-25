@@ -24,6 +24,7 @@ module.exports = function (sequelize) {
     }, {
         tableName: 'account_reports_tb',
         timestamps: true,
+        underscored: true,
     });
 
     AccountReport.associate = function (models) {
