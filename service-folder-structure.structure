@@ -1,0 +1,40 @@
+services/
+│── account/
+│   ├── account.service.js         // CRUD على الحسابات + إدارة الأدوار
+│   ├── auth.service.js            // تسجيل الدخول، تسجيل الخروج، JWT
+│   ├── permission.service.js      // CRUD على permissions_tb
+│   ├── accountPermission.service.js // ربط الحسابات بالصلاحيات
+│   └── scope.service.js           // إدارة permission_scopes_tb
+│
+│── academic/
+│   ├── collage.service.js         // collages_tb
+│   ├── department.service.js      // departments_tb
+│   ├── category.service.js        // categories_tb
+│   └── keyword.service.js         // keywords_tb
+│
+│── people/
+│   ├── student.service.js         // students_tb
+│   ├── supervisor.service.js      // supervisors_tb
+│   └── image.service.js           // images_tb
+│
+│── project/
+│   ├── project.service.js         // projects_tb
+│   ├── projectStudent.service.js  // project_students_tb
+│   ├── projectCategory.service.js // project_categories_tb
+│   ├── projectKeyword.service.js  // project_keywords_tb
+│   ├── projectBook.service.js     // project_books_tb
+│   ├── projectPresentation.service.js // project_presentations_tb
+│   └── projectReference.service.js   // project_references_tb
+│
+│── social/
+│   ├── like.service.js            // project_likes_tb
+│   ├── rating.service.js          // ratings_tb
+│   ├── comment.service.js         // comments_tb
+│   └── commentLike.service.js     // comment_likes_tb
+│
+│── report/
+│   ├── accountReport.service.js   // account_reports_tb
+│   ├── projectReport.service.js   // project_reports_tb
+│   └── commentReport.service.js   // comment_reports_tb
+│
+└── index.js                       // يجمع كل الخدمات لتصديرها بشكل منظم
