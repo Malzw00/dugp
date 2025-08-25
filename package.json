@@ -1,5 +1,5 @@
 {
-  "name": "dugb",
+  "name": "dugp",
   "version": "1.0.0",
   "homepage": ".",
   "description": "University graduation projects documentation platform",
@@ -7,9 +7,12 @@
   "author": "معاذ ابوقطيشة / سعيد بوحليقة / محمد النجمي / علي السنوسي",
   "main": "server.js",
   "scripts": {
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "db:seed:all": "npx sequelize-cli db:seed:all --config src/config/database.config.js",
+    "db:seed:undo:all": "npx sequelize-cli db:seed:undo:all --config src/config/database.config.js"
   },
   "dependencies": {
+    "@faker-js/faker": "^10.0.0",
     "compression": "^1.8.0",
     "connect-history-api-fallback": "^2.0.0",
     "dotenv": "^16.5.0",
@@ -32,5 +35,8 @@
     "@config": "src/config",
     "@utils": "src/utils",
     "@seeders": "src/seeders"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^6.6.3"
   }
 }
