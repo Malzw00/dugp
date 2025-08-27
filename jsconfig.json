@@ -1,18 +1,19 @@
 {
-    "compilerOptions": {
-        "baseUrl": ".",  
-        "paths": {
-            "*" : ["types/*"],
-            "@root/*": ["./*"],
-            "@routes/*": ["src/routes/*"],
-            "@middlewares/*": ["src/middlewares/*"],
-            "@controllers/*": ["src/controllers/*"],
-            "@services/*": ["src/services/*"],
-            "@models/*": ["src/models/*"],
-            "@config/*": ["src/config/*"],
-            "@utils/*": ["src/utils/*"],
-            "@seeders/*": ["src/seeders/*"]
-        }
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "*": ["types/*"],
+      "@root/*": ["./*"],
+      "@routes/*": ["src/routes/*"],
+      "@middlewares/*": ["src/middlewares/*"],
+      "@controllers/*": ["src/controllers/*"],
+      "@services/*": ["src/services/*"],
+      "@models/*": ["src/models/*"],
+      "@config/*": ["src/config/*"],
+      "@utils/*": ["src/utils/*"],
+      "@seeders/*": ["src/seeders/*"]
     },
-    "include": ["**/*", "types"]
+    "types": ["./src/types"]
+  },
+  "include": ["src/**/*", "types"]
 }

@@ -1,10 +1,10 @@
 require('module-alias/register');
 require('dotenv').config();
-const ShutdownProcess = require('@root/src/utils/shotdown_proc.util');
+const ShutdownProcess = require('@root/src/utils/shotdownProc.util');
 const expressApp = require('@root/src/app');
 // مجرد إستدعاء هذا الملف ينشيء إتصال مع قاعدة البيانات عن طريق Sequelize ORM
 const { initDatabase } = require('@root/src/config/database.config');
-const { createContainer, updateElement, renderContainer } = require('@root/src/utils/start_result_renderer.util');
+const { createContainer, updateElement, renderContainer } = require('@root/src/utils/startResultRenderer.util');
 
 
 
@@ -20,7 +20,7 @@ async function startServer() {
     
     try {
         await initDatabase({
-            syncOptions: { alter: true, force: true, },
+            syncOptions: { alter: false, force: true, },
             onTestConnection: () => { 
                 updateElement('start_server', { key: 'test_conn', value: '\u23F3 Test Database Connection' });
                 renderContainer('start_server');

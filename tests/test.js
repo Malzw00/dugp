@@ -1,5 +1,5 @@
 require('module-alias/register')
-const { createContainer, renderContainer, updateElement } = require('@root/src/utils/start_result_renderer.util');
+const { createContainer, renderContainer, updateElement } = require('@root/src/utils/startResultRenderer.util');
 
 
 createContainer('1');
