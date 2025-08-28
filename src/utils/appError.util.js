@@ -16,6 +16,14 @@ class AppError extends Error {
         this.code = code;
         this.extra = extra;
     }
+
+    static IDNotExistsError() {
+        return new Error('ID_NOT_EXISTS');
+    }
+
+    static isIDNotExistsError(error) {
+        return error?.message === 'ID_NOT_EXISTS';
+    }
 }
 
 module.exports = AppError;
