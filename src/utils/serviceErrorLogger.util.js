@@ -1,6 +1,6 @@
 const log = require("@utils/errorLogger.util");
 
-module.exports = class LogServiceError {
+module.exports = class ServiceErrorLogger {
 
     #layer;
     #module;

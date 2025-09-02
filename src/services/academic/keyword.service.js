@@ -1,5 +1,5 @@
 const { models } = require('@config/database.config');
-const LogServiceError = require('@utils/logServiceError.util');
+const ServiceErrorLogger = require('@root/src/utils/serviceErrorLogger.util');
 
 /**
  * @class KeywordService
@@ -9,7 +9,7 @@ const LogServiceError = require('@utils/logServiceError.util');
  */
 class KeywordService {
 
-    static logger = new LogServiceError({ module: 'Keyword' });
+    static logger = new ServiceErrorLogger({ module: 'Keyword' });
 
     /**
      * Create a new keyword.

@@ -1,12 +1,12 @@
 // models/index.js
 const AccountModel = require('@models/account.model');
-const AccountPermissionModel = require('@models/account_permission.model');
+const AccountPermissionModel = require('@models/accountPermission.model');
 const AccountReportModel = require('@root/src/models/accountReport.model');
 const CategoryModel = require('@models/category.model');
 const CollageModel = require('@root/src/models/collage.model');
 const CommentModel = require('@models/comment.model');
 const CommentLikeModel = require('@root/src/models/commentLike.model');
-const CommentReportModel = require('@models/comment_report.model');
+const CommentReportModel = require('@models/commentReport.model');
 const DepartmentModel = require('@models/department.model');
 const ImageModel = require('@root/src/models/image.model');
 const KeywordModel = require('@models/keyword.model');
@@ -23,8 +23,9 @@ const ProjectStudentModel = require('@root/src/models/projectStudent.model');
 const RatingModel = require('@models/rating.model');
 const StudentModel = require('@models/student.model');
 const SupervisorModel = require('@models/supervisor.model');
-const PermissionScopeModel = require('@root/src/models/permissionScope.model');
-
+const PermissionScopeModel = require('@models/permissionScope.model');
+const RefreshTokenModel = require('@models/refrehToken.model');
+const ResetPasswordModel = require('@models/resetPassword.model');
 
 
 
@@ -59,6 +60,8 @@ module.exports = function initModels(sequelize) {
         CommentLike: CommentLikeModel(sequelize),
         ProjectReport: ProjectReportModel(sequelize),
         CommentReport: CommentReportModel(sequelize),
+        RefreshToken: RefreshTokenModel(sequelize),
+        ResetPassword: ResetPasswordModel(sequelize),
     };
 
 

@@ -1,5 +1,5 @@
 const { models } = require('@config/database.config');
-const LogServiceError = require('@root/src/utils/logServiceError.util');
+const ServiceErrorLogger = require('@root/src/utils/serviceErrorLogger.util');
 
 
 /**
@@ -9,7 +9,7 @@ const LogServiceError = require('@root/src/utils/logServiceError.util');
  */
 class CategoryService {
 
-    static logger = new LogServiceError({ module: 'Category' });
+    static logger = new ServiceErrorLogger({ module: 'Category' });
     
     /**
      * Create a new category linked to a specific college.

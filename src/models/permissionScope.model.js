@@ -8,6 +8,7 @@ const { DataTypes } = require("sequelize");
 module.exports = function (sequelize) {
 
     const PermissionScope = sequelize.define('PermissionScope', {
+        permission_scope_id : { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
         account_permission_id: { type: DataTypes.INTEGER, allowNull: false, },
         collage_id: { type: DataTypes.INTEGER, allowNull: false, }
     }, {

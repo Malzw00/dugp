@@ -11,7 +11,7 @@ module.exports =  function (sequelize) {
         fst_name: { type: DataTypes.STRING(100), allowNull: false, },
         lst_name: { type: DataTypes.STRING(100), allowNull: false, },
         account_email: { type: DataTypes.STRING(255), allowNull: false, unique: true },
-        verified_email: { type: DataTypes.BOOLEAN, defaultValue: false },
+        verified_email: { type: DataTypes.BOOLEAN, defaultValue: false, allowNull: true },
         hashed_password: { type: DataTypes.STRING(255), allowNull: false },
         account_role: { type: DataTypes.ENUM('user', 'admin', 'manager'), allowNull: false },
         profile_image_id: { 
@@ -110,6 +110,12 @@ module.exports =  function (sequelize) {
             as: 'ReceivedReports', 
             foreignKey: 'account_id', 
             onDelete: 'CASCADE'
+        });
+
+        Account.hasMany(models.RefreshToken, {
+            foreignKey: 'account_id',
+            onDelete: 'CASCADE',
+            hooks: true, // مهم لتمكين CASCADE عند استخدام Sequelize hooks
         });
     }
 

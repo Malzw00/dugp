@@ -1,5 +1,5 @@
 const { models } = require('@config/database.config');
-const LogServiceError = require('@utils/logServiceError.util');
+const ServiceErrorLogger = require('@root/src/utils/serviceErrorLogger.util');
 const log = require('@utils/errorLogger.util');
 
 /**
@@ -9,7 +9,7 @@ const log = require('@utils/errorLogger.util');
  */
 class CollageService {
 
-    static logger = new LogServiceError({ module: 'Collage' });
+    static logger = new ServiceErrorLogger({ module: 'Collage' });
 
     /**
      * Create a new collage.

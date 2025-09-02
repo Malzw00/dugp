@@ -1,5 +1,5 @@
 const { models } = require("@config/database.config");
-const LogServiceError = require("@utils/logServiceError.util");
+const ServiceErrorLogger = require("@root/src/utils/serviceErrorLogger.util");
 const AppError = require("@utils/appError.util");
 
 
@@ -16,7 +16,7 @@ class DepartmentService {
      * @private
      * @static
      */
-    static logger = new LogServiceError({ module: 'Department' });
+    static logger = new ServiceErrorLogger({ module: 'Department' });
 
     /**
      * Create a new department linked to a specific college.
@@ -38,6 +38,17 @@ class DepartmentService {
 
         } catch (error) {
             throw this.logger.log(this.create.name, error);
+        }
+    }
+    
+    
+    static async getDepartments({ collage_id }) {
+        try {
+            const departments = await models.Department.findAll({ where: { collage_id } });
+            return departments;
+            
+        } catch (error) {
+            throw this.logger.log(this.getDepartments.name, error);
         }
     }
 
@@ -76,9 +87,6 @@ class DepartmentService {
      * @returns {Promise<number>} Number of rows updated.
      */
     static async updateName({ department_id, department_name }) {
-        if (typeof department_id !== 'number' || typeof department_name !== 'string')
-            throw ValidationError(this.updateName.name);
-
         try {
             const [affectedRows] = await models.Department.update(
                 { department_name },
@@ -106,8 +114,6 @@ class DepartmentService {
      * @returns {Promise<number>} Number of rows updated.
      */
     static async updateCollage({ department_id, collage_id }) {
-        if (typeof department_id !== 'number' || typeof collage_id !== 'number')
-            throw ValidationError(this.updateCollage.name);
 
         try {
             const [affectedRows] = await models.Department.update(
