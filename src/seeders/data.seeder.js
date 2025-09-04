@@ -1,4 +1,4 @@
-// seed-all.js
+// data.seeder.js
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     const now = new Date();
@@ -51,8 +51,90 @@ module.exports = {
 
     // Students
     await queryInterface.bulkInsert("students_tb", [
-      { students_name: "Ahmed", students_father_name: "Mohamed", students_grandfather_name: "Hassan", student_family_name: "Ali", student_email: "ahmed@student.edu", department_id: 1, account_id: 3, profile_image_id: null, created_at: now, updated_at: now },
-      { students_name: "Omar", students_father_name: "Yahya", students_grandfather_name: "Saleh", student_family_name: "Yasin", student_email: "omar@student.edu", department_id: 2, account_id: null, profile_image_id: null, created_at: now, updated_at: now },
+      { 
+        students_name: "Ahmed", 
+        students_father_name: "Mohamed", 
+        students_grandfather_name: "Hassan", 
+        student_family_name: "Ali", 
+        student_email: "ahmed@student.edu", 
+        department_id: 1, 
+        account_id: 3, 
+        profile_image_id: null, 
+        created_at: now, 
+        updated_at: now 
+      },
+      { 
+        students_name: "Omar", 
+        students_father_name: "Yahya", 
+        students_grandfather_name: "Saleh", 
+        student_family_name: "Yasin", 
+        student_email: "omar@student.edu", 
+        department_id: 2, 
+        account_id: null, 
+        profile_image_id: null, 
+        created_at: now, 
+        updated_at: now 
+      },
+      { 
+        students_name: "Omran", 
+        students_father_name: "ali", 
+        students_grandfather_name: "Saleh", 
+        student_family_name: "Yasin", 
+        student_email: "omar@student.edu", 
+        department_id: 2, 
+        account_id: null, 
+        profile_image_id: null, 
+        created_at: now, 
+        updated_at: now 
+      },
+      { 
+        students_name: "ali", 
+        students_father_name: "yousef", 
+        students_grandfather_name: "Saleh", 
+        student_family_name: "Yasin", 
+        student_email: "omar@student.edu", 
+        department_id: 2, 
+        account_id: null, 
+        profile_image_id: null, 
+        created_at: now, 
+        updated_at: now 
+      },
+      { 
+        students_name: "saad", 
+        students_father_name: "mohammed", 
+        students_grandfather_name: "khaled", 
+        student_family_name: "Yasin", 
+        student_email: "omar@student.edu", 
+        department_id: 2, 
+        account_id: null, 
+        profile_image_id: null, 
+        created_at: now, 
+        updated_at: now 
+      },
+      { 
+        students_name: "saed", 
+        students_father_name: "omar", 
+        students_grandfather_name: "raed", 
+        student_family_name: "Yasin", 
+        student_email: "omar@student.edu", 
+        department_id: 2, 
+        account_id: null, 
+        profile_image_id: null, 
+        created_at: now, 
+        updated_at: now 
+      },
+      { 
+        students_name: "abdollah", 
+        students_father_name: "saled", 
+        students_grandfather_name: "mohammed", 
+        student_family_name: "Yasin", 
+        student_email: "omar@student.edu", 
+        department_id: 2, 
+        account_id: null, 
+        profile_image_id: null, 
+        created_at: now, 
+        updated_at: now 
+      },
     ]);
 
     // Projects

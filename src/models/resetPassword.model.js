@@ -9,12 +9,12 @@ module.exports = function (sequelize) {
 
     const ResetPassword = sequelize.define('ResetPassword', {
         reset_password_id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true, },
-        token: { type: DataTypes.TEXT, allowNull: false, unique: true, },
+        token: { type: DataTypes.STRING(512), allowNull: false, unique: true, },
         account_id: { type: DataTypes.INTEGER, allowNull: true, },
         expires_at: { 
             type: DataTypes.DATE,
             allowNull: false, 
-            defaultValue: new Date() + (15 * 60 * 1000) 
+            defaultValue: () => new Date(Date.now() + 15 * 60 * 1000)
         }
     }, {
         tableName: 'reset_password_tb',

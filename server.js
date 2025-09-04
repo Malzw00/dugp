@@ -3,9 +3,10 @@ require('dotenv').config();
 const ShutdownProcess = require('@root/src/utils/shotdownProc.util');
 const expressApp = require('@root/src/app');
 // مجرد إستدعاء هذا الملف ينشيء إتصال مع قاعدة البيانات عن طريق Sequelize ORM
-const { initDatabase } = require('@root/src/config/database.config');
+const { initDatabase, sequelize } = require('@root/src/config/database.config');
 const { createContainer, updateElement, renderContainer } = require('@root/src/utils/startResultRenderer.util');
 
+const data_seeder = require('@root/src/seeders/data.seeder')
 
 
 const PORT = parseInt(process.env.PORT) || 5000;
@@ -50,6 +51,8 @@ async function startServer() {
                 renderContainer('start_server');
             }
         });
+
+        // data_seeder.up(sequelize.getQueryInterface())
 
         // Start Express server
         updateElement('start_server', { key: 'server', value: '\u23F3 Start Server' });

@@ -8,37 +8,42 @@ const { DataTypes } = require("sequelize");
 module.exports = function (sequelize) {
 
     const Student = sequelize.define('Student', {
-        students_id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true, },
-        students_name: { type: DataTypes.STRING(50), allowNull: false },
-        students_father_name: { type: DataTypes.STRING(50), allowNull: false },
-        students_grandfather_name: { type: DataTypes.STRING(50), allowNull: false },
+        student_id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true, },
+        student_full_name: { type: DataTypes.STRING(200), allowNull: false },
+        student_name: { type: DataTypes.STRING(50), allowNull: false },
+        student_father_name: { type: DataTypes.STRING(50), allowNull: false },
+        student_grandfather_name: { type: DataTypes.STRING(50), allowNull: false },
         student_family_name: { type: DataTypes.STRING(50), allowNull: false },
         student_email: { type: DataTypes.STRING(255), allowNull: false },
         department_id: { 
             type: DataTypes.INTEGER, 
             allowNull: false,
-            // references: { model: 'departments_tb', key: 'department_id' },
-            // onDelete: 'RESTRICT'
         },
         account_id: { 
             type: DataTypes.INTEGER, 
             allowNull: true, 
             defaultValue: null,
-            // references: { model: 'accounts_tb', key: 'account_id' },
-            // onDelete: 'SET NULL'
         },
         profile_image_id: { 
             type: DataTypes.INTEGER, 
             allowNull: true, 
             defaultValue: null,
-            // references: { model: 'images_tb', key: 'image_id' },
-            // onDelete: 'SET NULL'
         },
     }, {
         tableName: 'students_tb',
         timestamps: true,
         underscored: true,
     });
+
+    Student.beforeSave((student, options) => {
+        student.full_name = [
+            student.student_name,
+            student.student_father_name,
+            student.student_grandfather_name,
+            student.student_family_name
+        ].filter(Boolean).join(' ');
+    });
+
 
     Student.associate = function(models) {
 

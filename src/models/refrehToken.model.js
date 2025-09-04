@@ -9,7 +9,7 @@ module.exports = function (sequelize) {
 
     const RefreshToken = sequelize.define('RefreshToken', {
         refresh_token_id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true, },
-        token: { type: DataTypes.TEXT, allowNull: false, unique: true },
+        token: { type: DataTypes.STRING(512), allowNull: false, unique: true },
         account_id: { type: DataTypes.INTEGER, allowNull: false },
         expires_at: { type: DataTypes.DATE, allowNull: false },
     }, {
