@@ -13,7 +13,8 @@ module.exports = function (sequelize) {
         supervisor_father_name: { type: DataTypes.STRING(50), allowNull: false },
         supervisor_grandfather_name: { type: DataTypes.STRING(50), allowNull: false },
         supervisor_family_name: { type: DataTypes.STRING(50), allowNull: false },
-        supervisor_title: { type: DataTypes.STRING(50), allowNull: false },
+        supervisor_full_name: { type: DataTypes.STRING(50), allowNull: false },
+        supervisor_title: { type: DataTypes.STRING(50), allowNull: true },
         supervisor_email: { type: DataTypes.STRING(255), allowNull: false },
         department_id: { type: DataTypes.INTEGER, allowNull: false, },
         account_id: { type: DataTypes.INTEGER, allowNull: true, defaultValue: null, },
@@ -22,6 +23,15 @@ module.exports = function (sequelize) {
         tableName: 'supervisors_tb',
         timestamps: true,
         underscored: true,
+    });
+
+    Supervisor.beforeSave((supervisor, options) => {
+        supervisor.full_name = [
+            supervisor.supervisor_name,
+            supervisor.supervisor_father_name,
+            supervisor.supervisor_grandfather_name,
+            supervisor.supervisor_family_name
+        ].filter(Boolean).join(' ');
     });
 
     Supervisor.associate = function (models) {

@@ -1,6 +1,6 @@
 const { models } = require("@root/src/config/database.config");
 const ServiceErrorLogger = require("@root/src/utils/serviceErrorLogger.util");
-const { Sequelize, Op } = require("sequelize");
+const { Op, } = require("sequelize");
 
 /**
  * Service for managing student records and operations.
@@ -81,14 +81,19 @@ class StudentService {
     static async updateName ({ name, father_name, grand_father_name, family_name, student_id }) {
         try {
 
-            const options = {};
+            const values = {};
             
-            if(name) options.student_name = name;
-            if(father_name) options.student_father_name = father_name;
-            if(grand_father_name) options.student_grandfather_name = grand_father_name;
-            if(family_name) options.student_family_name = family_name;
+            if(name) values.student_name = name;
+            if(father_name) values.student_father_name = father_name;
+            if(grand_father_name) values.student_grandfather_name = grand_father_name;
+            if(family_name) values.student_family_name = family_name;
 
-            const [affectedRows] = await models.Student.update(options, { where: { student_id: student_id } });
+            const [affectedRows] = await models.Student.update(values, { 
+                where: { student_id: student_id } 
+            });
+
+            if (affectedRows === 0)
+            throw new Error('ID_NOT_EXISTS');
 
             return affectedRows;
 
@@ -115,6 +120,9 @@ class StudentService {
                 { where: { student_id: student_id } }
             );
 
+            if (affectedRows === 0)
+            throw new Error('ID_NOT_EXISTS');
+
             return affectedRows;
 
         } catch (error) {
@@ -140,6 +148,9 @@ class StudentService {
                 { account_id: account_id }, 
                 { where: { student_id: student_id } }
             );
+
+            if (affectedRows === 0)
+            throw new Error('ID_NOT_EXISTS');
 
             return affectedRows;
 
@@ -187,11 +198,15 @@ class StudentService {
      */
     static async searchByName(keyword, { department_id }) {
         try {
+            const whereOptions = {
+                student_full_name: { [Op.like]: `%${keyword}%` },
+            };
+
+            if(department_id)
+            whereOptions.department_id = department_id;
+
             const students = await models.Student.findAll({
-                where: {
-                    student_full_name: { [Op.like]: `%${keyword}%` },
-                    department_id: department_id,
-                },
+                where: whereOptions,
                 attributes: [ 'student_id', 'student_full_name', ]
             });
 
@@ -214,7 +229,10 @@ class StudentService {
      */
     static async get ({ student_id }) {
         try {
-            const student = await models.Student.findOne({ where: { student_id: student_id } });
+            const student = await models.Student.findOne({ 
+                where: { student_id: student_id } 
+            });
+
             return student;
 
         } catch (error) {
@@ -232,13 +250,16 @@ class StudentService {
      * @returns {Promise<Array>} Array of student records in the specified department
      * @throws {Error} If database operation fails
      */
-    static async getByDepartmentID ({ department_id }) {
+    static async getByDepartmentStudents ({ department_id }) {
         try {
-            const students = await models.Student.findAll({ where: { department_id: department_id } });
+            const students = await models.Student.findAll({ 
+                where: { department_id: department_id } 
+            });
+            
             return students;
 
         } catch (error) {
-            throw this.logger.log(this.getByDepartmentID.name, error);
+            throw this.logger.log(this.getByDepartmentStudents.name, error);
         }
     }
     
@@ -256,7 +277,7 @@ class StudentService {
     static async getByCollageID({ collage_id }) {
         try {
             const departments = await models.Department.findAll({ 
-                where: { collage_id } 
+                where: { collage_id: collage_id } 
             });
 
             // use Promise.all to wait all Promise processes.

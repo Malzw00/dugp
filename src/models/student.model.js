@@ -9,11 +9,11 @@ module.exports = function (sequelize) {
 
     const Student = sequelize.define('Student', {
         student_id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true, },
-        student_full_name: { type: DataTypes.STRING(200), allowNull: false },
         student_name: { type: DataTypes.STRING(50), allowNull: false },
         student_father_name: { type: DataTypes.STRING(50), allowNull: false },
         student_grandfather_name: { type: DataTypes.STRING(50), allowNull: false },
         student_family_name: { type: DataTypes.STRING(50), allowNull: false },
+        student_full_name: { type: DataTypes.STRING(200), allowNull: false },
         student_email: { type: DataTypes.STRING(255), allowNull: false },
         department_id: { 
             type: DataTypes.INTEGER, 
