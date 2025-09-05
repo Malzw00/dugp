@@ -1,4 +1,5 @@
 const { DataTypes } = require("sequelize");
+const { v4: uuidv4 } = require('uuid');
 
 
 /**
@@ -8,7 +9,11 @@ const { DataTypes } = require("sequelize");
 module.exports = function (sequelize) {
 
     const Student = sequelize.define('Student', {
-        student_id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true, },
+        student_id: { 
+            type: DataTypes.UUID, 
+            defaultValue: uuidv4, 
+            primaryKey: true, 
+        },
         student_name: { type: DataTypes.STRING(50), allowNull: false },
         student_father_name: { type: DataTypes.STRING(50), allowNull: false },
         student_grandfather_name: { type: DataTypes.STRING(50), allowNull: false },

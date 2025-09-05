@@ -1,4 +1,5 @@
 const { DataTypes } = require("sequelize");
+const { v4: uuidv4 } = require('uuid');
 
 
 /**
@@ -8,7 +9,11 @@ const { DataTypes } = require("sequelize");
 module.exports = function (sequelize) {
 
     const Supervisor = sequelize.define('Supervisor', {
-        supervisor_id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true, },
+        supervisor_id: { 
+            type: DataTypes.UUID, 
+            defaultValue: uuidv4, 
+            primaryKey: true, 
+        },
         supervisor_name: { type: DataTypes.STRING(50), allowNull: false },
         supervisor_father_name: { type: DataTypes.STRING(50), allowNull: false },
         supervisor_grandfather_name: { type: DataTypes.STRING(50), allowNull: false },

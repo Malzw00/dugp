@@ -1,5 +1,5 @@
 const { DataTypes } = require("sequelize");
-
+const { v4: uuidv4 } = require('uuid');
 
 
 /** @param {import('sequelize').Sequelize} sequelize */
@@ -7,7 +7,11 @@ const { DataTypes } = require("sequelize");
 module.exports =  function (sequelize) {
 
     const Account = sequelize.define('Account', {
-        account_id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
+        account_id: { 
+            type: DataTypes.UUID, 
+            defaultValue: uuidv4, 
+            primaryKey: true 
+        },
         fst_name: { type: DataTypes.STRING(100), allowNull: false, },
         lst_name: { type: DataTypes.STRING(100), allowNull: false, },
         account_email: { type: DataTypes.STRING(255), allowNull: false, unique: true },
