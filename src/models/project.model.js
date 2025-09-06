@@ -16,7 +16,7 @@ module.exports = function (sequelize) {
         project_grade: { type: DataTypes.DECIMAL(5, 2), allowNull: true, validate: { min: 0.00, max: 100.00 } },
         department_id: { type: DataTypes.INTEGER, allowNull: false, },
         cover_image_id: { type: DataTypes.INTEGER, allowNull: true,defaultValue: null, },
-        supervisor_id: { type: DataTypes.INTEGER, allowNull: true, },
+        supervisor_id: { type: DataTypes.UUID, allowNull: true, },
     }, {
         tableName: 'projects_tb',
         timestamps: true,

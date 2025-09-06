@@ -7,7 +7,7 @@ module.exports = function (sequelize) {
     const ProjectLike = sequelize.define('ProjectLike', {
         project_like_id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true, },
         account_id: { 
-            type: DataTypes.INTEGER, 
+            type: DataTypes.UUID, 
             allowNull: true, 
         },
         project_id: { 

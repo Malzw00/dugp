@@ -25,7 +25,7 @@ module.exports = function (sequelize) {
             allowNull: false,
         },
         account_id: { 
-            type: DataTypes.INTEGER, 
+            type: DataTypes.UUID, 
             allowNull: true, 
             defaultValue: null,
         },

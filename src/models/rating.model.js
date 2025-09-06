@@ -18,7 +18,7 @@ module.exports = function (sequelize) {
             allowNull: false,
         },
         account_id: { 
-            type: DataTypes.INTEGER, 
+            type: DataTypes.UUID, 
             allowNull: false,
         },
         rate: { type: DataTypes.INTEGER, allowNull: false, validate: { min: 1, max: 5 } },

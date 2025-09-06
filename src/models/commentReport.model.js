@@ -10,16 +10,12 @@ module.exports = function (sequelize) {
         is_report_reviewed: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false, },
         is_report_resolved: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false, },
         reporter_id: { 
-            type: DataTypes.INTEGER, 
+            type: DataTypes.UUID, 
             allowNull: false,
-            // references: { models: 'accounts_tb', key: 'account_id', }, 
-            // onDelete: 'CASCADE',
         },
         comment_id: { 
             type: DataTypes.INTEGER, 
             allowNull: false,
-            // references: { models: 'comments_tb', key: 'commnet_id', },
-            // onDelete: 'CASCADE',
         },
     }, {
         tableName: 'comment_reports_tb',

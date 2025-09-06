@@ -11,14 +11,10 @@ module.exports = function (sequelize) {
         keyword_id: { 
             type: DataTypes.INTEGER, 
             allowNull: false, 
-            // references: { model: 'keywords_tb', key: 'keyword_id' },
-            // onDelete: 'CASCADE',
         },
         project_id: { 
             type: DataTypes.INTEGER, 
             allowNull: false, 
-            // references: { model: 'projects_tb', key: 'project_id' },
-            // onDelete: 'CASCADE',
         },
     }, {
         tableName: 'project_keywords_tb',

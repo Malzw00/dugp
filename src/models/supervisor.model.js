@@ -22,7 +22,7 @@ module.exports = function (sequelize) {
         supervisor_title: { type: DataTypes.STRING(50), allowNull: true },
         supervisor_email: { type: DataTypes.STRING(255), allowNull: false },
         department_id: { type: DataTypes.INTEGER, allowNull: false, },
-        account_id: { type: DataTypes.INTEGER, allowNull: true, defaultValue: null, },
+        account_id: { type: DataTypes.UUID, allowNull: true, defaultValue: null, },
         profile_image_id: { type: DataTypes.INTEGER, allowNull: true, defaultValue: null, },
     }, {
         tableName: 'supervisors_tb',

@@ -7,16 +7,12 @@ module.exports = function (sequelize) {
     const AccountReport = sequelize.define('AccountReport', {
         report_id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true, },
         reporter_id: { 
-            type: DataTypes.INTEGER, 
+            type: DataTypes.UUID, 
             allowNull: false,
-            // references: { model: 'accounts_tb', key: 'account_id' },
-            // onDelete: 'CASCADE'
         },
         account_id: { 
-            type: DataTypes.INTEGER, 
+            type: DataTypes.UUID, 
             allowNull: false,
-            // references: { model: 'accounts_tb', key: 'account_id' },
-            // onDelete: 'CASECADE'
         },
         report_reason: { type: DataTypes.STRING(512), allowNull: false },
         is_report_reviewed: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false, },
