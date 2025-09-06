@@ -87,9 +87,6 @@ class SupervisorService {
                 values, { where: { supervisor_id: supervisor_id } }
             );
 
-            if (affectedRows === 0)
-            throw new Error('ID_NOT_EXISTS');
-
             return affectedRows;
 
         } catch (error) {
@@ -111,9 +108,6 @@ class SupervisorService {
                 { where: { supervisor_id: supervisor_id } }
             );
 
-            if (affectedRows === 0)
-            throw new Error('ID_NOT_EXISTS');
-
             return affectedRows;
 
         } catch (error) {
@@ -133,10 +127,7 @@ class SupervisorService {
             const [affectedRows] = await models.Supervisor.update(
                 { department_id: department_id },
                 { where: { supervisor_id: supervisor_id } }
-            );
-
-            if (affectedRows === 0)
-            throw new Error('ID_NOT_EXISTS');
+            );          
 
             return affectedRows;
 
@@ -159,9 +150,6 @@ class SupervisorService {
                 { where: { supervisor_id: supervisor_id } }
             );
 
-            if (affectedRows === 0)
-            throw new Error('ID_NOT_EXISTS');
-
             return affectedRows;
 
         } catch (error) {
@@ -181,10 +169,7 @@ class SupervisorService {
             const [affectedRows] = await models.Supervisor.update(
                 { image_id: image_id }, 
                 { where: { supervisor_id: supervisor_id } }
-            );
-
-            if (affectedRows === 0)
-            throw new Error('ID_NOT_EXISTS');
+            );            
 
             return affectedRows;
 

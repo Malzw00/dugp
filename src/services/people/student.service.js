@@ -92,9 +92,6 @@ class StudentService {
                 where: { student_id: student_id } 
             });
 
-            if (affectedRows === 0)
-            throw new Error('ID_NOT_EXISTS');
-
             return affectedRows;
 
         } catch (error) {
@@ -119,9 +116,6 @@ class StudentService {
                 { department_id: department_id }, 
                 { where: { student_id: student_id } }
             );
-
-            if (affectedRows === 0)
-            throw new Error('ID_NOT_EXISTS');
 
             return affectedRows;
 
@@ -148,9 +142,6 @@ class StudentService {
                 { account_id: account_id }, 
                 { where: { student_id: student_id } }
             );
-
-            if (affectedRows === 0)
-            throw new Error('ID_NOT_EXISTS');
 
             return affectedRows;
 

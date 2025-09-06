@@ -8,6 +8,11 @@ const { DataTypes } = require("sequelize");
 module.exports = function (sequelize) {
 
     const Rating = sequelize.define('Rating', {
+        rate_id: { 
+            type: DataTypes.INTEGER, 
+            primaryKey: true, 
+            autoIncrement: true 
+        },
         project_id: { 
             type: DataTypes.INTEGER, 
             allowNull: false,
@@ -22,7 +27,7 @@ module.exports = function (sequelize) {
         timestamps: true,
         underscored: true,
         indexes: [
-            { unique: true, fields: ['project_id', 'account_id'] }
+            { unique: true, fields: ['project_id', 'account_id'], }
         ]
     });
 
