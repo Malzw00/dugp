@@ -5,6 +5,7 @@ const { DataTypes } = require("sequelize");
 module.exports = function (sequelize) {
 
     const CommentLike = sequelize.define('CommentLike', {
+        comment_like_id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
         account_id: { 
             type: DataTypes.INTEGER, 
             allowNull: true, 

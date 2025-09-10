@@ -11,7 +11,7 @@ module.exports = function (sequelize) {
     const Student = sequelize.define('Student', {
         student_id: { 
             type: DataTypes.UUID, 
-            defaultValue: uuidv4, 
+            defaultValue: DataTypes.UUIDV4, 
             primaryKey: true, 
         },
         student_name: { type: DataTypes.STRING(50), allowNull: false },
@@ -41,7 +41,7 @@ module.exports = function (sequelize) {
     });
 
     Student.beforeSave((student, options) => {
-        student.full_name = [
+        student.student_full_name = [
             student.student_name,
             student.student_father_name,
             student.student_grandfather_name,

@@ -10,13 +10,14 @@ module.exports = function (sequelize) {
     const Project = sequelize.define('Project', {
         project_id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
         project_title: { type: DataTypes.STRING(255), allowNull: false, unique: true },
-        project_description: { type: DataTypes.STRING(512), allowNull: true, },
-        project_year: { type: DataTypes.DATEONLY, allowNull: false },
+        project_describtion: { type: DataTypes.STRING(512), allowNull: true, },
+        project_date: { type: DataTypes.DATEONLY, allowNull: false },
         project_semester: { type: DataTypes.ENUM('Winter', 'Spring', 'Summer', 'Autumn'), allowNull: false },
         project_grade: { type: DataTypes.DECIMAL(5, 2), allowNull: true, validate: { min: 0.00, max: 100.00 } },
         department_id: { type: DataTypes.INTEGER, allowNull: false, },
-        cover_image_id: { type: DataTypes.INTEGER, allowNull: true,defaultValue: null, },
+        cover_image_id: { type: DataTypes.INTEGER, allowNull: true, defaultValue: null, },
         supervisor_id: { type: DataTypes.UUID, allowNull: true, },
+        available: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false, },
     }, {
         tableName: 'projects_tb',
         timestamps: true,

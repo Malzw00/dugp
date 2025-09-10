@@ -23,7 +23,7 @@ class StudentService {
      * @returns {Promise<Object>} The created student record
      * @throws {Error} If database operation fails or validation errors occur
      */
-    static async create ({ name, father_name, grand_father_name, family_name, department_id }) {
+    static async create ({ name, father_name, grand_father_name, family_name, department_id, }) {
         try {
             const created = await models.Student.create({
                 student_name: name,
@@ -32,9 +32,7 @@ class StudentService {
                 student_family_name: family_name,
                 department_id: department_id,
             });
-
             return created;
-
         } catch (error) {
             throw this.logger.log(this.create.name, error);
         }
@@ -116,7 +114,6 @@ class StudentService {
                 { department_id: department_id }, 
                 { where: { student_id: student_id } }
             );
-
             return affectedRows;
 
         } catch (error) {
@@ -267,20 +264,17 @@ class StudentService {
      */
     static async getByCollageID({ collage_id }) {
         try {
-            const departments = await models.Department.findAll({ 
-                where: { collage_id: collage_id } 
+            const students = await models.Student.findAll({
+                include: [
+                    { 
+                        model: models.Department, 
+                        include: [{ model: models.Collage }], 
+                        where: { collage_id: collage_id },
+                        required: true
+                    }
+                    
+                ],
             });
-
-            // use Promise.all to wait all Promise processes.
-            const studentsArrays = await Promise.all(
-                departments.map(async ({ department_id }) => {
-                    return await models.Student.findAll({ where: { department_id } });
-                })
-            );
-
-            // Merge all arrays into one array.
-            const students = studentsArrays.flat();
-
             return students;
 
         } catch (error) {

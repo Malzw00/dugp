@@ -11,7 +11,7 @@ module.exports = function (sequelize) {
     const Supervisor = sequelize.define('Supervisor', {
         supervisor_id: { 
             type: DataTypes.UUID, 
-            defaultValue: uuidv4, 
+            defaultValue: DataTypes.UUIDV4, 
             primaryKey: true, 
         },
         supervisor_name: { type: DataTypes.STRING(50), allowNull: false },

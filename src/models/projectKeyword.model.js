@@ -1,10 +1,8 @@
 const { DataTypes } = require("sequelize");
 
 
-/**
- * 
- * @param {import('sequelize').Sequelize} sequelize 
- */
+/** @param {import('sequelize').Sequelize} sequelize */
+
 module.exports = function (sequelize) {
 
     const ProjectKeyword = sequelize.define('ProjectKeyword', {
@@ -20,6 +18,9 @@ module.exports = function (sequelize) {
         tableName: 'project_keywords_tb',
         timestamps: true,
         underscored: true,
+        indexes: [
+            { fields: [ 'keyowrd_id', 'project_id' ], unique: true }
+        ]
     });
 
     return ProjectKeyword;

@@ -9,8 +9,9 @@ module.exports = function (sequelize) {
         book_id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true, },
         book_path: { type: DataTypes.TEXT, allowNull: false },
         project_id: { 
-            type: DataTypes.INTEGER, 
+            type: DataTypes.INTEGER,
             allowNull: false,
+            unique: true
         },
     }, {
         tableName: 'project_books_tb',

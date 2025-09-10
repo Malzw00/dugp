@@ -252,20 +252,17 @@ class SupervisorService {
      */
     static async getByCollageID({ collage_id }) {
         try {
-            const departments = await models.Department.findAll({ 
-                where: { collage_id: collage_id } 
+            const supervisor = await models.Supervisor.findAll({
+                include: [
+                    { 
+                        model: models.Department, 
+                        include: [{ model: models.Collage }], 
+                        where: { collage_id: collage_id },
+                        required: true
+                    }
+                ],
             });
-
-            const supervisorsArrays = await Promise.all(
-                departments.map(async ({ department_id }) => {
-                    return await models.Supervisor.findAll({ where: { department_id: department_id } });
-                })
-            );
-
-            const supervisors = supervisorsArrays.flat();
-
-            return supervisors;
-
+            return supervisor;
         } catch (error) {
             throw this.logger.log(this.getByCollageID.name, error);    
         }

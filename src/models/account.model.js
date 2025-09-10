@@ -9,7 +9,7 @@ module.exports =  function (sequelize) {
     const Account = sequelize.define('Account', {
         account_id: { 
             type: DataTypes.UUID, 
-            defaultValue: uuidv4, 
+            defaultValue: DataTypes.UUIDV4, 
             primaryKey: true 
         },
         fst_name: { type: DataTypes.STRING(100), allowNull: false, },

@@ -10,7 +10,7 @@ module.exports = function (sequelize) {
     const ProjectPresentation = sequelize.define('ProjectPresentation', {
         presentation_id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true, },
         presentation_path: { type: DataTypes.TEXT, allowNull: false },
-        project_id: { 
+        project_id: {
             type: DataTypes.INTEGER, 
             allowNull: false,
         },

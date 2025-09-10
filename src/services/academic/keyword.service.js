@@ -26,7 +26,8 @@ class KeywordService {
      */
     static async create({ keyword }) {
         try {
-            const created = await models.Keyword.create({ keyword: keyword });
+            const _keyword = keyword.trim().toLowerCase();
+            const created = await models.Keyword.create({ keyword: _keyword });
             return created;
         } catch (error) {
             throw this.logger.log(this.create.name, error);

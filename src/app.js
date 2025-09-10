@@ -4,6 +4,7 @@ const helmet = require('helmet');
 const compression = require('compression');
 const history = require('connect-history-api-fallback');
 const GeneralRateLimiter = require('@root/src/middlewares/GeneralRateLimiter');
+const cors = require('cors');
 const expressApp = express();
 
 
@@ -17,10 +18,12 @@ expressApp.use(
         contentSecurityPolicy: false,
     })
 );
+expressApp.use(cors());
 expressApp.use(GeneralRateLimiter());
 expressApp.use(compression());
 expressApp.use(express.json());
 expressApp.use(express.static(path.resolve('build'))); // Serve Static Files
+expressApp.use('uploads/', express.static(path.resolve('uploads'))); // Serve Static Files
 expressApp.use(history());
 
 

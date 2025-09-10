@@ -1,5 +1,6 @@
 const ServiceErrorLogger = require("@utils/serviceErrorLogger.util");
 const { models } = require('@config/database.config');
+const { fn, col } = require("sequelize");
 
 
 
@@ -79,21 +80,31 @@ class CommentService {
         try {
             const comments = await models.Comment.findAll({
                 where: { project_id: project_id, parent_id: null },
-                attributes: [ 'comment_id', 'comment_content', 'parent_id', 'account_id' ],
+                attributes: [ 
+                    'comment_id', 
+                    'comment_content', 
+                    'parent_id', 
+                    'account_id',
+                    [fn("COUNT", col('CommentLike.comment_like_id')), 'likes_count']
+                ],
                 include: [
                     {
-                        model:      models.Comment,
-                        as:         'Replies',
-                        required:   false,
+                        model: models.Comment,
+                        as: 'Replies',
+                        required: false,
                         include: [{
-                            model:      models.Account,
-                            required:   true,
+                            model: models.Account,
+                            required: true,
                             attributes: [ 'account_id', 'account_name', 'profile_image_id', 'created_at' ],
                         }]
                     },
+                    { 
+                        model: models.CommentLike, 
+                        attributes: [] 
+                    },
                     {
-                        model:      models.Account,
-                        required:   true,
+                        model: models.Account,
+                        required: true,
                         attributes: [ 'account_id', 'account_name', 'profile_image_id', 'created_at' ],
                     }
                 ],

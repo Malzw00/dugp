@@ -1,6 +1,7 @@
 const ServiceErrorLogger = require("@utils/serviceErrorLogger.util");
 const { models } = require("@config/database.config");
 const { sequelize } = require("@config/database.config");
+const { fn, col } = require("sequelize");
 
 
 /**
@@ -117,62 +118,98 @@ class RatingService {
     }
 
     /**
-     * Calculate Bayesian rating for a project.
-     * @param {number} project_id - The project ID.
-     * @param {number} [m=10] - Minimum votes required to be listed in the chart.
-     * @returns {Promise<Object|null>} Project data with Bayesian rating, or null if project not found or no ratings available.
+     * Calculates the average rating (AVG) for a given project.
+     *
+     * @async
+     * @function getProjectRating
+     * @param {number|string} project_id - The ID of the project to calculate the rating for.
+     * @returns {Promise<number|null>} 
+     *    - The average rating (a decimal value between 1 and 5).
+     *    - Or `null` if the project has no ratings.
+     *
+     * @example
+     * // Example usage:
+     * const avgRating = await RatingService.getProjectRating(123);
+     * console.log(avgRating); // e.g. 4.25 or null if no ratings exist
+     *
+     * @throws {Error} Throws an error if the database query fails or 
+     *                 an unexpected issue occurs during execution.
      */
-    static async getProjectRating(project_id, m = 10) {
+    static async getProjectRating(project_id) {
+        try {
+            const projectRating = await models.Rating.findOne({
+                attributes: [
+                    [fn('AVG', col('rate')), 'rating']
+                ],
+                where: { project_id },
+                raw: true // return a plain object instead of a Sequelize instance
+            });
 
-        // calculate C (average rating across all projects)
-        const result = await models.Rating.findOne({
-            attributes: [
-                [sequelize.fn('AVG', sequelize.col('rate')), 'C']
-            ],
-            raw: true
-        });
+            return projectRating ? projectRating.rating : null;
 
-        const C = parseFloat(result.C) || 0;
-
-        // Select project with its ratings
-        const projectData = await models.Project.findOne({
-            where: { project_id: project_id },
-            include: [
-                {
-                    model: models.Rating,
-                    attributes: []
-                }
-            ],
-            attributes: [
-                'project_id',
-                'project_title',
-                'project_description',
-                'project_year',
-                'project_semester',
-                'project_grade',
-                // number of ratings for the project (v)
-                [sequelize.fn('COUNT', sequelize.col('Ratings.rate_id')), 'v'],
-                // average rating for the project (R)
-                [sequelize.fn('AVG', sequelize.col('Ratings.rate')), 'R'],
-            ],
-            group: ['Project.project_id'],
-            raw: true
-        });
-
-        if (!projectData) return null;
-
-        // Calculate Bayesian Rating
-        const v = parseInt(projectData.v, 10);
-        const R = parseFloat(projectData.R) || 0;
-
-        const bayesian_rating = ((v / (v + m)) * R) + ((m / (v + m)) * C);
-
-        // Return project data with Bayesian rating
-        return {
-            ...projectData,
-            rating: parseFloat(bayesian_rating.toFixed(2))
-        };
+        } catch (error) {
+            throw this.logger.log(this.getProjectRating.name, error);
+        }
     }
+
+
+    // /**
+    //  * Calculate Bayesian rating for a project.
+    //  * @param {number} project_id - The project ID.
+    //  * @param {number} [m=10] - Minimum votes required to be listed in the chart.
+    //  * @returns {Promise<Object|null>} Project data with Bayesian rating, or null if project not found or no ratings available.
+    //  */
+    // static async getProjectRating(project_id, m = 10) {
+
+    //     // calculate C (average rating across all projects)
+    //     const result = await models.Rating.findOne({
+    //         attributes: [
+    //             [sequelize.fn('AVG', sequelize.col('rate')), 'C']
+    //         ],
+    //         raw: true
+    //     });
+
+    //     const C = parseFloat(result.C) || 0;
+
+    //     // Select project with its ratings
+    //     const projectData = await models.Project.findOne({
+    //         where: { project_id: project_id },
+    //         include: [
+    //             {
+    //                 model: models.Rating,
+    //                 attributes: []
+    //             }
+    //         ],
+    //         attributes: [
+    //             'project_id',
+    //             'project_title',
+    //             'project_description',
+    //             'project_year',
+    //             'project_semester',
+    //             'project_grade',
+    //             // number of ratings for the project (v)
+    //             [sequelize.fn('COUNT', sequelize.col('Ratings.rate_id')), 'v'],
+    //             // average rating for the project (R)
+    //             [sequelize.fn('AVG', sequelize.col('Ratings.rate')), 'R'],
+    //         ],
+    //         group: ['Project.project_id'],
+    //         raw: true
+    //     });
+
+    //     if (!projectData) return null;
+
+    //     // Calculate Bayesian Rating
+    //     const v = parseInt(projectData.v, 10);
+    //     const R = parseFloat(projectData.R) || 0;
+
+    //     const bayesian_rating = ((v / (v + m)) * R) + ((m / (v + m)) * C);
+
+    //     // Return project data with Bayesian rating
+    //     return {
+    //         ...projectData,
+    //         rating: parseFloat(bayesian_rating.toFixed(2))
+    //     };
+    // }
 }
 
 module.exports = RatingService;
