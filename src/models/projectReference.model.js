@@ -1,16 +1,19 @@
 const { DataTypes } = require("sequelize");
 
 
-/**
- * 
- * @param {import('sequelize').Sequelize} sequelize 
- */
+/** @param {import('sequelize').Sequelize} sequelize */
 module.exports = function (sequelize) {
 
-    const ProjectReferences = sequelize.define('ProjectReferences', {
-        ref_id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true, },
-        ref_title: { type: DataTypes.STRING(512), allowNull: false, },
-        ref_path: { type: DataTypes.TEXT, allowNull: false },
+    const ProjectReference = sequelize.define('ProjectReference', {
+        project_reference_id: { 
+            type: DataTypes.INTEGER, 
+            autoIncrement: true, 
+            primaryKey: true, 
+        },
+        file_id: { 
+            type: DataTypes.INTEGER, 
+            allowNull: false, 
+        },
         project_id: { 
             type: DataTypes.INTEGER, 
             allowNull: false,
@@ -19,11 +22,13 @@ module.exports = function (sequelize) {
         tableName: 'project_references_tb',
         timestamps: true,
         underscored: true,
+        indexes: [
+            {
+                unique: true,
+                fields: ['file_id', 'project_id']
+            }
+        ]
     });
 
-    ProjectReferences.associate = function (models) {
-        ProjectReferences.belongsTo(models.Project, { foreignKey: 'project_id' });
-    }
-
-    return ProjectReferences;
+    return ProjectReference;
 }

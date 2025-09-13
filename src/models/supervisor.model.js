@@ -41,8 +41,11 @@ module.exports = function (sequelize) {
 
     Supervisor.associate = function (models) {
         Supervisor.belongsTo(models.Account, { foreignKey: 'account_id' });
-        Supervisor.belongsTo(models.Image, { foreignKey: 'profile_image_id' });
+        
+        Supervisor.belongsTo(models.File, { foreignKey: 'profile_image_id', as: 'ProfileImage' });
+        
         Supervisor.hasMany(models.Project, { foreignKey: 'supervisor_id', onDelete: 'SET NULL' });
+        
         Supervisor.belongsTo(models.Department, { foreignKey: 'department_id' });
     }
 

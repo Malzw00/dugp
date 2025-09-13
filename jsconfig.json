@@ -13,7 +13,6 @@
       "@utils/*": ["src/utils/*"],
       "@seeders/*": ["src/seeders/*"]
     },
-    "types": ["./src/types"]
   },
-  "include": ["src/**/*", "types"]
+  "include": ["src/**/*", "types", "archive/projectBook.model.js", "archive/projectPresentation.model.js", "archive/projectReference.model.js", "archive/image.model.js", "archive/projectPresentation.service.js", "archive/projectBook.service.js"]
 }

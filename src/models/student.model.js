@@ -1,5 +1,4 @@
 const { DataTypes } = require("sequelize");
-const { v4: uuidv4 } = require('uuid');
 
 
 /**
@@ -53,8 +52,11 @@ module.exports = function (sequelize) {
     Student.associate = function(models) {
 
         Student.belongsTo(models.Department, { foreignKey: 'department_id' });
-        Student.belongsTo(models.Image, { foreignKey: 'profile_image_id' });
+
+        Student.belongsTo(models.File, { foreignKey: 'profile_image_id', as: 'ProfileImage' });
+        
         Student.belongsTo(models.Account, { foreignKey: 'account_id' });
+        
         Student.belongsToMany(models.Project, { 
             through: models.ProjectStudent, 
             foreignKey: 'student_id', 

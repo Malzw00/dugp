@@ -3,13 +3,17 @@ const path = require('path');
 const helmet = require('helmet');
 const compression = require('compression');
 const history = require('connect-history-api-fallback');
-const GeneralRateLimiter = require('@root/src/middlewares/GeneralRateLimiter');
+const GeneralRateLimiter = require('@root/src/middlewares/generalRateLimiter.middleware');
 const cors = require('cors');
+const corsOptions = require('@config/corsOptions.config');
 const expressApp = express();
-
+const cookieParser = require('cookie-parser')
 
 
 // Middlewares:
+expressApp.use(cors(corsOptions));
+expressApp.use(GeneralRateLimiter());
+expressApp.use(compression());
 expressApp.use(
     helmet({
         // حصلت مشكلة عند محاولة فتح الموقع من خلال جهاز آخر على نفس الشبكة المحلية 
@@ -18,9 +22,7 @@ expressApp.use(
         contentSecurityPolicy: false,
     })
 );
-expressApp.use(cors());
-expressApp.use(GeneralRateLimiter());
-expressApp.use(compression());
+expressApp.use(cookieParser());
 expressApp.use(express.json());
 expressApp.use(express.static(path.resolve('build'))); // Serve Static Files
 expressApp.use('uploads/', express.static(path.resolve('uploads'))); // Serve Static Files
@@ -31,6 +33,6 @@ expressApp.use(history());
 
 
 // Error handler middleware 
-expressApp.use(require('@middlewares/ErrorHandler'));
+expressApp.use(require('@root/src/middlewares/errorHandler.middleware'));
 
 module.exports = expressApp;

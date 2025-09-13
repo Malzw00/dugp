@@ -19,7 +19,7 @@ module.exports = function (sequelize) {
         timestamps: true,
         underscored: true,
         indexes: [
-            { fields: [ 'keyowrd_id', 'project_id' ], unique: true }
+            { fields: [ 'keyword_id', 'project_id' ], unique: true }
         ]
     });
 

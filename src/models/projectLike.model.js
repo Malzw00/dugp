@@ -8,11 +8,11 @@ module.exports = function (sequelize) {
         project_like_id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true, },
         account_id: { 
             type: DataTypes.UUID, 
-            allowNull: true, 
+            allowNull: false, 
         },
         project_id: { 
             type: DataTypes.INTEGER, 
-            allowNull: true,
+            allowNull: false,
         },
     }, {
         tableName: 'project_likes_tb',

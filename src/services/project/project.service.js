@@ -1,7 +1,8 @@
 const ServiceErrorLogger = require("@utils/serviceErrorLogger.util");
 const { models, sequelize } = require("@config/database.config");
-const { fn, col, where, Op } = require("sequelize");
-const RatingService = require("@services/social/rating.service");
+const { fn, col } = require("sequelize");
+const FileService = require("@root/src/services/File.service");
+const ProjectReferenceService = require("./projectReference.service");
 
 
 
@@ -70,7 +71,7 @@ class ProjectService {
     }
 
 
-    static async get (project_id) {
+    static async get ({ project_id }) {
         try {
             const project = await models.Project.findByPk(
                 project_id, 
@@ -78,7 +79,11 @@ class ProjectService {
                     include: [
                         { model: models.Student, attributes: ['student_id', 'student_full_name'] },
                         { model: models.Supervisor, attributes: ['supervisor_id', 'supervisor_full_name'] },
-                        { model: models.Image, attributes: ['image_path'] },
+                        { 
+                            model: models.File,
+                            attributes: ['file_id', 'original_name', 'stored_name', 'path'],
+                            as: 'Cover', 
+                        },
                         { model: models.Department, include: { model: models.Collage } },
                     ]
                 }
@@ -88,17 +93,77 @@ class ProjectService {
             throw this.logger.log(this.get.name, error);
         } 
     }
-    
 
-    // uncompleted function ---
-    /** order: { by: 'date' | 'rating' | 'grade' | 'likes_count', dir: 'ASC' | 'DESC' } */
-    /** (**important: you should add categories, collage, department filter) */
-    static async getAll({ offset = 0, limit = 10, order = { by:'date', dir:'ASC' } }){
+
+    static async getAll({ 
+        offset = 0, 
+        limit = 10, 
+        order = { by: 'date', dir: 'ASC' },
+        filters = {} // { collage_id, department_id, category_ids }
+    }) {
         try {
+            const where = { available: true };
+
+            // فلترة حسب الكلية
+            if (filters.collage_id) {
+                where['$Department.collage_id$'] = filters.collage_id;
+            }
+
+            // فلترة حسب القسم
+            if (filters.department_id) {
+                where['department_id'] = filters.department_id;
+            }
+
+            // إعداد JOIN مع الفئات إذا وجدت
+            const include = [
+                { model: models.ProjectLike, attributes: [] },
+                { model: models.Comment, attributes: [] },
+                { model: models.Rating, attributes: [] },
+                {
+                    model: models.Department,
+                    attributes: ['department_id', 'department_name'],
+                    include: [
+                        {
+                            model: models.Collage,
+                            attributes: ['collage_id', 'collage_name']
+                        }
+                    ]
+                },
+                {
+                    model: models.Category,
+                    attributes: ['category_id', 'category_name'],
+                    through: { attributes: [] },
+                },
+                {
+                    model: models.File,
+                    as: 'Cover',
+                    attributes: ['file_id', 'original_name', 'stored_name', 'path']
+                }
+            ];
+
+            // إذا تم تمرير فلاتر للفئات
+            if (filters.category_ids && filters.category_ids.length) {
+                include.push({
+                    model: models.Category,
+                    attributes: [],
+                    through: { attributes: [] },
+                    where: { category_id: filters.category_ids }
+                });
+            }
+
+            // تحديد ترتيب حسب الحقل
+            let orderField;
+            switch (order.by) {
+                case 'date': orderField = 'created_at'; break;
+                case 'rating': orderField = fn('AVG', col('Ratings.rate')); break;
+                case 'likes': orderField = fn('COUNT', col('ProjectLikes.project_like_id')); break;
+                case 'grade': orderField = 'project_grade'; break;
+                default: orderField = 'created_at';
+            }
+
             const projects = await models.Project.findAll({
-                where: { available: true },
-                offset: offset?? 0,
-                limit:  limit?? 10,
+                where,
+                include,
                 attributes: [
                     'project_id',
                     'project_title',
@@ -110,22 +175,15 @@ class ProjectService {
                     [fn('COUNT', col('Comments.comment_id')), 'comments_count'],
                     [fn('AVG', col('Ratings.rate')), 'rating']
                 ],
-                include: [
-                    { model: models.ProjectLike, attributes: [] },
-                    { model: models.Comment, attributes: [] },
-                    { model: models.Rating, attributes: [] },
+                offset,
+                limit,
+                group: [
+                    'Project.project_id',
+                    'Department.department_id', 
+                    'Department->Collage.collage_id', 
+                    'Categories.category_id',
                 ],
-                group: ['Project.project_id'],
-                order: [[
-                    order.by === 'date'
-                    ? 'created_at'
-                    : order.by === 'rating'
-                    ? 'rating'
-                    : order.by === 'likes'
-                    ? 'likes_count'
-                    : 'grade',
-                    order.dir
-                ]]
+                order: [[orderField, order.dir.toUpperCase()]]
             });
 
             return projects;
@@ -136,25 +194,100 @@ class ProjectService {
     }
 
 
-
     /**
      * 
      * @param {*} options 
      * @param {*} filters
      */
     static async search({  }, {  }) {
-
-    }
-
-
-
-    static async delete({ project_id }) {
         
     }
 
 
 
+    /**
+     * Deletes a project along with its associated files (book, presentation, references) and related data.
+     * Comments, likes, ratings, and reports are deleted automatically via ON DELETE CASCADE.
+     * Students associated with the project are not deleted.
+     *
+     * @param {Object} params
+     * @param {number} params.project_id - The ID of the project to delete
+     * @returns {Promise<{ isDeleted: boolean, deletedFiles: number }>} Result of the deletion
+     * @throws {Error} Throws an error if deletion fails
+     */
+    static async delete({ project_id }) {
+        const _transaction = await sequelize.transaction();
+        try {
+            const project = await models.Project.findByPk(project_id, { 
+                include: [
+                    {
+                        model: models.File,
+                        as: 'References',
+                        attributes: ['file_id'],
+                        through: { attributes: [] },
+                    }
+                ],
+                transaction: _transaction 
+            });
 
+            if (!project) {
+                await _transaction.rollback();
+                return { isDeleted: false, deletedFiles: 0 };
+            }
+            
+            const fileIds = [
+                project.book_id, 
+                project.presentation_id,
+                ...project.References.map(ref => ref.file_id),
+            ].filter(Boolean);
+
+            const deletedFiles = await FileService.bulkDeleteFiles(fileIds, _transaction);
+
+            await project.destroy({ transaction: _transaction });
+
+            await _transaction.commit();
+
+            return { isDeleted: true, deletedFiles };
+
+        } catch (error) {
+            await _transaction.rollback();
+            throw this.logger.log(this.delete.name, error);
+        }
+    }
+
+
+    static async getBook({ project_id }) {
+        try {
+            const project = await models.Project.findByPk(project_id, {
+                include: {
+                    model: models.File,
+                    as: 'Book',
+                    where: { category: 'book' },
+                    required: false,
+                }
+            });
+            return project?.Book?? null;
+        } catch (error) {
+            throw this.logger.log(this.getBook.name, error);
+        }
+    }
+    
+    
+    static async getPresentation({ project_id }) {
+        try {
+            const project = await models.Project.findByPk(project_id, {
+                include: {
+                    model: models.File,
+                    as: 'Presentation',
+                    where: { category: 'presentation' },
+                    required: false,
+                }
+            });
+            return project?.Presentation?? null;
+        } catch (error) {
+            throw this.logger.log(this.getBook.name, error);
+        }
+    }
 }
 
 

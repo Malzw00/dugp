@@ -17,6 +17,8 @@ module.exports = function (sequelize) {
         department_id: { type: DataTypes.INTEGER, allowNull: false, },
         cover_image_id: { type: DataTypes.INTEGER, allowNull: true, defaultValue: null, },
         supervisor_id: { type: DataTypes.UUID, allowNull: true, },
+        book_id: { type: DataTypes.INTEGER, allowNull: false, },
+        presentation_id: { type: DataTypes.INTEGER, allowNull: false, },
         available: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false, },
     }, {
         tableName: 'projects_tb',
@@ -38,31 +40,60 @@ module.exports = function (sequelize) {
             onDelete: 'CASCADE' 
         });
         
-        Project.hasOne(models.ProjectPresentation, { foreignKey: 'project_id', onDelete: 'CASCADE' });
+        Project.belongsTo(models.File, { 
+            foreignKey: 'book_id', 
+            as: 'Book',
+        });
         
-        Project.hasOne(models.ProjectBook, { foreignKey: 'project_id', onDelete: 'CASCADE' });
+        Project.belongsTo(models.File, { 
+            foreignKey: 'presentation_id', 
+            as: 'Presentation',
+        });
         
-        Project.hasMany(models.ProjectReference, { foreignKey: 'project_id', onDelete: 'CASCADE' });
+        Project.belongsToMany(models.File, { 
+            foreignKey: 'project_id', 
+            through: models.ProjectReference,
+            as: 'References',
+        });
         
         Project.belongsToMany(models.Student, { 
             through: models.ProjectStudent, 
             foreignKey: 'project_id', 
-            onDelete: 'CASCADE' 
+            onDelete: 'CASCADE',
         });
         
-        Project.belongsTo(models.Supervisor, { foreignKey: 'supervisor_id' });
+        Project.belongsTo(models.Supervisor, { 
+            foreignKey: 'supervisor_id',
+        });
         
-        Project.belongsTo(models.Image, { foreignKey: 'cover_image_id'});
+        Project.belongsTo(models.File, { 
+            foreignKey: 'cover_image_id', 
+            as: 'Cover',
+        });
         
-        Project.hasMany(models.Comment, { foreignKey: 'project_id', onDelete: 'CASCADE' });
+        Project.hasMany(models.Comment, { 
+            foreignKey: 'project_id', 
+            onDelete: 'CASCADE',
+        });
         
-        Project.hasMany(models.ProjectLike, { foreignKey: 'project_id', onDelete: 'CASCADE' });
+        Project.hasMany(models.ProjectLike, { 
+            foreignKey: 'project_id', 
+            onDelete: 'CASCADE',
+        });
         
-        Project.hasMany(models.Rating, { foreignKey: 'project_id', onDelete: 'CASCADE' });
+        Project.hasMany(models.Rating, { 
+            foreignKey: 'project_id', 
+            onDelete: 'CASCADE',
+        });
         
-        Project.hasMany(models.ProjectReport, { foreignKey: 'project_id', onDelete: 'CASCADE' });
+        Project.hasMany(models.ProjectReport, { 
+            foreignKey: 'project_id', 
+            onDelete: 'CASCADE',
+        });
 
-        Project.belongsTo(models.Department, { foreignKey: 'department_id' });
+        Project.belongsTo(models.Department, { 
+            foreignKey: 'department_id',
+        });
     }
 
     return Project;

@@ -71,8 +71,9 @@ module.exports =  function (sequelize) {
             onDelete: 'CASCADE' 
         });
 
-        Account.belongsTo(models.Image, { 
-            foreignKey: 'profile_image_id', 
+        Account.belongsTo(models.File, { 
+            foreignKey: 'profile_image_id',
+            as: 'ProfileImage' 
         });
 
         Account.hasMany(models.ProjectLike, { 
@@ -81,8 +82,8 @@ module.exports =  function (sequelize) {
         });
 
         Account.hasMany(models.CommentLike, { 
-            foreignKey: 'account_id', 
-            onDelete: 'CASCADE' 
+            foreignKey: 'account_id',
+            onDelete: 'CASCADE',
         });
 
         Account.hasMany(models.Rating, { 

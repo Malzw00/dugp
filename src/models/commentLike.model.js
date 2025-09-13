@@ -7,12 +7,12 @@ module.exports = function (sequelize) {
     const CommentLike = sequelize.define('CommentLike', {
         comment_like_id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
         account_id: { 
-            type: DataTypes.INTEGER, 
-            allowNull: true, 
+            type: DataTypes.UUID, 
+            allowNull: false, 
         },
         comment_id: { 
             type: DataTypes.INTEGER, 
-            allowNull: true, 
+            allowNull: false, 
         },
     }, {
         tableName: 'comment_likes_tb',

@@ -36,8 +36,8 @@ module.exports = function (sequelize) {
         });
 
         Comment.hasMany(models.CommentLike, { 
-            foreignKey: 'comment_id', 
-            onDelete: 'CASCADE'
+            foreignKey: 'comment_id',
+            onDelete: 'CASCADE',
         });
 
         Comment.hasMany(models.Comment, { 
