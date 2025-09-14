@@ -11,6 +11,13 @@ module.exports = function (sequelize) {
         tableName: 'keywords_tb',
         timestamps: true,
         underscored: true,
+        indexes: [
+            {
+                name: 'ft_keyword',
+                type: 'FULLTEXT',
+                fields: ['keyword']
+            }
+        ]
     });
 
     Keyword.associate = function (models) {
