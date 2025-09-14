@@ -10,7 +10,7 @@ const ServiceErrorLogger = require("@utils/serviceErrorLogger.util");
 class SupervisorService {
 
     /** Logger instance for error handling */
-    static logger = new ServiceErrorLogger({ module: 'Supervisor' });
+    static #logger = new ServiceErrorLogger({ module: 'Supervisor' });
 
     /**
      * Create a new supervisor.
@@ -40,7 +40,7 @@ class SupervisorService {
             return created;
 
         } catch (error) {
-            throw this.logger.log(this.create.name, error);
+            throw this.#logger.log(this.create.name, error);
         }
     }
 
@@ -60,7 +60,7 @@ class SupervisorService {
             return deletedRows;
 
         } catch (error) {
-            throw this.logger.log(this.delete.name, error);
+            throw this.#logger.log(this.delete.name, error);
         }
     }
 
@@ -90,7 +90,7 @@ class SupervisorService {
             return affectedRows;
 
         } catch (error) {
-            throw this.logger.log(this.updateName.name, error);
+            throw this.#logger.log(this.updateName.name, error);
         }
     }
 
@@ -111,7 +111,7 @@ class SupervisorService {
             return affectedRows;
 
         } catch (error) {
-            throw this.logger.log(this.updateTitle.name, error);
+            throw this.#logger.log(this.updateTitle.name, error);
         }
     }
 
@@ -132,7 +132,7 @@ class SupervisorService {
             return affectedRows;
 
         } catch (error) {
-            throw this.logger.log(this.updateDepartment.name, error);
+            throw this.#logger.log(this.updateDepartment.name, error);
         }
     }
 
@@ -153,7 +153,7 @@ class SupervisorService {
             return affectedRows;
 
         } catch (error) {
-            throw this.logger.log(this.updateAccount.name, error);
+            throw this.#logger.log(this.updateAccount.name, error);
         }
     }
 
@@ -174,7 +174,7 @@ class SupervisorService {
             return affectedRows;
 
         } catch (error) {
-            throw this.logger.log(this.updateProfileImage.name, error);
+            throw this.#logger.log(this.updateProfileImage.name, error);
         }
     }
 
@@ -202,7 +202,7 @@ class SupervisorService {
             return supervisors;
 
         } catch (error) {
-            throw this.logger.log(this.searchByName.name, error);
+            throw this.#logger.log(this.searchByName.name, error);
         }
     }
 
@@ -221,7 +221,7 @@ class SupervisorService {
             return supervisor;
 
         } catch (error) {
-            throw this.logger.log(this.get.name, error);
+            throw this.#logger.log(this.get.name, error);
         }
     }
 
@@ -240,7 +240,7 @@ class SupervisorService {
             return supervisors;
 
         } catch (error) {
-            throw this.logger.log(this.getByDepartmentSupervisors.name, error);
+            throw this.#logger.log(this.getByDepartmentSupervisors.name, error);
         }
     }
 
@@ -264,7 +264,7 @@ class SupervisorService {
             });
             return supervisor;
         } catch (error) {
-            throw this.logger.log(this.getByCollageID.name, error);    
+            throw this.#logger.log(this.getByCollageID.name, error);    
         }
     }
 }

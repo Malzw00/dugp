@@ -5,7 +5,7 @@ const { models } = require("@config/database.config");
 
 class RefreshTokenService {
 
-    static logger = new ServiceErrorLogger({ module: 'RefreshToken' });
+    static #logger = new ServiceErrorLogger({ module: 'RefreshToken' });
 
     static async create ({ account_id }) {
         try {
@@ -24,7 +24,7 @@ class RefreshTokenService {
             return refreshToken;
 
         } catch (error) {
-            throw this.logger.log(this.create.name, error);
+            throw this.#logger.log(this.create.name, error);
         }
     }
 
@@ -38,7 +38,7 @@ class RefreshTokenService {
             return deletedRows;
 
         } catch (error) {
-            throw this.logger.log(this.deleteByID.name, error);
+            throw this.#logger.log(this.deleteByID.name, error);
         }
     }
 
@@ -53,7 +53,7 @@ class RefreshTokenService {
             return accountTokens;
 
         } catch (error) {
-            throw this.logger.log('GET_ACCOUNT_TOKENS_FAILED')
+            throw this.#logger.log('GET_ACCOUNT_TOKENS_FAILED')
         }
     }
 
@@ -68,7 +68,7 @@ class RefreshTokenService {
             }
             return null;
         } catch (error) {
-            throw this.logger.log('COMPARE_TOKENS_FAILES')
+            throw this.#logger.log('COMPARE_TOKENS_FAILES')
         }
     }
 }

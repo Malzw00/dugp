@@ -13,7 +13,7 @@ const ServiceErrorLogger = require("@utils/serviceErrorLogger.util");
  */
 class ProjectStudentService {
 
-    static logger = new ServiceErrorLogger({ module: 'ProjectStudentService' });
+    static #logger = new ServiceErrorLogger({ module: 'ProjectStudentService' });
 
     /**
      * Project-related operations
@@ -38,7 +38,7 @@ class ProjectStudentService {
                 });
                 return created;
             } catch (error) {
-                throw ProjectStudentService.logger.log(this.addStudent.name, error);
+                throw ProjectStudentService.#logger.log(this.addStudent.name, error);
             }
         }
 
@@ -59,7 +59,7 @@ class ProjectStudentService {
                 const students = await models.ProjectStudent.bulkCreate(_students, { ignoreDuplicates: true });
                 return students;
             } catch (error) {
-                throw ProjectStudentService.logger.log(this.addStudents.name, error);
+                throw ProjectStudentService.#logger.log(this.addStudents.name, error);
             }
         }
 
@@ -96,7 +96,7 @@ class ProjectStudentService {
 
                 return students.map(ps => ps.Student || null);
             } catch (error) {
-                throw ProjectStudentService.logger.log(this.getStudents.name, error);
+                throw ProjectStudentService.#logger.log(this.getStudents.name, error);
             }
         }
 
@@ -116,7 +116,7 @@ class ProjectStudentService {
                 });
                 return deletedRows;
             } catch (error) {
-                throw ProjectStudentService.logger.log(this.removeStudent.name, error);
+                throw ProjectStudentService.#logger.log(this.removeStudent.name, error);
             }
         }
 
@@ -137,7 +137,7 @@ class ProjectStudentService {
                 });
                 return deletedRows;
             } catch (error) {
-                throw ProjectStudentService.logger.log(this.removeStudents.name, error);
+                throw ProjectStudentService.#logger.log(this.removeStudents.name, error);
             }
         }
     }

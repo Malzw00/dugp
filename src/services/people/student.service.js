@@ -9,7 +9,7 @@ const { Op, } = require("sequelize");
  */
 class StudentService {
 
-    static logger = new ServiceErrorLogger({ module: 'Student' });
+    static #logger = new ServiceErrorLogger({ module: 'Student' });
 
     /**
      * Creates a new student record with the provided details.
@@ -34,7 +34,7 @@ class StudentService {
             });
             return created;
         } catch (error) {
-            throw this.logger.log(this.create.name, error);
+            throw this.#logger.log(this.create.name, error);
         }
     }
 
@@ -57,7 +57,7 @@ class StudentService {
             return deletedRows; 
 
         } catch (error) {
-            throw this.logger.log(this.delete.name, error);
+            throw this.#logger.log(this.delete.name, error);
         }
     }
 
@@ -93,7 +93,7 @@ class StudentService {
             return affectedRows;
 
         } catch (error) {
-            throw this.logger.log(this.updateName.name, error);
+            throw this.#logger.log(this.updateName.name, error);
         }
     }
     
@@ -117,7 +117,7 @@ class StudentService {
             return affectedRows;
 
         } catch (error) {
-            throw this.logger.log(this.updateDepartment.name, error);
+            throw this.#logger.log(this.updateDepartment.name, error);
         }
     }
     
@@ -143,7 +143,7 @@ class StudentService {
             return affectedRows;
 
         } catch (error) {
-            throw this.logger.log(this.updateAccount.name, error);
+            throw this.#logger.log(this.updateAccount.name, error);
         }
     }
     
@@ -168,7 +168,7 @@ class StudentService {
             return affectedRows;
 
         } catch (error) {
-            throw this.logger.log(this.updateProfileImage.name, error);
+            throw this.#logger.log(this.updateProfileImage.name, error);
         }
     }
 
@@ -201,7 +201,7 @@ class StudentService {
             return students;
 
         } catch (error) {
-            throw this.logger.log(this.searchByName.name, error);
+            throw this.#logger.log(this.searchByName.name, error);
         }
     }
 
@@ -224,7 +224,7 @@ class StudentService {
             return student;
 
         } catch (error) {
-            throw this.logger.log(this.get.name, error);
+            throw this.#logger.log(this.get.name, error);
         }
     }
 
@@ -247,7 +247,7 @@ class StudentService {
             return students;
 
         } catch (error) {
-            throw this.logger.log(this.getByDepartmentStudents.name, error);
+            throw this.#logger.log(this.getByDepartmentStudents.name, error);
         }
     }
     
@@ -278,7 +278,7 @@ class StudentService {
             return students;
 
         } catch (error) {
-            throw this.logger.log(this.getByCollageID.name, error);    
+            throw this.#logger.log(this.getByCollageID.name, error);    
         }
     }
 }

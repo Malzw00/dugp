@@ -16,7 +16,7 @@ class DepartmentService {
      * @private
      * @static
      */
-    static logger = new ServiceErrorLogger({ module: 'Department' });
+    static #logger = new ServiceErrorLogger({ module: 'Department' });
 
     /**
      * Create a new department linked to a specific college.
@@ -37,7 +37,7 @@ class DepartmentService {
             return created;
 
         } catch (error) {
-            throw this.logger.log(this.create.name, error);
+            throw this.#logger.log(this.create.name, error);
         }
     }
     
@@ -48,7 +48,7 @@ class DepartmentService {
             return departments;
             
         } catch (error) {
-            throw this.logger.log(this.getDepartments.name, error);
+            throw this.#logger.log(this.getDepartments.name, error);
         }
     }
 
@@ -72,7 +72,7 @@ class DepartmentService {
             return deletedRows;
 
         } catch (error) {
-            throw this.logger.log(this.delete.name, error);
+            throw this.#logger.log(this.delete.name, error);
         }
     }
 
@@ -99,7 +99,7 @@ class DepartmentService {
             return affectedRows;
 
         } catch (error) {
-            throw this.logger.log(this.updateName.name, error);
+            throw this.#logger.log(this.updateName.name, error);
         }
     }
 
@@ -127,7 +127,7 @@ class DepartmentService {
             return affectedRows;
 
         } catch (error) {
-            throw this.logger.log(this.updateCollage.name, error);
+            throw this.#logger.log(this.updateCollage.name, error);
         }
     }
 }

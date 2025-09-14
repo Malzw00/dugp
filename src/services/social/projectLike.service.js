@@ -8,7 +8,7 @@ const ServiceErrorLogger = require("@root/src/utils/serviceErrorLogger.util");
  */
 class ProjectLikeService {
 
-    static logger = new ServiceErrorLogger({ module: 'ProjectLike' });
+    static #logger = new ServiceErrorLogger({ module: 'ProjectLike' });
 
     /**
      * Create a new like for a project if it does not already exist.
@@ -30,7 +30,7 @@ class ProjectLikeService {
             return created;
             
         } catch (error) {
-            throw this.logger.log(this.create.name, error);   
+            throw this.#logger.log(this.create.name, error);   
         }
     }
 
@@ -50,7 +50,7 @@ class ProjectLikeService {
             return deletedRows;
 
         } catch (error) {
-            throw this.logger.log(this.delete.name, error);
+            throw this.#logger.log(this.delete.name, error);
         }
     }
     
@@ -71,7 +71,7 @@ class ProjectLikeService {
             return deletedRows;
 
         } catch (error) {
-            throw this.logger.log(this.delete.name, error);
+            throw this.#logger.log(this.delete.name, error);
         }
     }
 
@@ -97,7 +97,7 @@ class ProjectLikeService {
                 hasLike: !hasLike,
             };
         } catch (error) {
-            throw this.logger.log(this.toggle.name, error);
+            throw this.#logger.log(this.toggle.name, error);
         }
     }
 
@@ -145,7 +145,7 @@ class ProjectLikeService {
             return likes;
 
         } catch (error) {
-            throw this.logger.log(this.getProjectLikes.name, error);
+            throw this.#logger.log(this.getProjectLikes.name, error);
         }
     }
 
@@ -161,7 +161,7 @@ class ProjectLikeService {
             return await models.ProjectLike.count({ where: { project_id: project_id } });
 
         } catch (error) {
-            throw this.logger.log(this.getProjectLikesCount.name, error);
+            throw this.#logger.log(this.getProjectLikesCount.name, error);
         }
     }
 
@@ -182,7 +182,7 @@ class ProjectLikeService {
             return !!like;
 
         } catch (error) {
-            throw this.logger.log(this.hasLike.name, error);   
+            throw this.#logger.log(this.hasLike.name, error);   
         }
     }
 }

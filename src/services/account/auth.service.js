@@ -17,7 +17,7 @@ const RefreshTokenService = require('@services/account/refrehToken.service');
 
 class AuthService {
     
-    static logger = new ServiceErrorLogger({ module: 'Auth' });
+    static #logger = new ServiceErrorLogger({ module: 'Auth' });
 
     /**
      * Registers a new user account with the provided details.
@@ -51,7 +51,7 @@ class AuthService {
             return created;
 
         } catch (error) {
-            throw this.logger.log(this.register.name, error);
+            throw this.#logger.log(this.register.name, error);
         }
     }
 
@@ -95,7 +95,7 @@ class AuthService {
             }
 
         } catch (error) {
-            throw this.logger.log(this.login.name, error);
+            throw this.#logger.log(this.login.name, error);
         }
     }
 
@@ -137,7 +137,7 @@ class AuthService {
             return true;
             
         } catch (error) {
-            throw this.logger.error(`${this.logout.name}: ${error.message}`, error);
+            throw this.#logger.error(`${this.logout.name}: ${error.message}`, error);
         }
     }
 
@@ -183,7 +183,7 @@ class AuthService {
             )
 
         } catch (error) {
-            throw this.logger.log(this.refreshAccessToken.name, error);
+            throw this.#logger.log(this.refreshAccessToken.name, error);
         }
     }
 
@@ -227,7 +227,7 @@ class AuthService {
             return true;
                 
         } catch (error) {
-            this.logger.log(this.passwordResetRequest.name, error);
+            this.#logger.log(this.passwordResetRequest.name, error);
         }
     }
 
@@ -260,7 +260,7 @@ class AuthService {
             return true;
 
         } catch (error) {
-            throw this.logger.log(this.resetPassword.name, error);
+            throw this.#logger.log(this.resetPassword.name, error);
         }
     }
 }

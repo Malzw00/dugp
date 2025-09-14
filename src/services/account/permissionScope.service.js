@@ -8,7 +8,7 @@ const LogServiceError = require("@root/src/utils/serviceErrorLogger.util");
  */
 class PermissionScope {
 
-    static logger = new LogServiceError({ module: 'PermissionScope' });
+    static #logger = new LogServiceError({ module: 'PermissionScope' });
 
     /**
      * Creates a new permission scope that restricts a permission to a specific college context.
@@ -30,7 +30,7 @@ class PermissionScope {
             return created;
 
         } catch (error) {
-            throw this.logger.log(this.create.name, error);
+            throw this.#logger.log(this.create.name, error);
         }
     }
 
@@ -49,7 +49,7 @@ class PermissionScope {
             return deletedRows;
 
         } catch (error) {
-            throw this.logger.log(this.deleteByID.name, error);
+            throw this.#logger.log(this.deleteByID.name, error);
         }
     }
 
@@ -68,7 +68,7 @@ class PermissionScope {
             return scopes;
             
         } catch (error) {
-            throw this.logger.log(this.getScopes.name, error);
+            throw this.#logger.log(this.getScopes.name, error);
         }
     }
 
@@ -91,7 +91,7 @@ class PermissionScope {
             return count > 1;
 
         } catch (error) {
-            throw this.logger.log(this.hasScope.name, error);
+            throw this.#logger.log(this.hasScope.name, error);
         }
     }
 }

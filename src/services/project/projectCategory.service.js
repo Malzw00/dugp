@@ -15,7 +15,7 @@ const ServiceErrorLogger = require("@utils/serviceErrorLogger.util");
  */
 class ProjectCategoryService {
 
-    static logger = new ServiceErrorLogger({ module: 'ProjectCategoryService' });
+    static #logger = new ServiceErrorLogger({ module: 'ProjectCategoryService' });
 
     /**
      * Category-related operations
@@ -41,7 +41,7 @@ class ProjectCategoryService {
                 });
                 return { instance, created };
             } catch (error) {
-                throw ProjectCategoryService.logger.log(this.addProject.name, error);
+                throw ProjectCategoryService.#logger.log(this.addProject.name, error);
             }
         }
 
@@ -61,7 +61,7 @@ class ProjectCategoryService {
                 });
                 return deletedRows;
             } catch (error) {
-                throw ProjectCategoryService.logger.log(this.removeProject.name, error)
+                throw ProjectCategoryService.#logger.log(this.removeProject.name, error)
             }
         }
 
@@ -102,7 +102,7 @@ class ProjectCategoryService {
 
                 return projects;
             } catch (error) {
-                throw ProjectCategoryService.logger.log(this.getProjects.name, error);
+                throw ProjectCategoryService.#logger.log(this.getProjects.name, error);
             }
         }
 
@@ -122,7 +122,7 @@ class ProjectCategoryService {
                 });
                 return !!exists;
             } catch (error) {
-                throw ProjectCategoryService.logger.log(this.include.name, error);
+                throw ProjectCategoryService.#logger.log(this.include.name, error);
             }
         }
     }
@@ -153,7 +153,7 @@ class ProjectCategoryService {
                 });
                 return categories;
             } catch (error) {
-                throw ProjectCategoryService.logger.log(this.getCategories.name, error);
+                throw ProjectCategoryService.#logger.log(this.getCategories.name, error);
             }
         }
 
@@ -179,7 +179,7 @@ class ProjectCategoryService {
                 );
                 return created?.length;
             } catch (error) {
-                throw ProjectCategoryService.logger.log(this.addToCategories.name, error);
+                throw ProjectCategoryService.#logger.log(this.addToCategories.name, error);
             }
         }
 
@@ -200,7 +200,7 @@ class ProjectCategoryService {
                 });
                 return deletedRows;
             } catch (error) {
-                throw ProjectCategoryService.logger.log(this.removeFromCategories.name, error);
+                throw ProjectCategoryService.#logger.log(this.removeFromCategories.name, error);
             }
         }
 
@@ -221,7 +221,7 @@ class ProjectCategoryService {
                 });
                 return count > 0;
             } catch (error) {
-                throw ProjectCategoryService.logger.log(this.includes.name, error);
+                throw ProjectCategoryService.#logger.log(this.includes.name, error);
             }
         }
     }

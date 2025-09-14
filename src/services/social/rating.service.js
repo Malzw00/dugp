@@ -17,7 +17,7 @@ const { fn, col } = require("sequelize");
  */
 class RatingService {
 
-    static logger = new ServiceErrorLogger({ module: 'RatingService' });
+    static #logger = new ServiceErrorLogger({ module: 'RatingService' });
 
     /**
      * Create a new rating for a project by an account.
@@ -35,7 +35,7 @@ class RatingService {
             });
             return created;       
         } catch (error) {
-            throw this.logger.log(this.create.name, error);   
+            throw this.#logger.log(this.create.name, error);   
         }
     }
 
@@ -56,7 +56,7 @@ class RatingService {
             );
             return updatedRows;       
         } catch (error) {
-            throw this.logger.log(this.update.name, error);   
+            throw this.#logger.log(this.update.name, error);   
         }
     }
 
@@ -76,7 +76,7 @@ class RatingService {
             );
             return updatedRows;       
         } catch (error) {
-            throw this.logger.log(this.update.name, error);   
+            throw this.#logger.log(this.update.name, error);   
         }
     }
 
@@ -94,7 +94,7 @@ class RatingService {
             });
             return ratings;
         } catch (error) {
-            throw this.logger.log(this.getProjectRatings.name, error);   
+            throw this.#logger.log(this.getProjectRatings.name, error);   
         }
     }
 
@@ -113,7 +113,7 @@ class RatingService {
             });
             return rating;       
         } catch (error) {
-            throw this.logger.log(this.getAccountProjectRating.name, error);   
+            throw this.#logger.log(this.getAccountProjectRating.name, error);   
         }
     }
 
@@ -148,7 +148,7 @@ class RatingService {
             return projectRating ? projectRating.rating : null;
 
         } catch (error) {
-            throw this.logger.log(this.getProjectRating.name, error);
+            throw this.#logger.log(this.getProjectRating.name, error);
         }
     }
 

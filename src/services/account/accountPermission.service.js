@@ -7,7 +7,7 @@ const ServiceErrorLogger = require("@root/src/utils/serviceErrorLogger.util");
  */
 class AccountPermission {
 
-    static logger = new ServiceErrorLogger({ module: 'AccountPermission' });
+    static #logger = new ServiceErrorLogger({ module: 'AccountPermission' });
 
     /**
      * Creates a new permission assignment for a specific account.
@@ -29,7 +29,7 @@ class AccountPermission {
             return created;
 
         } catch (error) {
-            throw this.logger.log(this.create.name, error);
+            throw this.#logger.log(this.create.name, error);
         }
     }
 
@@ -51,7 +51,7 @@ class AccountPermission {
             return deletedRows;
             
         } catch (error) {
-            throw this.logger.log(this.deleteByID.name, error);
+            throw this.#logger.log(this.deleteByID.name, error);
         }
     }
 
@@ -74,7 +74,7 @@ class AccountPermission {
             return records_count > 0;
             
         } catch (error) {
-            throw this.logger.log(this.hasPermission.name, error);
+            throw this.#logger.log(this.hasPermission.name, error);
         }
     }
 
@@ -96,7 +96,7 @@ class AccountPermission {
             return permissions;
             
         } catch (error) {
-            throw this.logger.log(this.getAccountPermissions.name, error);
+            throw this.#logger.log(this.getAccountPermissions.name, error);
         }
     }
 
@@ -118,7 +118,7 @@ class AccountPermission {
             return accounts;
             
         } catch (error) {
-            throw this.logger.log(this.getPermissionAccounts.name, error);   
+            throw this.#logger.log(this.getPermissionAccounts.name, error);   
         }
     }
 
@@ -205,7 +205,7 @@ class AccountPermission {
             return accountPermissionsWithScopes;
 
         } catch (error) {
-            throw this.logger.log(this.getAccountPermissionAndScopes.name, error);
+            throw this.#logger.log(this.getAccountPermissionAndScopes.name, error);
         }
     }
 }

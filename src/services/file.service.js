@@ -7,7 +7,7 @@ const ServiceErrorLogger = require("@utils/serviceErrorLogger.util");
 
 
 class FileService {
-    static logger = new ServiceErrorLogger({ module: "FileService" });
+    static #logger = new ServiceErrorLogger({ module: "FileService" });
 
     /**
      * Upload a new file and save its record in DB
@@ -42,7 +42,7 @@ class FileService {
                 uploader_id: uploaderId,
             });
         } catch (error) {
-            throw this.logger.log(this.uploadFile.name, error);
+            throw this.#logger.log(this.uploadFile.name, error);
         }
     }
 
@@ -55,7 +55,7 @@ class FileService {
         try {
             return await models.File.findByPk(fileId);
         } catch (error) {
-            throw this.logger.log(this.getFileById.name, error);
+            throw this.#logger.log(this.getFileById.name, error);
         }
     }
 
@@ -82,7 +82,7 @@ class FileService {
 
         } catch (error) {
             if(ownTransaction) await _transaction.rollback();
-            throw this.logger.log(this.deleteFile.name, error);
+            throw this.#logger.log(this.deleteFile.name, error);
         }
     }
 
@@ -95,7 +95,7 @@ class FileService {
         try {
             return await models.File.findAll({ where: { uploader_id: uploaderId } });
         } catch (error) {
-            throw this.logger.log(this.getFilesByUploader.name, error);
+            throw this.#logger.log(this.getFilesByUploader.name, error);
         }
     }
 
@@ -118,7 +118,7 @@ class FileService {
             if (!file) return null;
             return await file.update(updates);
         } catch (error) {
-            throw this.logger.log(this.updateFileMetadata.name, error);
+            throw this.#logger.log(this.updateFileMetadata.name, error);
         }
     }
 
@@ -131,7 +131,7 @@ class FileService {
         try {
             return await models.File.findOne({ where: { file_hash: fileHash } });
         } catch (error) {
-            throw this.logger.log(this.findFileByHash.name, error);
+            throw this.#logger.log(this.findFileByHash.name, error);
         }
     }
 
@@ -149,7 +149,7 @@ class FileService {
             res.setHeader("Content-Type", file.mime_type);
             fs.createReadStream(fullPath).pipe(res);
         } catch (error) {
-            throw this.logger.log(this.streamFile.name, error);
+            throw this.#logger.log(this.streamFile.name, error);
         }
     }
 
@@ -175,7 +175,7 @@ class FileService {
         
         } catch (error) {
             if(ownTransaction) await _transaction.rollback();
-            throw this.logger.log(this.bulkDeleteFiles.name, error);
+            throw this.#logger.log(this.bulkDeleteFiles.name, error);
         }
     }
 
@@ -191,7 +191,7 @@ class FileService {
             const fullPath = path.join(process.cwd(), file.path, file.stored_name);
             return fs.existsSync(fullPath);
         } catch (error) {
-            throw this.logger.log(this.fileExists.name, error);
+            throw this.#logger.log(this.fileExists.name, error);
         }
     }
 }

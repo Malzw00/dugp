@@ -9,7 +9,7 @@ const ServiceErrorLogger = require('@root/src/utils/serviceErrorLogger.util');
  */
 class CategoryService {
 
-    static logger = new ServiceErrorLogger({ module: 'Category' });
+    static #logger = new ServiceErrorLogger({ module: 'Category' });
     
     /**
      * Create a new category linked to a specific college.
@@ -28,7 +28,7 @@ class CategoryService {
             return category;
 
         } catch (error) {
-            throw this.logger.log(this.create.name, error);
+            throw this.#logger.log(this.create.name, error);
         }
     }
 
@@ -53,7 +53,7 @@ class CategoryService {
             return categories;
 
         } catch (error) {
-            throw this.logger.log(this.getAll.name, error);
+            throw this.#logger.log(this.getAll.name, error);
         }
     }
 
@@ -80,7 +80,7 @@ class CategoryService {
             return { affectedRows };
 
         } catch (error) {
-            throw this.logger.log(this.updateName.name, error);
+            throw this.#logger.log(this.updateName.name, error);
         }
     }
 
@@ -107,7 +107,7 @@ class CategoryService {
             return { affectedRows };
 
         } catch (error) {
-            throw this.logger.log(this.updateCollage.name, error);
+            throw this.#logger.log(this.updateCollage.name, error);
         }
     }
 
@@ -132,7 +132,7 @@ class CategoryService {
             return deletedRows;
 
         } catch (error) {
-            throw this.logger.log(this.delete.name, error);
+            throw this.#logger.log(this.delete.name, error);
         }
     }
 }

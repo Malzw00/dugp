@@ -9,7 +9,7 @@ const ServiceErrorLogger = require('@root/src/utils/serviceErrorLogger.util');
  */
 class KeywordService {
 
-    static logger = new ServiceErrorLogger({ module: 'Keyword' });
+    static #logger = new ServiceErrorLogger({ module: 'Keyword' });
 
     /**
      * Create a new keyword.
@@ -30,7 +30,7 @@ class KeywordService {
             const created = await models.Keyword.create({ keyword: _keyword });
             return created;
         } catch (error) {
-            throw this.logger.log(this.create.name, error);
+            throw this.#logger.log(this.create.name, error);
         }
     }
 
@@ -56,7 +56,7 @@ class KeywordService {
 
             return keyword;
         } catch (error) {
-            throw this.logger.log(this.get.name, error);
+            throw this.#logger.log(this.get.name, error);
         }
     }
 
@@ -83,7 +83,7 @@ class KeywordService {
 
             return affectedRows;
         } catch (error) {
-            throw this.logger.log(this.updateName.name, error);
+            throw this.#logger.log(this.updateName.name, error);
         }
     }
 
@@ -107,7 +107,7 @@ class KeywordService {
             });
             return deletedRows;
         } catch (error) {
-            throw this.logger.log(this.delete.name, error);
+            throw this.#logger.log(this.delete.name, error);
         }
     }
 }

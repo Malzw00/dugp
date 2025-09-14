@@ -14,7 +14,7 @@ const ServiceErrorLogger = require("@utils/serviceErrorLogger.util");
  */
 class ProjectKeywordService {
 
-    static logger = new ServiceErrorLogger({ module: 'ProjectKeywordService' });
+    static #logger = new ServiceErrorLogger({ module: 'ProjectKeywordService' });
 
     /**
      * Project-related operations
@@ -48,7 +48,7 @@ class ProjectKeywordService {
                 
                 return instance;
             } catch (error) {
-                throw ProjectKeywordService.logger.log(this.addKeyword.name, error);
+                throw ProjectKeywordService.#logger.log(this.addKeyword.name, error);
             }
         }
 
@@ -83,7 +83,7 @@ class ProjectKeywordService {
 
                 return keywordInstances;
             } catch (error) {
-                throw ProjectKeywordService.logger.log(this.addKeywords.name, error);
+                throw ProjectKeywordService.#logger.log(this.addKeywords.name, error);
             }
         }
 
@@ -103,7 +103,7 @@ class ProjectKeywordService {
                 });
                 return deletedRows;
             } catch (error) {
-                throw ProjectKeywordService.logger.log(this.removeKeyword.name, error);
+                throw ProjectKeywordService.#logger.log(this.removeKeyword.name, error);
             }
         }
        
@@ -133,7 +133,7 @@ class ProjectKeywordService {
                 });
                 return deletedRows;
             } catch (error) {
-                throw ProjectKeywordService.logger.log(this.removeKeyword.name, error);
+                throw ProjectKeywordService.#logger.log(this.removeKeyword.name, error);
             }
         }
 
@@ -158,7 +158,7 @@ class ProjectKeywordService {
                 });
                 return !!exists;
             } catch (error) {
-                throw ProjectKeywordService.logger.log(this.includes.name, error);
+                throw ProjectKeywordService.#logger.log(this.includes.name, error);
             }
         }
 
@@ -182,7 +182,7 @@ class ProjectKeywordService {
                 });
                 return keywords;
             } catch (error) {
-                throw ProjectKeywordService.logger.log(this.getKeywords.name, error);
+                throw ProjectKeywordService.#logger.log(this.getKeywords.name, error);
             }
         }
     }

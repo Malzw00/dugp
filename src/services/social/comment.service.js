@@ -16,7 +16,7 @@ const { fn, col } = require("sequelize");
  */
 class CommentService {
 
-    static logger = new ServiceErrorLogger({ module: 'CommentService' });
+    static #logger = new ServiceErrorLogger({ module: 'CommentService' });
 
     /**
      * Create a new comment or reply on a project.
@@ -40,7 +40,7 @@ class CommentService {
             return created;
 
         } catch (error) {
-            throw this.logger.log(this.create.name, error);
+            throw this.#logger.log(this.create.name, error);
         }
     }
 
@@ -62,7 +62,7 @@ class CommentService {
             return affectedRows;
 
         } catch (error) {
-            throw this.logger.log(this.update.name, error);
+            throw this.#logger.log(this.update.name, error);
         }
     }
 
@@ -116,7 +116,7 @@ class CommentService {
             return comments;
             
         } catch (error) {
-            this.logger.log(this.getProjectComments.name, error);
+            this.#logger.log(this.getProjectComments.name, error);
         }
     }
 
@@ -136,7 +136,7 @@ class CommentService {
             return count;
             
         } catch (error) {
-            throw this.logger.log(this.getProjectCommentsCount.name, error);
+            throw this.#logger.log(this.getProjectCommentsCount.name, error);
         }
     }
 
@@ -155,7 +155,7 @@ class CommentService {
             return deletedRows;
 
         } catch (error) {
-            throw this.logger.log(this.delete.name, error);
+            throw this.#logger.log(this.delete.name, error);
         }
     }
 
@@ -200,7 +200,7 @@ class CommentService {
             return comments;
 
         } catch (error) {
-            throw this.logger.log(this.getAccountComments.name, error);
+            throw this.#logger.log(this.getAccountComments.name, error);
         }
     }
     
@@ -228,7 +228,7 @@ class CommentService {
 
             return comment;
         } catch (error) {
-            throw this.logger.log(this.getCommentByID.name, error);
+            throw this.#logger.log(this.getCommentByID.name, error);
         }
     }
 }

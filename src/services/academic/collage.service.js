@@ -1,6 +1,5 @@
 const { models } = require('@config/database.config');
 const ServiceErrorLogger = require('@root/src/utils/serviceErrorLogger.util');
-const log = require('@utils/errorLogger.util');
 
 /**
  * @class CollageService
@@ -9,7 +8,7 @@ const log = require('@utils/errorLogger.util');
  */
 class CollageService {
 
-    static logger = new ServiceErrorLogger({ module: 'Collage' });
+    static #logger = new ServiceErrorLogger({ module: 'Collage' });
 
     /**
      * Create a new collage.
@@ -25,7 +24,7 @@ class CollageService {
             return created;
 
         } catch (error) {
-           throw this.logger.log(this.create.name, error);
+           throw this.#logger.log(this.create.name, error);
         }
     }
 
@@ -48,7 +47,7 @@ class CollageService {
             return affectedRows;
 
         } catch (error) {
-            throw this.logger.log(this.updateName.name, error);
+            throw this.#logger.log(this.updateName.name, error);
         }
     }
 
@@ -69,7 +68,7 @@ class CollageService {
             return collage;
 
         } catch (error) {
-            throw this.logger.log(this.get.name, error);
+            throw this.#logger.log(this.get.name, error);
         }
     }
 
@@ -94,7 +93,7 @@ class CollageService {
 
             return deletedRows;
         } catch (error) {
-            throw this.logger.log(this.delete.name, error)
+            throw this.#logger.log(this.delete.name, error)
         }
     }
 }

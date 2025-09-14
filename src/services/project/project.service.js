@@ -17,7 +17,7 @@ const FileService = require("@root/src/services/File.service");
  */
 class ProjectService {
     
-    static logger = new ServiceErrorLogger({ module: 'ProjectService' });
+    static #logger = new ServiceErrorLogger({ module: 'ProjectService' });
 
     /**
      * Create a new project in the database.
@@ -47,7 +47,7 @@ class ProjectService {
             });
             return created;
         } catch (error) {
-            throw this.logger.log(this.create.name, error);
+            throw this.#logger.log(this.create.name, error);
         }
     }
 
@@ -97,7 +97,7 @@ class ProjectService {
             return affectedRows;
 
         } catch (error) {
-            throw this.logger.log(this.update.name, error);
+            throw this.#logger.log(this.update.name, error);
         }
     }
 
@@ -119,7 +119,7 @@ class ProjectService {
             );
             return affectedRows;
         } catch (error) {
-            throw this.logger.log(this.updateAvailable.name, error);
+            throw this.#logger.log(this.updateAvailable.name, error);
         }
     }
 
@@ -176,7 +176,7 @@ class ProjectService {
             );
             return project;
         } catch (error) {
-            throw this.logger.log(this.get.name, error);
+            throw this.#logger.log(this.get.name, error);
         } 
     }
 
@@ -299,7 +299,7 @@ class ProjectService {
             return projects;
 
         } catch (error) {
-            throw this.logger.log(this.getAll.name, error);
+            throw this.#logger.log(this.getAll.name, error);
         }
     }
 
@@ -531,11 +531,11 @@ class ProjectService {
 
         } catch (error) {
             await _transaction.rollback();
-            throw this.logger.log(this.delete.name, error);
+            throw this.#logger.log(this.delete.name, error);
         }
     }
 
-    
+
     /**
      * Associate a book file with a project.
      *
@@ -554,7 +554,7 @@ class ProjectService {
 
             return affectedRows;
         } catch (error) {
-            throw this.logger.log(this.setBook.name, error);
+            throw this.#logger.log(this.setBook.name, error);
         }
     }
 
@@ -595,7 +595,7 @@ class ProjectService {
             return deleted;
         } catch (error) {
             await _transaction.rollback();
-            throw this.logger.log(this.deleteBook.name, error);
+            throw this.#logger.log(this.deleteBook.name, error);
         }
     }
 
@@ -619,7 +619,7 @@ class ProjectService {
             });
             return project?.Book?? null;
         } catch (error) {
-            throw this.logger.log(this.getBook.name, error);
+            throw this.#logger.log(this.getBook.name, error);
         }
     }
 
@@ -643,7 +643,7 @@ class ProjectService {
             });
             return project?.Presentation?? null;
         } catch (error) {
-            throw this.logger.log(this.getPresentation.name, error);
+            throw this.#logger.log(this.getPresentation.name, error);
         }
     }
 
@@ -665,7 +665,7 @@ class ProjectService {
 
             return affectedRows;
         } catch (error) {
-            throw this.logger.log(this.setPresentation.name, error);
+            throw this.#logger.log(this.setPresentation.name, error);
         }
     }
 
@@ -706,7 +706,7 @@ class ProjectService {
 
         } catch (error) {
             await _transaction.rollback();
-            throw this.logger.log(this.deletePresentation.name, error);
+            throw this.#logger.log(this.deletePresentation.name, error);
         }
     }
 
@@ -730,7 +730,7 @@ class ProjectService {
             });
             return project?.Cover ?? null;
         } catch (error) {
-            throw this.logger.log(this.getCover.name, error);
+            throw this.#logger.log(this.getCover.name, error);
         }
     }
 
@@ -751,7 +751,7 @@ class ProjectService {
             );
             return affectedRows;
         } catch (error) {
-            throw this.logger.log(this.setCover.name, error);
+            throw this.#logger.log(this.setCover.name, error);
         }
     }
 
@@ -789,7 +789,7 @@ class ProjectService {
 
         } catch (error) {
             await _transaction.rollback();
-            throw this.logger.log(this.deleteCover.name, error);
+            throw this.#logger.log(this.deleteCover.name, error);
         }
     }
 

@@ -13,7 +13,7 @@ const ServiceErrorLogger = require("@utils/serviceErrorLogger.util");
  */
 class ProjectReferenceService {
 
-    static logger = new ServiceErrorLogger({ module: 'ProjectReferenceService' });
+    static #logger = new ServiceErrorLogger({ module: 'ProjectReferenceService' });
 
 
     /**
@@ -33,7 +33,7 @@ class ProjectReferenceService {
             });
             return created;
         } catch (error) {
-            throw this.logger.log(this.create.name, error);
+            throw this.#logger.log(this.create.name, error);
         }
     }
 
@@ -59,7 +59,7 @@ class ProjectReferenceService {
 
             return file ? file.Projects : [];
         } catch (error) {
-            throw this.logger.log(this.getReferenceProjects.name, error);
+            throw this.#logger.log(this.getReferenceProjects.name, error);
         }
     }
 
@@ -85,7 +85,7 @@ class ProjectReferenceService {
             });
             return project ? project.References : [];
         } catch (error) {
-            throw this.logger.log(this.getProjectReferences.name, error);
+            throw this.#logger.log(this.getProjectReferences.name, error);
         }
     }
 
@@ -107,7 +107,7 @@ class ProjectReferenceService {
 
             return count > 0;
         } catch (error) {
-            throw this.logger.log(this.isReferenceOfProject.name, error);
+            throw this.#logger.log(this.isReferenceOfProject.name, error);
         }
     }
 
@@ -128,7 +128,7 @@ class ProjectReferenceService {
             });
             return deletedRows;
         } catch (error) {
-            throw this.logger.log(this.delete.name, error);
+            throw this.#logger.log(this.delete.name, error);
         }
     }
 
@@ -148,7 +148,7 @@ class ProjectReferenceService {
             });
             return deletedRows;
         } catch (error) {
-            throw this.logger.log(this.deleteByID.name, error);
+            throw this.#logger.log(this.deleteByID.name, error);
         }
     }
 }

@@ -9,7 +9,7 @@ const { Op } = require("sequelize");
  */
 class AccountService {
 
-    static logger = new ServiceErrorLogger({ module: 'Account' });
+    static #logger = new ServiceErrorLogger({ module: 'Account' });
 
     /**
      * Delete an account by ID.
@@ -34,7 +34,7 @@ class AccountService {
 
             return created;
         } catch (error) {
-            throw this.logger.log(this.create.name, error);
+            throw this.#logger.log(this.create.name, error);
         }
     }
 
@@ -53,7 +53,7 @@ class AccountService {
             });
             return deletedRows;
         } catch (error) {
-            throw this.logger.log(this.delete.name, error);            
+            throw this.#logger.log(this.delete.name, error);            
         }
     }
 
@@ -78,7 +78,7 @@ class AccountService {
 
             return affectedRows;
         } catch (error) {
-            throw this.logger.log(this.update.name, error);
+            throw this.#logger.log(this.update.name, error);
         }
     }
 
@@ -94,7 +94,7 @@ class AccountService {
             const account = await models.Account.findByPk(account_id);
             return account;
         } catch (error) {
-            throw this.logger.log(this.getByID.name, error);
+            throw this.#logger.log(this.getByID.name, error);
         }
     }
 
@@ -110,7 +110,7 @@ class AccountService {
             const account = await models.Account.findOne({ where: { account_email: account_email } });
             return account;
         } catch (error) {
-            throw this.logger.log(this.getByEmail.name, error);
+            throw this.#logger.log(this.getByEmail.name, error);
         }
     }
 
@@ -132,7 +132,7 @@ class AccountService {
             });
             return accounts;
         } catch (error) {
-            throw this.logger.log(this.searchByName.name, error);
+            throw this.#logger.log(this.searchByName.name, error);
         }
     }
 
@@ -142,7 +142,7 @@ class AccountService {
             const checkForEmail = models.Account.count({ where: { account_email: email } });
             return checkForEmail > 0;
         } catch (error) {
-            throw this.logger.log(this.isEmailExists.name, error);
+            throw this.#logger.log(this.isEmailExists.name, error);
         }
     }
 }
