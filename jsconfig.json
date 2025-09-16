@@ -2,7 +2,6 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "*": ["types/*"],
       "@root/*": ["./*"],
       "@routes/*": ["src/routes/*"],
       "@middlewares/*": ["src/middlewares/*"],
@@ -14,5 +13,5 @@
       "@seeders/*": ["src/seeders/*"]
     },
   },
-  "include": ["src/**/*", "types", "archive/projectBook.model.js", "archive/projectPresentation.model.js", "archive/projectReference.model.js", "archive/image.model.js", "archive/projectPresentation.service.js", "archive/projectBook.service.js"]
+  "include": [ "./**/*" ]
 }

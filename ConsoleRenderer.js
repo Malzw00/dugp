@@ -1,4 +1,4 @@
-const { createContainer, updateElement, renderContainer } = require('@utils/startResultRenderer.util');
+const { updateElement, renderContainer } = require('@utils/startResultRenderer.util');
 
 const initDB = {
     onTestConnection: () => { 

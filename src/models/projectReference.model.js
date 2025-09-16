@@ -10,9 +10,9 @@ module.exports = function (sequelize) {
             autoIncrement: true, 
             primaryKey: true, 
         },
-        file_id: { 
+        reference_id: {
             type: DataTypes.INTEGER, 
-            allowNull: false, 
+            allowNull: false,
         },
         project_id: { 
             type: DataTypes.INTEGER, 
@@ -25,7 +25,7 @@ module.exports = function (sequelize) {
         indexes: [
             {
                 unique: true,
-                fields: ['file_id', 'project_id']
+                fields: ['reference_id', 'project_id']
             }
         ]
     });

@@ -22,8 +22,9 @@ const SupervisorModel = require('@models/supervisor.model');
 const PermissionScopeModel = require('@models/permissionScope.model');
 const RefreshTokenModel = require('@models/refrehToken.model');
 const ResetPasswordModel = require('@models/resetPassword.model');
-const FileModel = require('./file.model');
-const ProjectReferenceModel = require('./projectReference.model');
+const FileModel = require('@models/file.model');
+const ProjectReferenceModel = require('@models/projectReference.model');
+const ReferenceModel = require('@models/reference.model');
 
 
 
@@ -58,6 +59,7 @@ module.exports = function initModels(sequelize) {
         ResetPassword: ResetPasswordModel(sequelize),
         File: FileModel(sequelize),
         ProjectReference: ProjectReferenceModel(sequelize),
+        Reference: ReferenceModel(sequelize),
     };
 
 

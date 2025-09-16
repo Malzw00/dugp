@@ -7,7 +7,7 @@
   "author": "معاذ ابوقطيشة / سعيد بوحليقة / محمد النجمي / علي السنوسي",
   "main": "server.js",
   "scripts": {
-    "dev": "nodemon server.js",
+    "dev": "nodemon main.js",
     "db:seed:all": "npx sequelize-cli db:seed:all --config src/config/database.config.js",
     "db:seed:undo:all": "npx sequelize-cli db:seed:undo:all --config src/config/database.config.js"
   },

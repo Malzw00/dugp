@@ -196,7 +196,7 @@ class AuthService {
      * @returns {Promise<boolean>} True if reset request was processed successfully
      * @throws {Error} EMAIL_NOT_FOUND if no account exists with the provided email
      */
-    static async passwordResetRequest({ email }) {
+    static async forgetPassword({ email }) {
         try {
             const account = await AccountService.getByEmail({ account_email: email });
            
@@ -227,7 +227,7 @@ class AuthService {
             return true;
                 
         } catch (error) {
-            this.#logger.log(this.passwordResetRequest.name, error);
+            this.#logger.log(this.forgetPassword.name, error);
         }
     }
 

@@ -57,16 +57,20 @@ module.exports = function (sequelize) {
             as: 'Presentation',
         });
         
-        Project.belongsToMany(models.File, { 
-            foreignKey: 'project_id', 
+        Project.belongsToMany(models.Reference, {
             through: models.ProjectReference,
             as: 'References',
+            onDelete: 'CASCADE',
+            foreignKey: 'project_id',
+            otherKey: 'reference_id',
+            timestamps: false,
         });
         
         Project.belongsToMany(models.Student, { 
             through: models.ProjectStudent, 
             foreignKey: 'project_id', 
             onDelete: 'CASCADE',
+            timestamps: false,
         });
         
         Project.belongsTo(models.Supervisor, { 
