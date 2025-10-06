@@ -7,7 +7,8 @@ const GeneralRateLimiter = require('@middlewares/generalRateLimiter.middleware')
 const cors = require('cors');
 const corsOptions = require('@config/corsOptions.config');
 const expressApp = express();
-const cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser');
+const apiRoute = require('@routes/api/index');
 
 
 // Middlewares:
@@ -29,7 +30,7 @@ expressApp.use('uploads/', express.static(path.resolve('uploads'))); // Serve St
 expressApp.use(history());
 
 
-
+expressApp.use('/', apiRoute);
 
 
 // Error handler middleware 
