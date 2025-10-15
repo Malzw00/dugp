@@ -20,11 +20,13 @@ async function seedPermissions(models) {
         { permission_id: 'update_project_image',  permission_name: 'تحديث صورة غلاف مشروع' },
 
         { permission_id: 'delete_comment',  permission_name: 'حذف تعليق' },
-
+        
         { permission_id: 'delete_account',  permission_name: 'حذف حساب' },
+
+        { permission_id: 'update_role',  permission_name: 'تحديث دور حساب' },
         
         { permission_id: 'delete_account_image',  permission_name: 'حذف صورة حساب' },
-
+        
         { permission_id: 'read_account_report',  permission_name: 'عرض بلاغ حساب' },
         { permission_id: 'delete_account_report',  permission_name: 'حذف بلاغ حساب' },
         
@@ -33,6 +35,8 @@ async function seedPermissions(models) {
         
         { permission_id: 'read_comment_report',  permission_name: 'عرض بلاغ تعليق' },
         { permission_id: 'delete_comment_report',  permission_name: 'حذف بلاغ تعليق' },
+
+        { permission_id: 'account_permissions',  permission_name: 'إدارة صلاحيات الحسابات' },
         
     ], { ignoreDuplicates: true });
 }

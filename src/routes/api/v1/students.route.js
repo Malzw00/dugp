@@ -11,11 +11,11 @@ const router = express.Router();
 router.get('/', );
 
 /**
- * @route GET /students/projects
+ * @route GET /students/:studentId/projects
  * @description Retrieve all projects that the students have participated in.
  * @access Public
  */
-router.get('/projects', );
+router.get('/:studentId/projects', );
 
 /**
  * @route GET /students/:studentId
@@ -28,8 +28,10 @@ router.get('/:studentId', );
 /**
  * @route POST /students
  * @description Create a new student record.
- * @body {string} name - Student's full name.
- * @body {string} collageId - ID of the student's collage.
+ * @body {string} name - Student's name.
+ * @body {string} fatherName - Student's father name.
+ * @body {string} grandFatherName - Student's father name.
+ * @body {string} familyName - Student's father name.
  * @body {string} departmentId - ID of the student's department.
  * @access Admin (requires permission)
  */
@@ -39,7 +41,13 @@ router.post('/', );
  * @route PUT /students/:studentId
  * @description Update information of a student by ID.
  * @param {string} studentId - Unique identifier of the student.
- * @body {object} updates - Fields to update (e.g., name, department).
+ * @body {string} name - Student's name.
+ * @body {string} fatherName - Student's father name.
+ * @body {string} grandFatherName - Student's father name.
+ * @body {string} familyName - Student's father name.
+ * @body {number} departmentId - ID of the student's department.
+ * @body {number} accountId
+ * @body {number} imageId
  * @access Admin (requires permission)
  */
 router.put('/:studentId', );
@@ -57,7 +65,7 @@ router.delete('/:studentId', );
  * @description Retrieve linked account information for a student.
  * @access Admin (requires permission)
  */
-router.get('/account', );
+router.get('/:studentId/account', );
 
 /**
  * @route POST /students/account

@@ -3,12 +3,12 @@ const router  = express.Router();
 
 /**
  * @route GET /accounts/search
- * @description Search accounts by keyword, role, and page number.
- *              Supports pagination via `offset` and `limit`.
+ * @description Search accounts by keyword, role, offset and limit.
  * @access any (no authentication required)
  * @query {string} keyword - Search keyword to match accounts.
  * @query {string} role - Filter results by role (e.g., admin, user).
- * @query {number} page - Page number for pagination.
+ * @query {number} offset
+ * @query {number} limit
  */
 router.get('/search', );         
 
@@ -19,6 +19,14 @@ router.get('/search', );
  * @param {string} accountId - The ID of the account.
  */
 router.get('/:accountId', );     
+
+/**
+ * @route GET /accounts/me
+ * @description Retrieve details of a my account.
+ * @access Owner
+ * @param {string} accountId - The ID of the account.
+ */
+router.get('/me', );     
 
 /**
  * @route DELETE /accounts/:accountId

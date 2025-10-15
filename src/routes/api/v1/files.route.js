@@ -6,7 +6,7 @@ const router  = express.Router();
  * @description Retrieve a list of all files.
  *              Supports pagination and filtering if implemented.
  * @access all (only authenticated users can access, no guests)
- * @query {number} [page] - Page number for pagination.
+ * @query {number} [offset] - Offset number.
  * @query {number} [limit] - Number of items per page.
  */
 router.get('/files', );
@@ -42,7 +42,7 @@ router.put('/files/:fileId', );
  * @description Upload a new file.
  * @access all (only authenticated users can access, no guests)
  * @body {File} file - The file to be uploaded (multipart/form-data).
- * @body {string} [description] - Description of the uploaded file.
+ * @body {'book'|'presentation'|'reference'|'image'} [category] - category of the uploaded file.
  */
 router.post('/files', );
 

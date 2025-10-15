@@ -32,7 +32,10 @@ router.get('/:projectId', );
  * @access all (only authenticated users can create)
  * @body {string} title - The title of the project.
  * @body {string} description - The description of the project.
- * @body {string} [other fields] - Additional optional project fields.
+ * @body {date} date
+ * @body {'Winter'|'Spring'|'Summer'|'Autumn'} semester
+ * @body {number} departmentId
+ * @body {number} supervisorId
  */
 router.post('/', );
 
@@ -49,7 +52,17 @@ router.delete('/:projectId', );
  * @description Update a specific project by its ID.
  * @access all (authenticated users with permission)
  * @param {string} projectId - The unique identifier of the project.
- * @body {string} [fields] - Project fields to update.
+ * @body {string} title - The title of the project.
+ * @body {string} description - The description of the project.
+ * @body {date} date
+ * @body {'Winter'|'Spring'|'Summer'|'Autumn'} semester
+ * @body {number} departmentId
+ * @body {number} supervisorId
+ * @body {number} grade
+ * @body {number} imageId
+ * @body {number} bookId
+ * @body {number} presentationId
+ * @body {boolean} available
  */
 router.put('/:projectId');
 

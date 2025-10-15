@@ -10,7 +10,8 @@
       "@models/*": ["src/models/*"],
       "@config/*": ["src/config/*"],
       "@utils/*": ["src/utils/*"],
-      "@seeders/*": ["src/seeders/*"]
+      "@seeders/*": ["src/seeders/*"],
+      "@validations/*": ["src/validations/*"]
     },
   },
   "include": [ "./**/*" ]

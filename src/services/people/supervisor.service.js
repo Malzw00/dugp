@@ -65,6 +65,61 @@ class SupervisorService {
     }
 
     /**
+     * Updates supervisor fields dynamically.
+     * Only the fields provided in the parameters will be updated.
+     * 
+     * @param {Object} params - Update parameters
+     * @param {number} params.supervisor_id - Supervisor ID to update
+     * @param {string} [params.name] - First name
+     * @param {string} [params.father_name] - Father's name
+     * @param {string} [params.grandfather_name] - Grandfather's name
+     * @param {string} [params.family_name] - Family name
+     * @param {string} [params.title] - Supervisor title
+     * @param {number} [params.department_id] - Department ID
+     * @param {number} [params.account_id] - Linked account ID
+     * @param {number} [params.image_id] - Profile image ID
+     * @returns {Promise<number>} Number of affected rows (1 if updated, 0 if not found)
+     * @throws {Error} If database operation fails
+     */
+    static async updateSupervisor({
+        supervisor_id,
+        name,
+        father_name,
+        grandfather_name,
+        family_name,
+        title,
+        department_id,
+        account_id,
+        image_id
+    }) {
+        try {
+            const values = {};
+
+            if (name !== undefined) values.supervisor_name = name;
+            if (father_name !== undefined) values.supervisor_father_name = father_name;
+            if (grandfather_name !== undefined) values.supervisor_grandfather_name = grandfather_name;
+            if (family_name !== undefined) values.supervisor_family_name = family_name;
+            if (title !== undefined) values.supervisor_title = title;
+            if (department_id !== undefined) values.department_id = department_id;
+            if (account_id !== undefined) values.account_id = account_id;
+            if (image_id !== undefined) values.image_id = image_id;
+
+            // إذا لم يتم تمرير أي حقل، لا ننفذ التحديث
+            if (Object.keys(values).length === 0) return 0;
+
+            const [affectedRows] = await models.Supervisor.update(values, {
+                where: { supervisor_id }
+            });
+
+            return affectedRows;
+
+        } catch (error) {
+            throw this.#logger.log(this.updateSupervisor.name, error);
+        }
+    }
+
+
+    /**
      * Update the supervisor's name components.
      * @param {Object} params
      * @param {number} params.supervisor_id - Supervisor ID to update.

@@ -11,11 +11,11 @@ const router = express.Router();
 router.get('/', );
 
 /**
- * @route GET /supervisors/projects
+ * @route GET /supervisors/:supervisorId/projects
  * @description Retrieve all projects supervised or co-supervised by supervisors.
  * @access Public
  */
-router.get('/projects', );
+router.get('/:supervisorId/projects', );
 
 /**
  * @route GET /supervisors/:supervisorId
@@ -28,7 +28,10 @@ router.get('/:supervisorId', );
 /**
  * @route POST /supervisors
  * @description Create a new supervisor record.
- * @body {string} name - Name of the supervisor.
+ * @body {string} name - Supervisor name.
+ * @body {string} fatherName - Supervisor's father name.
+ * @body {string} grandFatherName - Supervisor's father name.
+ * @body {string} familyName - Supervisor's father name.
  * @body {string} department - Department of the supervisor.
  * @access Admin (requires permission)
  */
@@ -38,7 +41,14 @@ router.post('/', );
  * @route PUT /supervisors/:supervisorId
  * @description Update information of a supervisor by ID.
  * @param {string} supervisorId - Unique identifier of the supervisor.
- * @body {object} updates - Fields to update.
+ * @body {string} name - Student's name.
+ * @body {string} fatherName - Supervisor's father name.
+ * @body {string} grandFatherName - Supervisor's father name.
+ * @body {string} familyName - Supervisor's father name.
+ * @body {number} departmentId - ID of the Supervisor's department.
+ * @body {number} accountId
+ * @body {number} imageId
+ * @body {string} title
  * @access Admin (requires permission)
  */
 router.put('/:supervisorId', );
@@ -54,9 +64,9 @@ router.delete('/:supervisorId', );
 /**
  * @route GET /supervisors/account
  * @description Retrieve account link information for a supervisor.
- * @access Admin (requires permission)
+ * @access Public
  */
-router.get('/account', );
+router.get('/:supervisorId/account', );
 
 /**
  * @route POST /supervisors/account

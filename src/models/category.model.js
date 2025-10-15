@@ -46,7 +46,7 @@ function CategoryModel(sequelize) {
                 primaryKey: true,
             },
             category_name: {
-                type: DataTypes.STRING(255),
+                type: DataTypes.STRING(100),
                 allowNull: false,
             },
             collage_id: {

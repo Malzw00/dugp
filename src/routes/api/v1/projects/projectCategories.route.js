@@ -29,8 +29,15 @@ projectCategoriesRouter.delete('/:categoryId', );
  * @description Create a new category.
  * @access ahp (admin with permission)
  * @body {string} name - The name of the new category.
- * @body {string} [description] - The description of the category (optional).
  */
 projectCategoriesRouter.post('/', );
+
+/**
+ * @route PUT /categories
+ * @description update category data.
+ * @access ahp (admin with permission)
+ * @body {string} name - The name of the category.
+ */
+projectCategoriesRouter.put('/', );
 
 module.exports = projectCategoriesRouter;

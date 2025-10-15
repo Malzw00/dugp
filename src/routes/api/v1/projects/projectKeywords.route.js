@@ -32,4 +32,12 @@ projectKeywordsRouter.delete('/:keywordId', );
  */
 projectKeywordsRouter.post('/', );
 
+/**
+ * @route PUT /keywords
+ * @description Update a keyword.
+ * @access ahp (admin with permission)
+ * @body {string} name - The name of keyword.
+ */
+projectKeywordsRouter.put('/', );
+
 module.exports = projectKeywordsRouter;

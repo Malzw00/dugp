@@ -86,12 +86,12 @@ commentsRouter.get('/me', );
 commentsRouter.post('/', );
 
 /**
- * @route POST /projects/:projectId/comments/:count
- * @description Add multiple comments at once (based on count).
+ * @route GET /projects/:projectId/comments/:count
+ * @description Get comments count
  * @access all (only authenticated users can access)
- * @param {number} count - Number of comments to add.
+ * @param {number} count - Number of comments.
  */
-commentsRouter.post('/:count', );
+commentsRouter.get('/:count', );
 
 /**
  * @route DELETE /projects/:projectId/comments/:commentId

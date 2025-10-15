@@ -28,7 +28,7 @@ adminsRouter.get('/accounts', );
  * @route GET /admins/accounts/:accountId/permissions/:permissionId
  * @description Check whether an account has a specific permission.
  * @access Manager account or admin with appropriate permission (AHP).
- * @returns The permission details if the account has it, otherwise a 404 response.
+ * @returns True or False.
  */
 adminsRouter.get('/accounts/:accountId/permissions/:permissionId', );
 

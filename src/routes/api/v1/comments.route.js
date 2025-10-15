@@ -81,6 +81,22 @@ router.get('/:commentId/replies/:index', );
 router.get('/:commentId/likes', );
 
 /**
+ * @route GET /comments/:commentId/likes/count
+ * @description Retrieve comment likes count.
+ * @param {string} commentId - Unique identifier of the comment.
+ * @access any (public)
+ */
+router.get('/:commentId/likes/count', );
+
+/**
+ * @route GET /comments/:commentId/likes/me
+ * @description Retrieve if i set like comment.
+ * @param {string} commentId - Unique identifier of the comment.
+ * @access Owner
+ */
+router.get('/:commentId/likes/me', );
+
+/**
  * @route POST /comments/:commentId/likes
  * @description Like a specific comment.
  * @param {string} commentId - Unique identifier of the comment.

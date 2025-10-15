@@ -28,19 +28,19 @@ class ProjectService {
      * @param {Object} params - Parameters for creating the project.
      * @param {string} params.title - The title of the project.
      * @param {string} params.description - The description of the project.
-     * @param {string|number} params.year - The academic year for the project.
+     * @param {string|number} params.date - The academic date for the project.
      * @param {'Winter'|'Spring'|'Summer'|'Autumn'} params.semester - The semester of the project.
      * @param {number} params.department_id - The ID of the department associated with the project.
      * @param {number} params.supervisor_id - The ID of the supervisor for the project.
      * @returns {Promise<import('sequelize').Model>} The created project instance.
      * @throws {AppError} Throws an error if creation fails.
      */
-    static async create({ title, description, year, semester, department_id, supervisor_id }) {
+    static async create({ title, description, year: date, semester, department_id, supervisor_id }) {
         try {
             const created = await models.Project.create({
                 project_title: title,
                 project_description: description,
-                project_year: year,
+                project_date: date,
                 project_semester: semester,
                 department_id,
                 supervisor_id
