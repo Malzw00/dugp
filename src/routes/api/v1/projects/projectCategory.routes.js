@@ -18,7 +18,7 @@ projectCategoriesRouter.get('/:categoryId', );
 
 /**
  * @route DELETE /categories/:categoryId
- * @description Delete a specific category by its ID.
+ * @description remove a specific category by its ID.
  * @access ahp (admin with permission)
  * @param {string} categoryId - The unique identifier of the category.
  */
@@ -26,18 +26,11 @@ projectCategoriesRouter.delete('/:categoryId', );
 
 /**
  * @route POST /categories
- * @description Create a new category.
+ * @description add category to project.
  * @access ahp (admin with permission)
- * @body {string} name - The name of the new category.
+ * @body {number} categoryId
  */
 projectCategoriesRouter.post('/', );
 
-/**
- * @route PUT /categories
- * @description update category data.
- * @access ahp (admin with permission)
- * @body {string} name - The name of the category.
- */
-projectCategoriesRouter.put('/', );
 
 module.exports = projectCategoriesRouter;

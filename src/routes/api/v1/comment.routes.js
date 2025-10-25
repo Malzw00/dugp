@@ -23,6 +23,7 @@ router.delete('/:commentId', );
  * @route PUT /comments/:commentId
  * @description Update a specific comment.
  * @param {string} commentId - Unique identifier of the comment.
+ * @query {string} content
  * @access owner (comment owner only)
  */
 router.put('/:commentId', );
@@ -61,7 +62,7 @@ router.post('/:commentId/replies', );
  * @route GET /comments/:commentId/replies/:index
  * @description Retrieve a single reply by index.
  * @param {string} commentId - Unique identifier of the parent comment.
- * @param {number} index - Index of the reply in the list.
+ * @param {string} index - Index of the reply in the list.
  * @access any (public)
  */
 router.get('/:commentId/replies/:index', );

@@ -52,7 +52,6 @@ adminsRouter.post('/accounts/:accountId/permissions', );
  * @route DELETE /admins/accounts/:accountId/permissions/:permissionId
  * @description Remove a specific permission from an account.
  * @access Manager account or admin with appropriate permission (AHP).
- * @param {string} permissionId - The unique ID of the permission to remove.
  */
 adminsRouter.delete('/accounts/:accountId/permissions/:permissionId', );
 

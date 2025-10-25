@@ -47,6 +47,8 @@ router.put('/:collageId', );
  * @route GET /collages/:collageId/departments
  * @description Retrieve all departments belonging to a collage.
  * @param {string} collageId - Unique identifier of the collage.
+ * @param {string} limit
+ * @param {string} offset
  * @access Public
  */
 router.get('/:collageId/departments', );
@@ -78,14 +80,6 @@ router.post('/:collageId/departments', );
  */
 router.delete('/:collageId/departments/:departmentId', );
 
-/**
- * @route PUT /collages/:collageId/departments/:departmentId
- * @description Update department name inside a collage.
- * @query {string} departmentName - New department name.
- * @param {string} collageId - Unique identifier of the collage.
- * @param {string} departmentId - Unique identifier of the department.
- * @access Admin (requires permission)
- */
-router.put('/:collageId/departments/:departmentId', );
+
 
 module.exports = router;

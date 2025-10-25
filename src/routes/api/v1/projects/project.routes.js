@@ -1,10 +1,10 @@
 const express = require('express');
-const categoriesRouter = require('./projectCategories.route');
-const projectFilesRouter = require('./projectFiles.route');
-const projectKeywordsRouter = require('./projectKeywords.route');
-const projectSearchRouter = require('./projectSearch.route');
-const projectPeopleRouter = require('./projectPeople.route');
-const projectSocialRouter = require('./projectSocial.route');
+const categoriesRouter = require('./projectCategory.routes');
+const projectFilesRouter = require('./projectFile.routes');
+const projectKeywordsRouter = require('./projectKeyword.routes');
+const projectSearchRouter = require('./projectSearch.routes');
+const projectPeopleRouter = require('./projectPeople.routes');
+const projectSocialRouter = require('./projectSocial.routes');
 const router  = express.Router();
 
 /**

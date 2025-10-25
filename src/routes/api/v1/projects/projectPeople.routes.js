@@ -32,14 +32,6 @@ projectPeopleRouter.post('/students/:studentId', );
 projectPeopleRouter.get('/supervisor', );
 
 /**
- * @route POST /supervisor/:supervisorId
- * @description Add a new supervisor or update a supervisor by ID.
- * @access ahp (admin with permission)
- * @param {string} supervisorId - The unique identifier of the supervisor.
- */
-projectPeopleRouter.post('/supervisor/:supervisorId', );
-
-/**
  * @route DELETE /supervisor/:supervisorId
  * @description Delete a specific supervisor by their ID.
  * @access ahp (admin with permission)

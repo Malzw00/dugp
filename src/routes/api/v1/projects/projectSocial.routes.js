@@ -37,12 +37,14 @@ likesRouter.post('/', );
  * @description Remove the like of the authenticated user from the project.
  * @access all (only authenticated users can access)
  */
-likesRouter.delete('/me', );
+likesRouter.delete('/', );
 
 
 /**
  * @route GET /projects/:projectId/comments
  * @description Get all comments for a specific project.
+ * @body {number} offset
+ * @body {number} limit
  * @access any (no authentication required)
  */
 commentsRouter.get('/', );
@@ -53,14 +55,6 @@ commentsRouter.get('/', );
  * @access any (no authentication required)
  */
 commentsRouter.get('/count', );
-
-/**
- * @route GET /projects/:projectId/comments/:commentId
- * @description Get details of a specific comment by its ID.
- * @access any (no authentication required)
- * @param {string} commentId - The unique identifier of the comment.
- */
-commentsRouter.get('/:commentId', );
 
 /**
  * @route GET /projects/:projectId/comments/:index
@@ -86,14 +80,6 @@ commentsRouter.get('/me', );
 commentsRouter.post('/', );
 
 /**
- * @route GET /projects/:projectId/comments/:count
- * @description Get comments count
- * @access all (only authenticated users can access)
- * @param {number} count - Number of comments.
- */
-commentsRouter.get('/:count', );
-
-/**
  * @route DELETE /projects/:projectId/comments/:commentId
  * @description Delete a specific comment. If it's the user's own comment, delete directly. 
  * If not, requires delete-comment permission.
@@ -101,15 +87,6 @@ commentsRouter.get('/:count', );
  * @param {string} commentId - The unique identifier of the comment.
  */
 commentsRouter.delete('/:commentId', );
-
-/**
- * @route PUT /projects/:projectId/comments/:commentId
- * @description Update a specific comment. Only the sender can update their comment.
- * @access owner (only the owner of the comment)
- * @param {string} commentId - The unique identifier of the comment.
- * @query {string} content - The new content of the comment.
- */
-commentsRouter.put('/:commentId', );
 
 
 /**

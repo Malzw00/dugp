@@ -1,15 +1,15 @@
 const express           = require('express');
 const router            = express.Router();
-const accountsRoute     = require('@routes/api/v1/accounts.route');
-const adminsRoute       = require('@routes/api/v1/admins.route');
-const authRoute         = require('@routes/api/v1/auth.route');
-const collagesRoute     = require('@routes/api/v1/collages.route');
-const filesRoute        = require('@routes/api/v1/files.route');
-const projectsRoute     = require('@root/src/routes/api/v1/projects/projects.route');
-const studentsRoute     = require('@routes/api/v1/students.route');
-const supervisorsRoute  = require('@routes/api/v1/supervisors.route');
-const commentsRoute     = require('@routes/api/v1/comments.route');
-const settingsRoute     = require('@routes/api/v1/settings.route');
+const accountsRoute     = require('@root/src/routes/api/v1/account.routes');
+const adminsRoute       = require('@root/src/routes/api/v1/admin.routes');
+const authRoute         = require('@root/src/routes/api/v1/auth.routes');
+const collagesRoute     = require('@root/src/routes/api/v1/collage.routes');
+const filesRoute        = require('@root/src/routes/api/v1/file.routes');
+const projectsRoute     = require('@root/src/routes/api/v1/projects/project.routes');
+const studentsRoute     = require('@root/src/routes/api/v1/student.routes');
+const supervisorsRoute  = require('@root/src/routes/api/v1/supervisor.routes');
+const commentsRoute     = require('@root/src/routes/api/v1/comment.routes');
+const settingsRoute     = require('@root/src/routes/api/v1/setting.routes');
 
 router.use('/accounts', accountsRoute);
 router.use('/admins', adminsRoute);
