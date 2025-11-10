@@ -13,7 +13,7 @@ const adminsRouter = express.Router();
  * @access Manager account or admin with appropriate permission (AHP).
  * @body {string} role - The new role to assign to the account (e.g., 'admin', 'user').
  */
-adminsRouter.put('/accounts/:accountId/role', );
+adminsRouter.put('/:accountId/role', );
 
 /**
  * @route GET /admins/accounts
@@ -22,15 +22,7 @@ adminsRouter.put('/accounts/:accountId/role', );
  * @query {number} [limit] - Maximum number of records to return.
  * @query {number} [offset] - Number of records to skip.
  */
-adminsRouter.get('/accounts', );
-
-/**
- * @route GET /admins/accounts/:accountId/permissions/:permissionId
- * @description Check whether an account has a specific permission.
- * @access Manager account or admin with appropriate permission (AHP).
- * @returns True or False.
- */
-adminsRouter.get('/accounts/:accountId/permissions/:permissionId', );
+adminsRouter.get('/', );
 
 /**
  * @route GET /admins/accounts/:accountId/permissions
@@ -38,7 +30,7 @@ adminsRouter.get('/accounts/:accountId/permissions/:permissionId', );
  * @access Manager account or admin with appropriate permission (AHP).
  * @returns {Array<Object>} List of permissions.
  */
-adminsRouter.get('/accounts/:accountId/permissions', );
+adminsRouter.get('/:accountId/permissions', );
 
 /**
  * @route POST /admins/accounts/:accountId/permissions
@@ -46,14 +38,14 @@ adminsRouter.get('/accounts/:accountId/permissions', );
  * @access Manager account or admin with appropriate permission (AHP).
  * @body {string} permissionId - The unique identifier of the permission to assign.
  */
-adminsRouter.post('/accounts/:accountId/permissions', );
+adminsRouter.post('/:accountId/permissions', );
 
 /**
  * @route DELETE /admins/accounts/:accountId/permissions/:permissionId
  * @description Remove a specific permission from an account.
  * @access Manager account or admin with appropriate permission (AHP).
  */
-adminsRouter.delete('/accounts/:accountId/permissions/:permissionId', );
+adminsRouter.delete('/:accountId/permissions/:permissionId', );
 
 
 module.exports = adminsRouter;

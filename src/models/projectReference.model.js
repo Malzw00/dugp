@@ -16,8 +16,8 @@ class ProjectReference extends Model {
      */
     static associate(models) {
         // Example associations (can be uncommented if needed):
-        // ProjectReference.belongsTo(models.Project, { foreignKey: 'project_id' });
-        // ProjectReference.belongsTo(models.File, { foreignKey: 'reference_id' });
+        ProjectReference.belongsTo(models.Project, { foreignKey: 'project_id', onDelete: 'CASCADE' });
+        ProjectReference.belongsTo(models.Reference, { foreignKey: 'reference_id', onDelete: 'CASCADE' });
     }
 }
 

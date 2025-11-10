@@ -1,5 +1,5 @@
 const express = require('express');
-const categoriesRouter = require('./projectCategory.routes');
+const projectCategoriesRouter = require('./projectCategory.routes');
 const projectFilesRouter = require('./projectFile.routes');
 const projectKeywordsRouter = require('./projectKeyword.routes');
 const projectSearchRouter = require('./projectSearch.routes');
@@ -13,8 +13,11 @@ const router  = express.Router();
  * @access any (no authentication required)
  * @query {number} offset - Pagination offset.
  * @query {number} limit - Pagination limit.
- * @query {Object} filters - Optional filters { categories, startDate, endDate, collage, departments }.
- * @query {Object} order - Optional ordering { by, dir }.
+ * @query {Array} categories
+ * @query {Array} departments
+ * @query {Array} collages
+ * @query {"date" | "rating" | "likes" | "grade"} orderBy
+ * @query {"ASC"|"DESC"} orderDir
  */
 router.get('/', );
 
@@ -60,8 +63,6 @@ router.delete('/:projectId', );
  * @body {number} supervisorId
  * @body {number} grade
  * @body {number} imageId
- * @body {number} bookId
- * @body {number} presentationId
  * @body {boolean} available
  */
 router.put('/:projectId');
@@ -71,7 +72,7 @@ router.put('/:projectId');
  * @description Manage categories related to a project.
  * @access varies by sub-routes.
  */
-router.use('/:projectId/categories', categoriesRouter);
+router.use('/:projectId/categories', projectCategoriesRouter);
 
 /**
  * @route /projects/:projectId/keywords

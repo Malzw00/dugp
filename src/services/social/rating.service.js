@@ -84,13 +84,16 @@ class RatingService {
      * Get all ratings for a specific project.
      * @param {Object} params
      * @param {number} params.project_id - The project ID.
+     * @param {number} params.offset
+     * @param {number} params.limit
      * @returns {Promise<Object[]>} An array of Rating instances.
      * @throws {AppError} If fetching fails.
      */
-    static async getProjectRatings({ project_id }) {
+    static async getProjectRatings({ project_id, offset, limit }) {
         try {
             const ratings = await models.Rating.findAll({
-                where: { project_id: project_id }
+                where: { project_id: project_id },
+                offset, limit
             });
             return ratings;
         } catch (error) {

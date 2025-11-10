@@ -60,19 +60,23 @@ class AccountService {
     /**
      * Update account details (name, email, or profile image).
      * @param {Object} params
-     * @param {string} [params.account_name] - New account name (optional).
+     * @param {number} params.account_id - The unique identifier of the account to update.
+     * @param {string} [params.fst_name] - New account fst name (optional).
+     * @param {string} [params.lst_name] - New account lst name (optional).
      * @param {string} [params.account_email] - New account email (optional).
      * @param {number} [params.profile_image_id] - New profile image ID (optional).
-     * @param {number} params.account_id - The unique identifier of the account to update.
+     * @param {number} [params.account_role] - The unique identifier of the account to update.
      * @returns {Promise<number>} The number of affected rows (0 if no account was updated).
      * @throws {Error} If update fails.
      */
-    static async update({ account_name, account_email, profile_image_id, account_id }) {
+    static async update({ fst_name, lst_name, account_email, profile_image_id, account_id, account_role }) {
         try {
             const values = {};
-            if(account_name) values.account_name = account_name;
+            if(fst_name) values.fst_name = fst_name;
+            if(lst_name) values.lst_name = lst_name;
             if(account_email) values.account_email = account_email;
             if(profile_image_id) values.profile_image_id = profile_image_id;
+            if(account_role === 'admin' || account_role === 'user') values.account_role = account_role;
 
             const [affectedRows] = await models.Account.update(values, { where: { account_id: account_id } });
 
@@ -97,6 +101,26 @@ class AccountService {
             throw this.#logger.log(this.getByID.name, error);
         }
     }
+    
+    /**
+     * Retrieve an admin accounts.
+     * @param {Object} params
+     * @param {number} params.offset
+     * @param {number} params.limit
+     * @returns {Promise<Object|null>} The account instance if found, otherwise null.
+     * @throws {Error} If retrieval fails.
+     */
+    static async getAdmins({ offset, limit }) {
+        try {
+            const admins = await models.Account.findAll({
+                where: { account_role: 'admin' },
+                offset, limit,
+            });
+            return admins;
+        } catch (error) {
+            throw this.#logger.log(this.getAdmins.name, error);
+        }
+    }
 
     /**
      * Retrieve an account by its email.
@@ -118,17 +142,21 @@ class AccountService {
      * Search accounts by name (partial match).
      * @param {Object} params
      * @param {string} params.keyword - The keyword to search for in account names.
+     * @param {string} params.offset
+     * @param {string} params.limit
      * @returns {Promise<Object[]>} An array of accounts that match the keyword.
      * @throws {Error} If search fails.
      */
-    static async searchByName ({ keyword }) {
+    static async searchByName ({ keyword, limit = 0, offset = 20 }) {
         try {
             const accounts = await models.Account.findAll({
                 where: {
                     account_name: {
                         [Op.like]: `%${keyword}%`
                     }
-                }
+                },
+                offset,
+                limit,
             });
             return accounts;
         } catch (error) {

@@ -6,16 +6,15 @@ const projectSearchRouter  = express.Router();
  * @description Search for projects using a keyword with optional filters and ordering.
  * @access any (no authentication required)
  * 
- * @param {string} keyword - The keyword to search for.
- * @query {Object} filters - Optional filters for the search.
- * @query {Array<string>} filters.collages - Filter by collage IDs.
- * @query {Array<string>} filters.departments - Filter by department IDs.
- * @query {Array<string>} filters.categories - Filter by category IDs.
- * @query {Object} filters.ratingRange - Filter by rating range {min, max}.
- * @query {Object} order - Optional ordering settings.
- * @query {string} order.by - Field to order by: 'date' | 'ratingAverage' | 'likesCount'.
- * @query {string} order.dir - Direction: 'desc' | 'asc'.
+ * @query {string} keyword - The keyword to search for.
+ * @query {Array<string>} collages - Filter by collage IDs.
+ * @query {Array<string>} departments - Filter by department IDs.
+ * @query {Array<string>} categories - Filter by category IDs.
+ * @query {string} orderBy - Field to order by: 'date' | 'ratingAverage' | 'likesCount'.
+ * @query {string} orderDir - Direction: 'desc' | 'asc'.
+ * @query {string} offset.
+ * @query {string} limit.
  */
-projectSearchRouter.get('/:keyword', );
+projectSearchRouter.get('/', );
 
 module.exports = projectSearchRouter;

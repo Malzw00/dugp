@@ -20,9 +20,9 @@ projectPeopleRouter.delete('/students/:studentId', );
  * @route POST /students/:studentId
  * @description Add a new student or update an existing student by ID.
  * @access ahp (admin with permission)
- * @param {string} studentId - The unique identifier of the student.
+ * @body {number} studentId - The unique identifier of the student.
  */
-projectPeopleRouter.post('/students/:studentId', );
+projectPeopleRouter.post('/students', );
 
 /**
  * @route GET /supervisor
@@ -43,9 +43,9 @@ projectPeopleRouter.delete('/supervisor', );
  * @route PUT /supervisor/:supervisorId
  * @description Update details of a specific supervisor by their ID.
  * @access ahp (admin with permission)
- * @param {string} supervisorId - The unique identifier of the supervisor.
+ * @body {number} supervisorId - The unique identifier of the supervisor.
  */
-projectPeopleRouter.put('/supervisor/:supervisorId', );
+projectPeopleRouter.put('/supervisor', );
 
 
 module.exports = projectPeopleRouter;

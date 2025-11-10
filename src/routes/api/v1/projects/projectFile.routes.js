@@ -64,6 +64,7 @@ referencesRouter.get('/', );
  * @access all (only authenticated users can access)
  * @body {string} title - The title of the reference.
  * @body {string} link - The link of the reference (local:{path} or network:{path}).
+ * @body {string} author
  */
 referencesRouter.post('/', );
 
@@ -91,12 +92,6 @@ referencesRouter.delete('/:index', );
 referencesRouter.delete('/:referenceId', );
 
 
-/**
- * @route GET /files
- * @description Get all files related to a project (book, presentation, references).
- * @access any (no authentication required)
- */
-projectFilesRouter.get('/', );
 
 projectFilesRouter.use('/book', bookRouter);
 projectFilesRouter.use('/presentation', presentationRouter);

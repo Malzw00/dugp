@@ -5,7 +5,7 @@ const ServiceErrorLogger = require("@root/src/utils/serviceErrorLogger.util");
  * Service for managing account permissions and permission-based access control.
  * Provides CRUD operations for account-permission relationships and permission checking functionality.
  */
-class AccountPermission {
+class AccountPermissionService {
 
     static #logger = new ServiceErrorLogger({ module: 'AccountPermission' });
 
@@ -14,16 +14,16 @@ class AccountPermission {
      * Links an account with a permission to grant access rights.
      * 
      * @param {Object} params - Permission assignment parameters
-     * @param {string|number} params.permission - The permission identifier to assign
+     * @param {string|number} params.permissionId - The permission identifier to assign
      * @param {string|number} params.account_id - The account ID to assign the permission to
      * @returns {Promise<Object>} The created AccountPermission record
      * @throws {Error} If database operation fails or validation errors occur
      */
-    static async create({ permission, account_id }) {
+    static async create({ permissionId, account_id }) {
         try {
             const created = await models.AccountPermission.create({ 
                 account_id: account_id, 
-                permission_id: permission,
+                permission_id: permissionId,
             });
 
             return created;
@@ -46,6 +46,30 @@ class AccountPermission {
         try {
             const deletedRows = await models.AccountPermission.destroy({
                 where: { account_permission_id: account_permission_id }
+            });
+
+            return deletedRows;
+            
+        } catch (error) {
+            throw this.#logger.log(this.deleteByID.name, error);
+        }
+    }
+    
+    
+    /**
+     * Deletes a specific permission assignment by its ID.
+     * Removes the association between an account and a permission.
+     * 
+     * @param {Object} params - Deletion parameters
+     * @param {number} params.account_id - The unique identifier of the account assignment
+     * @param {string} params.permission_id - The unique identifier of the permission assignment
+     * @returns {Promise<number>} Number of deleted rows (should be 1 if successful, 0 if not found)
+     * @throws {Error} If database operation fails
+     */
+    static async delete({ account_id, permission_id }) {
+        try {
+            const deletedRows = await models.AccountPermission.destroy({
+                where: { permission_id, account_id }
             });
 
             return deletedRows;
@@ -210,4 +234,4 @@ class AccountPermission {
     }
 }
 
-module.exports = AccountPermission;
+module.exports = AccountPermissionService;

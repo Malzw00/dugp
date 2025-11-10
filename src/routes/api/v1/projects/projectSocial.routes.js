@@ -43,8 +43,8 @@ likesRouter.delete('/', );
 /**
  * @route GET /projects/:projectId/comments
  * @description Get all comments for a specific project.
- * @body {number} offset
- * @body {number} limit
+ * @query {string} offset
+ * @query {string} limit
  * @access any (no authentication required)
  */
 commentsRouter.get('/', );
@@ -55,21 +55,6 @@ commentsRouter.get('/', );
  * @access any (no authentication required)
  */
 commentsRouter.get('/count', );
-
-/**
- * @route GET /projects/:projectId/comments/:index
- * @description Get a comment by its index (e.g., pagination or order).
- * @access any (no authentication required)
- * @param {number} index - The index of the comment.
- */
-commentsRouter.get('/:index', );
-
-/**
- * @route GET /projects/:projectId/comments/me
- * @description Get all comments created by the authenticated user on this project.
- * @access owner (only the owner of the comments)
- */
-commentsRouter.get('/me', );
 
 /**
  * @route POST /projects/:projectId/comments
