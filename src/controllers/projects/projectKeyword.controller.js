@@ -54,7 +54,7 @@ const projectKeywordController = {
             res.status(500).json({
                 success: false,
                 message: "Failed to retrieve project keywords.",
-                error: error.message,
+                
             });
         }
     },
@@ -115,7 +115,7 @@ const projectKeywordController = {
             res.status(500).json({
                 success: false,
                 message: "Failed to add project keywords.",
-                error: error.message,
+                
             });
         }
     },
@@ -162,7 +162,7 @@ const projectKeywordController = {
             res.status(500).json({
                 success: false,
                 message: "Failed to remove project keyword.",
-                error: error.message,
+                
             });
         }
     },

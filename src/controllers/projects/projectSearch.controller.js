@@ -91,7 +91,7 @@ const projectSearchController = {
             res.status(500).json({
                 success: false,
                 message: "Failed to perform project search.",
-                error: error.message,
+                
             });
         }
     }

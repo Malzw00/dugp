@@ -5,7 +5,8 @@ const router  = express.Router();
  * @route POST /auth/register
  * @description Register a new account with the system.
  * @access any (no authentication required)
- * @body {string} username - The username for the new account.
+ * @body {string} fstname
+ * @body {string} lstname
  * @body {string} email - The email address of the new account.
  * @body {string} password - The password for the new account.
  */

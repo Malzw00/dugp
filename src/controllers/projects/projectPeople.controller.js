@@ -41,7 +41,7 @@ const projectPeopleController = {
             res.status(500).json({
                 success: false,
                 message: "Failed to retrieve project students.",
-                error: error.message,
+                
             });
         }
     },
@@ -86,7 +86,7 @@ const projectPeopleController = {
             res.status(500).json({
                 success: false,
                 message: "Failed to add student to project.",
-                error: error.message,
+                
             });
         }
     },
@@ -121,7 +121,7 @@ const projectPeopleController = {
             res.status(500).json({
                 success: false,
                 message: "Failed to remove student from project.",
-                error: error.message,
+                
             });
         }
     },
@@ -173,7 +173,7 @@ const projectPeopleController = {
             res.status(500).json({
                 success: false,
                 message: "Failed to retrieve project supervisor.",
-                error: error.message,
+                
             });
         }
     },
@@ -208,7 +208,7 @@ const projectPeopleController = {
             res.status(500).json({
                 success: false,
                 message: "Failed to remove supervisor from project.",
-                error: error.message,
+                
             });
         }
     },
@@ -252,7 +252,7 @@ const projectPeopleController = {
             res.status(500).json({
                 success: false,
                 message: "Failed to assign supervisor to project.",
-                error: error.message,
+                
             });
         }
     },

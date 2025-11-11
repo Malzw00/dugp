@@ -43,7 +43,7 @@ const projectSocialController = {
             res.status(500).json({
                 success: false,
                 message: "Failed to retrieve project likes.",
-                error: error.message,
+                
             });
         }
     },
@@ -81,7 +81,7 @@ const projectSocialController = {
             res.status(500).json({
                 success: false,
                 message: "Failed to retrieve project likes count.",
-                error: error.message,
+                
             });
         }
     },
@@ -121,7 +121,7 @@ const projectSocialController = {
             res.status(500).json({
                 success: false,
                 message: "Failed to check like status.",
-                error: error.message,
+                
             });
         }
     },
@@ -160,7 +160,7 @@ const projectSocialController = {
             res.status(500).json({
                 success: false,
                 message: "Failed to add like.",
-                error: error.message,
+                
             });
         }
     },
@@ -206,7 +206,7 @@ const projectSocialController = {
             res.status(500).json({
                 success: false,
                 message: "Failed to remove like.",
-                error: error.message,
+                
             });
         }
     },
@@ -259,7 +259,7 @@ const projectSocialController = {
             res.status(500).json({
                 success: false,
                 message: "Failed to retrieve project comments.",
-                error: error.message,
+                
             });
         }
     },
@@ -304,7 +304,7 @@ const projectSocialController = {
             res.status(500).json({
                 success: false,
                 message: "Failed to retrieve project comments count.",
-                error: error.message,
+                
             });
         }
     },
@@ -362,7 +362,7 @@ const projectSocialController = {
             res.status(500).json({
                 success: false,
                 message: "Failed to add comment.",
-                error: error.message,
+                
             });
         }
     },
@@ -399,7 +399,7 @@ const projectSocialController = {
             res.status(500).json({
                 success: false,
                 message: "Failed to remove comment.",
-                error: error.message,
+                
             });
         }
     },
@@ -447,7 +447,7 @@ const projectSocialController = {
             res.status(500).json({
                 success: false,
                 message: "Failed to retrieve project ratings.",
-                error: error.message,
+                
             });
         }
     },
@@ -486,7 +486,7 @@ const projectSocialController = {
             res.status(500).json({
                 success: false,
                 message: "Failed to retrieve project average rating.",
-                error: error.message,
+                
             });
         }
     },
@@ -525,7 +525,7 @@ const projectSocialController = {
             res.status(500).json({
                 success: false,
                 message: "Failed to retrieve your project rating.",
-                error: error.message,
+                
             });
         }
     },
@@ -565,7 +565,7 @@ const projectSocialController = {
             res.status(500).json({
                 success: false,
                 message: "Failed to rate the project.",
-                error: error.message,
+                
             });
         }
     },
@@ -605,7 +605,7 @@ const projectSocialController = {
             res.status(500).json({
                 success: false,
                 message: "Failed to update the project rating.",
-                error: error.message,
+                
             });
         }
     },

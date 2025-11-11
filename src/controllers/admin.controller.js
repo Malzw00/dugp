@@ -47,7 +47,7 @@ const adminController = {
             res.status(500).json({
                 success: false,
                 message: "Failed to retrieve admin accounts.",
-                error: error.message,
+                
             });
         }
     },
@@ -82,16 +82,8 @@ const adminController = {
             const { accountId } = req.params;
             const { role } = req.body;
 
-            const accountIdNum = parseInt(accountId);
-            if (isNaN(accountIdNum) || !role) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Invalid accountId or role.",
-                });
-            }
-
             await AccountService.update({
-                account_id: accountIdNum,
+                account_id: accountId,
                 account_role: role,
             });
 
@@ -102,7 +94,7 @@ const adminController = {
             res.status(500).json({
                 success: false,
                 message: "Failed to update account role.",
-                error: error.message,
+                
             });
         }
     },
@@ -136,17 +128,9 @@ const adminController = {
     async getAccountPermissions(req, res) {
         try {
             const { accountId } = req.params;
-            const accountIdNum = parseInt(accountId);
-
-            if (isNaN(accountIdNum)) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Invalid accountId parameter.",
-                });
-            }
 
             const permissions = await AccountPermissionService.getAccountPermissions({
-                account_id: accountIdNum,
+                account_id: accountId,
             });
 
             res.status(200).json({
@@ -157,7 +141,7 @@ const adminController = {
             res.status(500).json({
                 success: false,
                 message: "Failed to retrieve account permissions.",
-                error: error.message,
+                
             });
         }
     },
@@ -184,11 +168,10 @@ const adminController = {
             const { accountId } = req.params;
             const { permissionId } = req.body;
             
-            const accountIdNum = parseInt(accountId);
             const permissionIdNum = parseInt(permissionId);
             
             await AccountPermissionService.create({
-                account_id: accountIdNum,
+                account_id: accountId,
                 permission_id: permissionIdNum,
             });
             
@@ -199,7 +182,7 @@ const adminController = {
             res.status(500).json({
                 success: false,
                 message: "Failed to grant permission.",
-                error: error.message,
+                
             });
         }
     },
@@ -229,18 +212,11 @@ const adminController = {
     async removePermission(req, res) {
         try {
             const { accountId, permissionId } = req.params;
-            const accountIdNum = parseInt(accountId);
+
             const permissionIdNum = parseInt(permissionId);
 
-            if (isNaN(accountIdNum) || isNaN(permissionIdNum)) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Invalid accountId or permissionId.",
-                });
-            }
-
             await AccountPermissionService.delete({
-                account_id: accountIdNum,
+                account_id: accountId,
                 permission_id: permissionIdNum,
             });
 
@@ -251,7 +227,7 @@ const adminController = {
             res.status(500).json({
                 success: false,
                 message: "Failed to remove permission.",
-                error: error.message,
+                
             });
         }
     },

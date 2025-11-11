@@ -57,7 +57,7 @@ const projectController = {
             res.status(500).json({
                 success: false,
                 message: 'Get All Projects Failed.',
-                error: error.message,
+                
             });
         }
     },
@@ -106,7 +106,7 @@ const projectController = {
             res.status(500).json({
                 success: false,
                 message: "Get Project Failed.",
-                error: error.message,
+                
             });
         }
     },
@@ -170,7 +170,7 @@ const projectController = {
             res.status(500).json({
                 success: false,
                 message: "Failed to create project.",
-                error: error.message,
+                
             });
         }
     },
@@ -250,7 +250,7 @@ const projectController = {
             res.status(500).json({
                 success: false,
                 message: "Failed to update project.",
-                error: error.message,
+                
             });
         }
     },
@@ -298,7 +298,7 @@ const projectController = {
             res.status(500).json({
                 success: false,
                 message: "Failed to delete project.",
-                error: error.message,
+                
             });
         }
     },

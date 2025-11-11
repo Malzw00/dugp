@@ -61,7 +61,7 @@ const projectCategoryController = {
             res.status(500).json({
                 success: false,
                 message: "Failed to retrieve project categories.",
-                error: error.message,
+                
             });
         }
     },
@@ -141,7 +141,7 @@ const projectCategoryController = {
             res.status(500).json({
                 success: false,
                 message: "Failed to add categories to project.",
-                error: error.message,
+                
             });
         }
     },
@@ -196,7 +196,7 @@ const projectCategoryController = {
             res.status(500).json({
                 success: false,
                 message: "Failed to remove category from project.",
-                error: error.message,
+                
             });
         }
     },

@@ -49,7 +49,7 @@ const projectFileController = {
             res.status(500).json({
                 success: false,
                 message: "Failed to retrieve project book.",
-                error: error.message,
+                
             });
         }
     },
@@ -102,7 +102,7 @@ const projectFileController = {
             res.status(500).json({
                 success: false,
                 message: "Failed to set project book.",
-                error: error.message,
+                
             });
         }
     },
@@ -144,7 +144,7 @@ const projectFileController = {
             res.status(500).json({
                 success: false,
                 message: "Failed to delete project book.",
-                error: error.message,
+                
             });
         }
     },
@@ -188,7 +188,7 @@ const projectFileController = {
             res.status(500).json({
                 success: false,
                 message: "Failed to retrieve presentation.",
-                error: error.message,
+                
             });
         }
     },
@@ -244,7 +244,7 @@ const projectFileController = {
             res.status(500).json({
                 success: false,
                 message: "Failed to set project presentation.",
-                error: error.message,
+                
             });
         }
     },
@@ -288,7 +288,7 @@ const projectFileController = {
             res.status(500).json({
                 success: false,
                 message: "Failed to delete presentation.",
-                error: error.message,
+                
             });
         }
     },
@@ -316,7 +316,7 @@ const projectFileController = {
             res.status(500).json({
                 success: false,
                 message: "Failed to retrieve project references.",
-                error: error.message,
+                
             });
         }
     },
@@ -371,7 +371,7 @@ const projectFileController = {
             res.status(500).json({
                 success: false,
                 message: "An error occurred while adding the reference.",
-                error: error.message,
+                
             });
         }
     },
@@ -413,7 +413,7 @@ const projectFileController = {
             res.status(500).json({
                 success: false,
                 message: "Failed to remove reference.",
-                error: error.message,
+                
             });
         }
     }

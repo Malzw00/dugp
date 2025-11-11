@@ -5,24 +5,16 @@ const router = express.Router();
  * @route GET /categories
  * @description Get all categories with optional pagination.
  * @access any
- * @query {number} offset - The number of records to skip.
- * @query {number} limit - The number of records to return.
+ * @query {string} collageId
  */
 router.get('/', );
-
-/**
- * @route GET /categories/:categoryId
- * @description Get a single category by its ID.
- * @access any
- * @param {string} categoryId - The unique ID of the category.
- */
-router.get('/:categoryId', );
 
 /**
  * @route POST /categories
  * @description Create multiple categories.
  * @access ahp (admin has a permission)
- * @body {string[]} names - An array of category names to create.
+ * @body {string} name - An array of category name to create.
+ * @body {number} collageId 
  */
 router.post('/', );
 
@@ -35,19 +27,12 @@ router.post('/', );
 router.delete('/:categoryId', );
 
 /**
- * @route DELETE /categories
- * @description Delete multiple categories by their IDs.
- * @access ahp (admin has a permission)
- * @body {number[]} ids - An array of category IDs to delete.
- */
-router.delete('/', );
-
-/**
  * @route PUT /categories/:categoryId
  * @description Update a category name.
  * @access ahp (admin has a permission)
  * @param {string} categoryId - The unique ID of the category.
- * @body {string} name - The new category name.
+ * @body  {string} name - The new category name.
+ * @body  {string} collageId - The new category name.
  */
 router.put('/:categoryId', );
 
@@ -56,6 +41,8 @@ router.put('/:categoryId', );
  * @description Get all projects that belong to a specific category.
  * @access any
  * @param {string} categoryId - The category ID.
+ * @query {string} limit
+ * @query {string} offset
  */
 router.get('/:categoryId/projects', );
 
@@ -69,15 +56,6 @@ router.get('/:categoryId/projects', );
 router.post('/:categoryId/projects', );
 
 /**
- * @route DELETE /categories/:categoryId/projects
- * @description Remove multiple projects from a category.
- * @access ahp (admin has a permission)
- * @param {string} categoryId - The category ID.
- * @body {number[]} ids - Array of project IDs to remove.
- */
-router.delete('/:categoryId/projects', );
-
-/**
  * @route DELETE /categories/:categoryId/projects/:projectId
  * @description Remove a single project from a category.
  * @access ahp (admin has a permission)
@@ -85,7 +63,5 @@ router.delete('/:categoryId/projects', );
  * @param {string} projectId - The project ID to remove.
  */
 router.delete('/:categoryId/projects/:projectId', );
-
-
 
 module.exports = router;

@@ -89,8 +89,7 @@ const accountController = {
     async getMe(req, res) {
         try {
             const { user } = req;
-            const accountIdNum = parseInt(user.accountID);
-            const account = await AccountService.getByID({ account_id: accountIdNum });
+            const account = await AccountService.getByID({ account_id: user.accountID });
 
             res.status(200).json({
                 success: true,
@@ -176,8 +175,7 @@ const accountController = {
     async deleteMe(req, res) {
         try {
             const { user } = req;
-            const accountIdNum = parseInt(user.accountID);
-            await AccountService.delete({ account_id: accountIdNum });
+            await AccountService.delete({ account_id: user.accountID });
 
             res.status(200).json({ success: true });
         } catch (error) {
@@ -220,14 +218,12 @@ const accountController = {
     async updateMe(req, res) {
         try {
             const { user } = req;
-            const { accountID } = user;
             const { fstname, lstname, accountEmail, imageId } = req.body;
 
-            const accountIdNum = parseInt(accountID);
             const imageIdNum = parseInt(imageId);
 
             await AccountService.update({
-                account_id: accountIdNum,
+                account_id: user.accountID,
                 account_email: accountEmail,
                 fst_name: fstname,
                 lst_name: lstname,
