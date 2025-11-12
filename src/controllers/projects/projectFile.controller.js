@@ -207,6 +207,7 @@ const projectFileController = {
             const fileData = req.file;
 
             const projectIdNum = parseInt(projectId);
+            
             if (!fileData) {
                 return res.status(400).json({
                     success: false,
@@ -333,19 +334,6 @@ const projectFileController = {
             const { projectId } = req.params;
             const { title, link, author } = req.body;
 
-            if (!projectId || isNaN(projectId)) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Invalid projectId.",
-                });
-            }
-            if (!title || !link) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Both title and link are required.",
-                });
-            }
-
             const projectIdNum = parseInt(projectId);
             const createdRef = await ReferenceService.create({ title, link, author });
 
@@ -387,17 +375,15 @@ const projectFileController = {
         try {
             const { projectId, referenceId } = req.params;
 
-            if (!projectId || isNaN(projectId) || !referenceId || isNaN(referenceId)) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Invalid projectId or referenceId.",
-                });
-            }
-
             const referenceIdNum = parseInt(referenceId);
-            const referenceDeleted = await ReferenceService.delete({ reference_id: referenceIdNum });
+            const projectIdNum = parseInt(projectId);
 
-            if (!referenceDeleted) {
+            const deleted = await ProjectReferenceService.Project.removeReference({ 
+                reference_id: referenceIdNum,
+                project_id: projectIdNum,
+            });
+
+            if (!deleted) {
                 return res.status(404).json({
                     success: false,
                     message: "Reference not found or already removed.",
@@ -409,11 +395,25 @@ const projectFileController = {
                 message: "Reference removed successfully.",
             });
 
+            // Background check: delete reference if unused
+            (async () => {
+                try {
+                    const isReferenceUsed = await ProjectReferenceService.Reference.isReferenceUsed({
+                        reference_id: referenceIdNum,
+                    });
+                    if (!isReferenceUsed) {
+                        await ReferenceService.delete({ reference_id: referenceIdNum });
+                    }
+                } catch (innerError) {
+                    // Log but do not affect response
+                    console.error("Background deletion failed for reference:", innerError);
+                }
+            })();
+
         } catch (error) {
             res.status(500).json({
                 success: false,
                 message: "Failed to remove reference.",
-                
             });
         }
     }

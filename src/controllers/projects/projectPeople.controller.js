@@ -20,14 +20,6 @@ const projectPeopleController = {
         try {
             const { projectId } = req.params;
 
-            // Validation
-            if (!projectId || isNaN(projectId)) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Invalid projectId.",
-                });
-            }
-
             const projectIdNum = parseInt(projectId);
             const projectStudents = await ProjectStudentService.Project.getStudents({
                 project_id: projectIdNum,
@@ -56,21 +48,6 @@ const projectPeopleController = {
         try {
             const { projectId } = req.params;
             const { studentId } = req.body;
-
-            // Validation
-            if (!projectId || isNaN(projectId)) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Invalid projectId.",
-                });
-            }
-
-            if (!studentId || isNaN(studentId)) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Invalid studentId.",
-                });
-            }
 
             const created = await ProjectStudentService.Project.addStudent({
                 project_id: parseInt(projectId),

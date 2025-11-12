@@ -93,6 +93,7 @@ const projectKeywordController = {
         try {
             const { projectId } = req.params;
             const { keywords } = req.body;
+            
             const projectIdNum = parseInt(projectId);
 
             if (!Array.isArray(keywords) || keywords.length === 0) {

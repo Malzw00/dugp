@@ -80,13 +80,6 @@ const projectController = {
         try {
             const { projectId } = req.params;
 
-            if (!projectId || isNaN(projectId)) {
-                return res.status(400).json({
-                    status: false,
-                    message: "Invalid projectId.",
-                });
-            }
-
             const projectIdNum = parseInt(projectId);
             const project = await ProjectService.get({ project_id: projectIdNum });
 
@@ -106,7 +99,6 @@ const projectController = {
             res.status(500).json({
                 success: false,
                 message: "Get Project Failed.",
-                
             });
         }
     },
@@ -134,22 +126,8 @@ const projectController = {
         try {
             const { title, description, date, semester, departmentId, supervisorId } = req.body;
 
-            if (!title || !departmentId || !supervisorId) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Missing required fields: title, departmentId, or supervisorId.",
-                });
-            }
-
             const departmentIdNum = parseInt(departmentId);
             const supervisorIdNum = parseInt(supervisorId);
-
-            if (isNaN(departmentIdNum) || isNaN(supervisorIdNum)) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Invalid departmentId or supervisorId.",
-                });
-            }
 
             const project = await ProjectService.create({
                 title,
@@ -206,12 +184,7 @@ const projectController = {
                 available 
             } = req.body;
 
-            if (!projectId || isNaN(projectId)) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Invalid projectId.",
-                });
-            }
+            
 
             const projectIdNum = parseInt(projectId);
             const gradeVal = grade ? parseInt(grade) : undefined;
@@ -272,13 +245,6 @@ const projectController = {
     async delete(req, res) {
         try {
             const { projectId } = req.params;
-
-            if (!projectId || isNaN(projectId)) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Invalid projectId.",
-                });
-            }
 
             const projectIdNum = parseInt(projectId);
             const deleted = await ProjectService.delete({ project_id: projectIdNum });

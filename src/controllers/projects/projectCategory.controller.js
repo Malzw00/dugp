@@ -95,14 +95,6 @@ const projectCategoryController = {
             const { categoryIds } = req.body;
             const { projectId } = req.params;
 
-            // Validate projectId
-            if (!projectId || isNaN(projectId)) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Invalid projectId.",
-                });
-            }
-
             // Validate categoryIds
             if (!Array.isArray(categoryIds) || categoryIds.length === 0) {
                 return res.status(400).json({
@@ -168,14 +160,6 @@ const projectCategoryController = {
     async remove(req, res) {
         try {
             const { projectId, categoryId } = req.params;
-
-            // Validate IDs
-            if (!projectId || isNaN(projectId) || !categoryId || isNaN(categoryId)) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Invalid projectId or categoryId.",
-                });
-            }
 
             const projectIdNum = parseInt(projectId);
             const categoryIdNum = parseInt(categoryId);

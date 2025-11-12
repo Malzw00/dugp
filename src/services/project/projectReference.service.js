@@ -180,6 +180,17 @@ class ProjectReferenceService {
                 throw ProjectReferenceService.#logger.log(this.getReferenceProjects.name, error);
             }
         }
+
+        static async isReferenceUsed({ reference_id }) {
+            try {
+                const refrencesCount = await models.ProjectReference.count({
+                    where: { reference_id, }
+                });
+                return refrencesCount > 0;
+            } catch (error) {
+                throw ProjectReferenceService.#logger.log(this.isReferenceUsed.name, error);
+            }
+        }
     }
 }
 
