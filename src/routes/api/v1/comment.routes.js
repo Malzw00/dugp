@@ -23,7 +23,7 @@ router.delete('/:commentId', );
  * @route PUT /comments/:commentId
  * @description Update a specific comment.
  * @param {string} commentId - Unique identifier of the comment.
- * @query {string} content
+ * @body {string} content
  * @access owner (comment owner only)
  */
 router.put('/:commentId', );

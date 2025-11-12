@@ -97,6 +97,50 @@ class StudentService {
         }
     }
     
+    
+    /**
+     * Update fields for a specific student.
+     * Only updates the fields that are provided in the parameters.
+     * 
+     * @param {Object} params - Name update parameters
+     * @param {string} [params.name] - New first name (optional)
+     * @param {string} [params.father_name] - New father's name (optional)
+     * @param {string} [params.grand_father_name] - New grandfather's name (optional)
+     * @param {string} [params.family_name] - New family name (optional)
+     * @param {string} [params.account_id] - New family name (optional)
+     * @param {string} [params.department_id] - New family name (optional)
+     * @param {string} [params.image_id] - New family name (optional)
+     * @param {number} params.student_id - ID of the student to update
+     * @returns {Promise<number>} Number of affected rows (1 if successful, 0 if not found)
+     * @throws {Error} If database operation fails
+     */
+    static async update ({ 
+        name, father_name, grand_father_name, 
+        family_name, account_id, department_id, image_id, student_id 
+    }) {
+        try {
+
+            const values = {};
+            
+            if(name) values.student_name = name;
+            if(father_name) values.student_father_name = father_name;
+            if(grand_father_name) values.student_grandfather_name = grand_father_name;
+            if(family_name) values.student_family_name = family_name;
+            if(account_id) values.account_id = account_id;
+            if(department_id) values.department_id = department_id;
+            if(image_id) values.image_id = image_id;
+
+            const [affectedRows] = await models.Student.update(values, { 
+                where: { student_id: student_id } 
+            });
+
+            return affectedRows;
+
+        } catch (error) {
+            throw this.#logger.log(this.updateName.name, error);
+        }
+    }
+    
 
 
     /**
@@ -278,6 +322,29 @@ class StudentService {
 
         } catch (error) {
             throw this.#logger.log(this.get.name, error);
+        }
+    }
+    
+    
+    /**
+     * Retrieves a all students.
+     * 
+     * @param {Object} params
+     * @param {number} params.offset
+     * @param {number} params.limit
+     * @returns {Promise<Object[]|null>} Student record if found, null otherwise
+     * @throws {Error} If database operation fails
+     */
+    static async getAll ({ offset, limit }) {
+        try {
+            const students = await models.Student.findAll({ 
+                offset, limit,
+            });
+
+            return students;
+
+        } catch (error) {
+            throw this.#logger.log(this.getAll.name, error);
         }
     }
 

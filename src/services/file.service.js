@@ -58,6 +58,21 @@ class FileService {
             throw this.#logger.log(this.getFileById.name, error);
         }
     }
+    
+    /**
+     * Get file
+     * @param {Object} params
+     * @param {number} [params.offset] 
+     * @param {number} [params.limit]
+     * @returns {Promise<Object|null>}
+     */
+    static async getAll({ limit, offset }) {
+        try {
+            return await models.File.findAll({ limit, offset });
+        } catch (error) {
+            throw this.#logger.log(this.getAll.name, error);
+        }
+    }
 
     /**
      * Delete a file from disk and DB

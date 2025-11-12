@@ -11,13 +11,6 @@ const router = express.Router();
 router.get('/', );
 
 /**
- * @route GET /students/:studentId/projects
- * @description Retrieve all projects that the students have participated in.
- * @access Public
- */
-router.get('/:studentId/projects', );
-
-/**
  * @route GET /students/:studentId
  * @description Retrieve details of a specific student by ID.
  * @param {string} studentId - Unique identifier of the student.
@@ -70,11 +63,10 @@ router.get('/:studentId/account', );
 /**
  * @route POST /students/account
  * @description Link a student to a platform account.
- * @body {string} studentId - ID of the student to link.
  * @body {string} accountId - ID of the account to link.
  * @access Admin (requires permission)
  */
-router.post('/account', );
+router.post('/:studentId/account', );
 
 /**
  * @route DELETE /students/account
@@ -82,7 +74,7 @@ router.post('/account', );
  * @body {string} studentId - ID of the student to unlink.
  * @access Admin (requires permission)
  */
-router.delete('/account', );
+router.delete('/:studentId/account', );
 
 
 module.exports = router;

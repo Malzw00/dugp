@@ -32,7 +32,9 @@ router.get('/:supervisorId', );
  * @body {string} fatherName - Supervisor's father name.
  * @body {string} grandFatherName - Supervisor's father name.
  * @body {string} familyName - Supervisor's father name.
- * @body {string} department - Department of the supervisor.
+ * @body {string} departmentId - Department of the supervisor.
+ * @body {string} title
+ * @body {string} email
  * @access Admin (requires permission)
  */
 router.post('/', );
@@ -49,6 +51,7 @@ router.post('/', );
  * @body {number} accountId
  * @body {number} imageId
  * @body {string} title
+ * @body {string} email
  * @access Admin (requires permission)
  */
 router.put('/:supervisorId', );

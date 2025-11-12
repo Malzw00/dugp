@@ -71,6 +71,26 @@ class CollageService {
             throw this.#logger.log(this.get.name, error);
         }
     }
+    
+    
+    
+    /**
+     * Retrieve a collage by ID, or fetch all collages if no ID is provided.
+     * @param {Object} params
+     * @param {number} [params.offset]
+     * @param {number} [params.limit]
+     * @returns {Promise<Object[]>} A single collage instance or an array of collages.
+     * @throws {AppError} If fetching fails.
+     */
+    static async getAll({ offset, limit }) {
+
+        try {
+            const collages = await models.Collage.findAll({ offset, limit });
+            return collages;
+        } catch (error) {
+            throw this.#logger.log(this.get.name, error);
+        }
+    }
 
 
 

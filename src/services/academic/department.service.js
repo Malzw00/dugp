@@ -51,6 +51,17 @@ class DepartmentService {
             throw this.#logger.log(this.getDepartments.name, error);
         }
     }
+    
+    
+    static async getDepartment({ department_id }) {
+        try {
+            const department = await models.Department.findByPk(department_id);
+            return department;
+            
+        } catch (error) {
+            throw this.#logger.log(this.getDepartment.name, error);
+        }
+    }
 
     /**
      * Delete a department by its ID.

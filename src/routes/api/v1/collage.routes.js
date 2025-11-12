@@ -37,7 +37,7 @@ router.delete('/:collageId', );
 /**
  * @route PUT /collages/:collageId
  * @description Update an existing collage name.
- * @query {string} collageName - New collage name.
+ * @body {string} collageName - New collage name.
  * @param {string} collageId - Unique identifier of the collage.
  * @access Admin (requires permission)
  */
@@ -65,8 +65,8 @@ router.get('/:collageId/departments/:departmentId', );
 /**
  * @route POST /collages/:collageId/departments
  * @description Create a new department inside a specific collage.
- * @query {string} departmentName - Name of the new department.
  * @param {string} collageId - Unique identifier of the collage.
+ * @body {string} name - Name of the new department.
  * @access Admin (requires permission)
  */
 router.post('/:collageId/departments', );

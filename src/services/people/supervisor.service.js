@@ -75,19 +75,21 @@ class SupervisorService {
      * @param {string} [params.grandfather_name] - Grandfather's name
      * @param {string} [params.family_name] - Family name
      * @param {string} [params.title] - Supervisor title
+     * @param {string} [params.email]
      * @param {number} [params.department_id] - Department ID
      * @param {number} [params.account_id] - Linked account ID
      * @param {number} [params.image_id] - Profile image ID
      * @returns {Promise<number>} Number of affected rows (1 if updated, 0 if not found)
      * @throws {Error} If database operation fails
      */
-    static async updateSupervisor({
+    static async update({
         supervisor_id,
         name,
         father_name,
         grandfather_name,
         family_name,
         title,
+        email,
         department_id,
         account_id,
         image_id
@@ -101,6 +103,7 @@ class SupervisorService {
             if (family_name !== undefined) values.supervisor_family_name = family_name;
             if (title !== undefined) values.supervisor_title = title;
             if (department_id !== undefined) values.department_id = department_id;
+            if (email !== undefined) values.supervisor_email = email;
             if (account_id !== undefined) values.account_id = account_id;
             if (image_id !== undefined) values.image_id = image_id;
 
@@ -114,7 +117,7 @@ class SupervisorService {
             return affectedRows;
 
         } catch (error) {
-            throw this.#logger.log(this.updateSupervisor.name, error);
+            throw this.#logger.log(this.update.name, error);
         }
     }
 
@@ -279,6 +282,50 @@ class SupervisorService {
             throw this.#logger.log(this.get.name, error);
         }
     }
+    
+    /**
+     * Get supervisors.
+     * @param {Object} params
+     * @param {number} params.offset
+     * @param {number} params.limit
+     * @returns {Promise<Object[]|null>} Supervisor instance or null if not found.
+     */
+    static async getAll({ limit, offset }) {
+        try {
+            const supervisors = await models.Supervisor.findAll({ offset, limit, });
+            
+            return supervisors;
+
+        } catch (error) {
+            throw this.#logger.log(this.getAll.name, error);
+        }
+    }
+    
+    /**
+     * Get supervisor projects.
+     * @param {Object} params
+     * @param {number} params.supervisor_id
+     * @param {number} [params.offset=0]
+     * @param {number} [params.limit=20]
+     * @returns {Promise<Object[]>} List of projects supervised by the given supervisor.
+     */
+    static async getProjects({ supervisor_id, offset = 0, limit = 20 }) {
+        try {
+            const projects = await models.Project.findAll({
+                where: { supervisor_id },
+                attributes: ['project_id', 'project_title'],
+                offset,
+                limit,
+                order: [['project_id', 'DESC']]
+            });
+
+            return projects;
+
+        } catch (error) {
+            throw this.#logger.log(this.getProjects.name, error);
+        }
+    }
+
 
     /**
      * Get all supervisors in a specific department.
