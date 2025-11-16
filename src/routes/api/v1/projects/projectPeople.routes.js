@@ -1,51 +1,57 @@
 const express = require('express');
 const projectPeopleRouter  = express.Router();
+const controller = require("@controllers/projects/projectPeople.controller");
 
 /**
- * @route GET /students
- * @description Get a list of all students.
+ * @route GET /projects/:projectId/people/students
+ * @description Get all students associated with a specific project.
  * @access any (no authentication required)
+ * @param {string} projectId - The ID of the project.
  */
-projectPeopleRouter.get('/students', );
+projectPeopleRouter.get('/students', controller.getStudents);
 
 /**
- * @route DELETE /students/:studentId
- * @description Delete a specific student by their ID.
+ * @route POST /projects/:projectId/people/students
+ * @description Add a new student to the project.
  * @access ahp (admin with permission)
- * @param {string} studentId - The unique identifier of the student.
+ * @param {string} projectId - The ID of the project.
+ * @body {number} studentId - The ID of the student to add.
  */
-projectPeopleRouter.delete('/students/:studentId', );
+projectPeopleRouter.post('/students', controller.addStudent);
 
 /**
- * @route POST /students/:studentId
- * @description Add a new student or update an existing student by ID.
+ * @route DELETE /projects/:projectId/people/students/:studentId
+ * @description Remove a student from the project.
  * @access ahp (admin with permission)
- * @body {number} studentId - The unique identifier of the student.
+ * @param {string} projectId - The ID of the project.
+ * @param {string} studentId - The ID of the student to remove.
  */
-projectPeopleRouter.post('/students', );
+projectPeopleRouter.delete('/students/:studentId', controller.removeStudent);
 
 /**
- * @route GET /supervisor
- * @description Get a list of all supervisors.
+ * @route GET /projects/:projectId/people/supervisor
+ * @description Get the supervisor assigned to the project.
  * @access any (no authentication required)
+ * @param {string} projectId - The ID of the project.
  */
-projectPeopleRouter.get('/supervisor', );
+projectPeopleRouter.get('/supervisor', controller.getSupervisor);
 
 /**
- * @route DELETE /supervisor/:supervisorId
- * @description Delete a specific supervisor by their ID.
+ * @route PUT /projects/:projectId/people/supervisor/:supervisorId
+ * @description Set or update the supervisor of the project.
  * @access ahp (admin with permission)
- * @param {string} supervisorId - The unique identifier of the supervisor.
+ * @param {string} projectId - The ID of the project.
+ * @param {string} supervisorId - The ID of the supervisor to set.
  */
-projectPeopleRouter.delete('/supervisor', );
+projectPeopleRouter.put('/supervisor/:supervisorId', controller.setSupervisor);
 
 /**
- * @route PUT /supervisor/:supervisorId
- * @description Update details of a specific supervisor by their ID.
+ * @route DELETE /projects/:projectId/people/supervisor/:supervisorId
+ * @description Remove the supervisor from the project.
  * @access ahp (admin with permission)
- * @body {number} supervisorId - The unique identifier of the supervisor.
+ * @param {string} projectId - The ID of the project.
+ * @param {string} supervisorId - The ID of the supervisor to remove.
  */
-projectPeopleRouter.put('/supervisor', );
-
+projectPeopleRouter.delete('/supervisor/:supervisorId', controller.removeSupervisor);
 
 module.exports = projectPeopleRouter;

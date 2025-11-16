@@ -1,29 +1,31 @@
 const express = require('express');
 const projectCategoriesRouter  = express.Router();
+const controller = require('@controllers/projects/projectCategory.controller');
 
 /**
- * @route GET /categories
- * @description Get a list of all categories.
+ * @route GET /projects/:projectId/categories
+ * @description Get all categories linked to a specific project.
  * @access any (no authentication required)
+ * @param {string} projectId - The ID of the project.
  */
-projectCategoriesRouter.get('/', );
+projectCategoriesRouter.get('/', controller.getAll);
 
 /**
- * @route DELETE /categories/:categoryId
- * @description remove a specific category by its ID.
+ * @route POST /projects/:projectId/categories
+ * @description Add a category to a specific project.
  * @access ahp (admin with permission)
- * @param {string} categoryId - The unique identifier of the category.
+ * @param {string} projectId - The ID of the project.
+ * @body {number} categoryId - The ID of the category to be linked.
  */
-projectCategoriesRouter.delete('/:categoryId', );
+projectCategoriesRouter.post('/', controller.add);
 
 /**
- * @route POST /categories
- * @description add category to project.
+ * @route DELETE /projects/:projectId/categories/:categoryId
+ * @description Remove a category from a specific project.
  * @access ahp (admin with permission)
- * @body  {string} categoryId
- * @param {string} projectId
+ * @param {string} projectId - The ID of the project.
+ * @param {string} categoryId - The ID of the category to remove.
  */
-projectCategoriesRouter.post('/', );
-
+projectCategoriesRouter.delete('/:categoryId', controller.remove);
 
 module.exports = projectCategoriesRouter;

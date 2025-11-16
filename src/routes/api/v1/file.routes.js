@@ -1,23 +1,28 @@
 const express = require('express');
 const router  = express.Router();
+const controller = require('@controllers/file.controller');
+
+/* -------------------------------------------------------------------------- */
+/*                                   FILES                                    */
+/* -------------------------------------------------------------------------- */
 
 /**
  * @route GET /files
  * @description Retrieve a list of all files.
  *              Supports pagination and filtering if implemented.
- * @access all (only authenticated users can access, no guests)
+ * @access all (authenticated users only)
  * @query {number} [offset] - Offset number.
  * @query {number} [limit] - Number of items per page.
  */
-router.get('/files', );
+router.get('/', controller.getAll);
 
 /**
  * @route GET /files/:fileId
  * @description Retrieve a single file by its ID.
- * @access all (only authenticated users can access, no guests)
+ * @access all (authenticated users only)
  * @param {string} fileId - The unique identifier of the file.
  */
-router.get('/files/:fileId', );
+router.get('/:fileId', controller.getByID);
 
 /**
  * @route DELETE /files/:fileId
@@ -25,25 +30,15 @@ router.get('/files/:fileId', );
  * @access ahp (admin must have permission)
  * @param {string} fileId - The unique identifier of the file.
  */
-router.delete('/files/:fileId', );
-
-/**
- * @route PUT /files/:fileId
- * @description Update a specific file's metadata or information by ID.
- * @access ahp (admin must have permission)
- * @param {string} fileId - The unique identifier of the file.
- * @body {string} [name] - Updated file name.
- * @body {string} [description] - Updated description of the file.
- */
-router.put('/files/:fileId', );
+router.delete('/:fileId', controller.deleteByID);
 
 /**
  * @route POST /files
  * @description Upload a new file.
- * @access all (only authenticated users can access, no guests)
+ * @access all (authenticated users only)
  * @body {File} file - The file to be uploaded (multipart/form-data).
- * @body {'book'|'presentation'|'reference'|'image'} [category] - category of the uploaded file.
+ * @body {'book'|'presentation'|'reference'|'image'} [category] - Category of the uploaded file.
  */
-router.post('/files', );
+router.post('/', controller.uploadFile);
 
 module.exports = router;

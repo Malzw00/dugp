@@ -1,35 +1,31 @@
 const express = require('express');
 const projectKeywordsRouter  = express.Router();
+const controller = require('@controllers/projects/projectKeyword.controller');
 
 /**
- * @route GET /keywords
- * @description Get a list of all keywords.
+ * @route GET /projects/:projectId/keywords
+ * @description Get all keywords linked to a specific project.
  * @access any (no authentication required)
+ * @param {string} projectId - The ID of the project.
  */
-projectKeywordsRouter.get('/', );
+projectKeywordsRouter.get('/', controller.getAll);
 
 /**
- * @route DELETE /keywords/:keywordId
- * @description Delete a specific keyword by its ID.
+ * @route POST /projects/:projectId/keywords
+ * @description Add one or more keywords to a specific project.
  * @access ahp (admin with permission)
- * @param {string} keywordId - The unique identifier of the keyword.
+ * @param {string} projectId - The ID of the project.
+ * @body {Array<string>} keywords - A list of keyword strings to be added.
  */
-projectKeywordsRouter.delete('/:keywordId', );
+projectKeywordsRouter.post('/', controller.create);
 
 /**
- * @route POST /keywords
- * @description Create a new keyword.
+ * @route DELETE /projects/:projectId/keywords/:keywordId
+ * @description Delete a specific keyword from a project.
  * @access ahp (admin with permission)
- * @body {Array<String>} keywords - the new keywords.
+ * @param {string} projectId - The ID of the project.
+ * @param {string} keywordId - The ID of the keyword to remove.
  */
-projectKeywordsRouter.post('/', );
-
-/**
- * @route PUT /keywords
- * @description Update a keyword.
- * @access ahp (admin with permission)
- * @body {string} name - The name of keyword.
- */
-projectKeywordsRouter.put('/', );
+projectKeywordsRouter.delete('/:keywordId', controller.delete);
 
 module.exports = projectKeywordsRouter;

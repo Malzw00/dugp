@@ -1,19 +1,21 @@
 /**
  * @file admins.route.js
  * @description API routes for managing admin roles and permissions within the system.
- * Provides endpoints for promoting/demoting accounts, managing permissions, and listing administrators.
  */
 
 const express = require('express');
 const adminsRouter = express.Router();
+const controller = require('@controllers/admin.controller');
+
+
 
 /**
  * @route PUT /admins/accounts/:accountId/role
  * @description Assign or remove the admin role from a specific account.
  * @access Manager account or admin with appropriate permission (AHP).
- * @body {string} role - The new role to assign to the account (e.g., 'admin', 'user').
+ * @body {string} role - The new role to assign to the account ('admin' | 'user').
  */
-adminsRouter.put('/:accountId/role', );
+adminsRouter.put('/accounts/:accountId/role', controller.updateRole);
 
 /**
  * @route GET /admins/accounts
@@ -22,15 +24,14 @@ adminsRouter.put('/:accountId/role', );
  * @query {number} [limit] - Maximum number of records to return.
  * @query {number} [offset] - Number of records to skip.
  */
-adminsRouter.get('/', );
+adminsRouter.get('/accounts', controller.getAdmins);
 
 /**
  * @route GET /admins/accounts/:accountId/permissions
  * @description Retrieve all permissions assigned to a specific account.
  * @access Manager account or admin with appropriate permission (AHP).
- * @returns {Array<Object>} List of permissions.
  */
-adminsRouter.get('/:accountId/permissions', );
+adminsRouter.get('/accounts/:accountId/permissions', controller.getAccountPermissions);
 
 /**
  * @route POST /admins/accounts/:accountId/permissions
@@ -38,14 +39,15 @@ adminsRouter.get('/:accountId/permissions', );
  * @access Manager account or admin with appropriate permission (AHP).
  * @body {string} permissionId - The unique identifier of the permission to assign.
  */
-adminsRouter.post('/:accountId/permissions', );
+adminsRouter.post('/accounts/:accountId/permissions', controller.grantPermission);
 
 /**
  * @route DELETE /admins/accounts/:accountId/permissions/:permissionId
  * @description Remove a specific permission from an account.
  * @access Manager account or admin with appropriate permission (AHP).
  */
-adminsRouter.delete('/:accountId/permissions/:permissionId', );
+adminsRouter.delete('/accounts/:accountId/permissions/:permissionId', controller.removePermission);
+
 
 
 module.exports = adminsRouter;

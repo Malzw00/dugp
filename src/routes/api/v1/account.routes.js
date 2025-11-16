@@ -1,54 +1,61 @@
 const express = require('express');
 const router  = express.Router();
+const controller = require('@controllers/account.contoller');
+
 
 /**
  * @route GET /accounts/search
  * @description Search accounts by keyword, role, offset and limit.
  * @access any (no authentication required)
  * @query {string} keyword - Search keyword to match accounts.
- * @query {string} role - Filter results by role (e.g., admin, user).
+ * @query {string} role - Filter by role (e.g., admin, user).
  * @query {number} offset
  * @query {number} limit
  */
-router.get('/search', );         
+router.get('/search', controller.search);
 
-/**
- * @route GET /accounts/:accountId
- * @description Retrieve details of a single account by ID.
- * @access any (no authentication required)
- * @param {string} accountId - The ID of the account.
- */
-router.get('/:accountId', );     
+
+/* ------------------------------- Me Endpoints ------------------------------- */
 
 /**
  * @route GET /accounts/me
- * @description Retrieve details of a my account.
- * @access Owner
- * @param {string} accountId - The ID of the account.
+ * @description Retrieve details of the authenticated user's account.
+ * @access owner (authenticated user)
  */
-router.get('/me', );     
-
-/**
- * @route DELETE /accounts/:accountId
- * @description Delete a specific account by ID.
- * @access ahp (admin must have permission)
- * @param {string} accountId - The ID of the account to delete.
- */
-router.delete('/:accountId', );  
+router.get('/me', controller.getMe);
 
 /**
  * @route DELETE /accounts/me
- * @description Delete the authenticated user's own account.
- * @access owner (only the account owner can perform this action)
+ * @description Delete the authenticated user's account.
+ * @access owner (authenticated user)
  */
-router.delete('/me', );          
+router.delete('/me', controller.deleteMe);
 
 /**
  * @route PUT /accounts/me
- * @description Update the authenticated user's own account.
- * @access owner (only the account owner can perform this action)
+ * @description Update the authenticated user's account.
+ * @access owner (authenticated user)
  */
-router.put('/me', );             
+router.put('/me', controller.updateMe);
+
+
+/* ------------------------ Account By ID (Admin endpoints) ------------------------ */
+
+/**
+ * @route GET /accounts/:accountId
+ * @description Retrieve details of an account by its ID.
+ * @access any (no authentication required)
+ * @param {string} accountId - The ID of the account.
+ */
+router.get('/:accountId', controller.getByID);
+
+/**
+ * @route DELETE /accounts/:accountId
+ * @description Delete an account by ID.
+ * @access ahp (admin with required permission)
+ * @param {string} accountId - The ID of the account to delete.
+ */
+router.delete('/:accountId', controller.deleteByID);
 
 
 module.exports = router;

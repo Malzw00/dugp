@@ -1,5 +1,10 @@
 const express = require('express');
 const router = express.Router();
+const controller = require('@controllers/supervisor.controller');
+
+/* -------------------------------------------------------------------------- */
+/*                                SUPERVISORS                                  */
+/* -------------------------------------------------------------------------- */
 
 /**
  * @route GET /supervisors
@@ -8,14 +13,7 @@ const router = express.Router();
  * @query {number} limit - Number of results to return.
  * @access Public
  */
-router.get('/', );
-
-/**
- * @route GET /supervisors/:supervisorId/projects
- * @description Retrieve all projects supervised or co-supervised by supervisors.
- * @access Public
- */
-router.get('/:supervisorId/projects', );
+router.get('/', controller.getAll);
 
 /**
  * @route GET /supervisors/:supervisorId
@@ -23,38 +21,46 @@ router.get('/:supervisorId/projects', );
  * @param {string} supervisorId - Unique identifier of the supervisor.
  * @access Public
  */
-router.get('/:supervisorId', );
+router.get('/:supervisorId', controller.getByID);
+
+/**
+ * @route GET /supervisors/:supervisorId/projects
+ * @description Retrieve all projects supervised or co-supervised by the supervisor.
+ * @param {string} supervisorId - Supervisor ID.
+ * @access Public
+ */
+router.get('/:supervisorId/projects', controller.getProjects);
 
 /**
  * @route POST /supervisors
  * @description Create a new supervisor record.
- * @body {string} name - Supervisor name.
- * @body {string} fatherName - Supervisor's father name.
- * @body {string} grandFatherName - Supervisor's father name.
- * @body {string} familyName - Supervisor's father name.
- * @body {string} departmentId - Department of the supervisor.
+ * @body {string} name
+ * @body {string} fatherName
+ * @body {string} grandFatherName
+ * @body {string} familyName
+ * @body {number} departmentId
  * @body {string} title
  * @body {string} email
  * @access Admin (requires permission)
  */
-router.post('/', );
+router.post('/', controller.create);
 
 /**
  * @route PUT /supervisors/:supervisorId
  * @description Update information of a supervisor by ID.
  * @param {string} supervisorId - Unique identifier of the supervisor.
- * @body {string} name - Student's name.
- * @body {string} fatherName - Supervisor's father name.
- * @body {string} grandFatherName - Supervisor's father name.
- * @body {string} familyName - Supervisor's father name.
- * @body {number} departmentId - ID of the Supervisor's department.
+ * @body {string} name
+ * @body {string} fatherName
+ * @body {string} grandFatherName
+ * @body {string} familyName
+ * @body {number} departmentId
  * @body {number} accountId
  * @body {number} imageId
  * @body {string} title
  * @body {string} email
  * @access Admin (requires permission)
  */
-router.put('/:supervisorId', );
+router.put('/:supervisorId', controller.update);
 
 /**
  * @route DELETE /supervisors/:supervisorId
@@ -62,31 +68,35 @@ router.put('/:supervisorId', );
  * @param {string} supervisorId - Unique identifier of the supervisor.
  * @access Admin (requires permission)
  */
-router.delete('/:supervisorId', );
+router.delete('/:supervisorId', controller.delete);
+
+/* -------------------------------------------------------------------------- */
+/*                              SUPERVISOR ACCOUNT                             */
+/* -------------------------------------------------------------------------- */
 
 /**
- * @route GET /supervisors/account
- * @description Retrieve account link information for a supervisor.
+ * @route GET /supervisors/:supervisorId/account
+ * @description Retrieve account link information for a specific supervisor.
+ * @param {string} supervisorId - ID of the supervisor.
  * @access Public
  */
-router.get('/:supervisorId/account', );
+router.get('/:supervisorId/account', controller.getAccount);
 
 /**
- * @route POST /supervisors/account
+ * @route POST /supervisors/:supervisorId/account
  * @description Link a supervisor to a platform account.
- * @body {string} supervisorId - Supervisor to link.
- * @body {string} accountId - Platform account to link with.
+ * @param {string} supervisorId - Supervisor ID.
+ * @body {number} accountId - Platform account ID.
  * @access Admin (requires permission)
  */
-router.post('/account', );
+router.post('/:supervisorId/account', controller.addAccount);
 
 /**
- * @route DELETE /supervisors/account
+ * @route DELETE /supervisors/:supervisorId/account
  * @description Unlink a supervisor from a platform account.
- * @body {string} supervisorId - Supervisor to unlink.
+ * @param {string} supervisorId - Supervisor ID.
  * @access Admin (requires permission)
  */
-router.delete('/account', );
-
+router.delete('/:supervisorId/account', controller.removeAccount);
 
 module.exports = router;

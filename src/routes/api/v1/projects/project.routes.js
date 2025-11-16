@@ -6,6 +6,7 @@ const projectSearchRouter = require('./projectSearch.routes');
 const projectPeopleRouter = require('./projectPeople.routes');
 const projectSocialRouter = require('./projectSocial.routes');
 const router  = express.Router();
+const controller = require('@controllers/projects/project.controller');
 
 /**
  * @route GET /projects
@@ -13,21 +14,21 @@ const router  = express.Router();
  * @access any (no authentication required)
  * @query {number} offset - Pagination offset.
  * @query {number} limit - Pagination limit.
- * @query {Array} categories
- * @query {Array} departments
- * @query {Array} collages
- * @query {"date" | "rating" | "likes" | "grade"} orderBy
- * @query {"ASC"|"DESC"} orderDir
+ * @query {Array<number>} categories - Filter by category IDs.
+ * @query {Array<number>} departments - Filter by department IDs.
+ * @query {Array<number>} collages - Filter by collage IDs.
+ * @query {"date" | "rating" | "likes" | "grade"} orderBy - Sorting field.
+ * @query {"ASC"|"DESC"} orderDir - Sorting direction.
  */
-router.get('/', );
+router.get('/', controller.getAll);
 
 /**
  * @route GET /projects/:projectId
  * @description Get details of a specific project by its ID.
  * @access any (no authentication required)
- * @param {string} projectId - The unique identifier of the project.
+ * @param {number} projectId - The unique identifier of the project.
  */
-router.get('/:projectId', );
+router.get('/:projectId', controller.getByID);
 
 /**
  * @route POST /projects
@@ -35,26 +36,26 @@ router.get('/:projectId', );
  * @access all (only authenticated users can create)
  * @body {string} title - The title of the project.
  * @body {string} description - The description of the project.
- * @body {date} date
- * @body {'Winter'|'Spring'|'Summer'|'Autumn'} semester
- * @body {number} departmentId
- * @body {number} supervisorId
+ * @body {date} date - The project creation date.
+ * @body {'Winter'|'Spring'|'Summer'|'Autumn'} semester - Academic semester.
+ * @body {number} departmentId - Department ID.
+ * @body {number} supervisorId - Supervisor ID.
  */
-router.post('/', );
+router.post('/', controller.create);
 
 /**
  * @route DELETE /projects/:projectId
  * @description Delete a specific project by its ID.
  * @access ahp (admin with permission)
- * @param {string} projectId - The unique identifier of the project.
+ * @param {number} projectId - The unique identifier of the project.
  */
-router.delete('/:projectId', );
+router.delete('/:projectId', controller.delete);
 
 /**
  * @route PUT /projects/:projectId
  * @description Update a specific project by its ID.
  * @access all (authenticated users with permission)
- * @param {string} projectId - The unique identifier of the project.
+ * @param {number} projectId - The unique identifier of the project.
  * @body {string} title - The title of the project.
  * @body {string} description - The description of the project.
  * @body {date} date
@@ -65,48 +66,48 @@ router.delete('/:projectId', );
  * @body {number} imageId
  * @body {boolean} available
  */
-router.put('/:projectId');
+router.put('/:projectId', controller.update);
 
 /**
  * @route /projects/:projectId/categories
  * @description Manage categories related to a project.
- * @access varies by sub-routes.
+ * @access depends on the specific sub-route.
  */
 router.use('/:projectId/categories', projectCategoriesRouter);
 
 /**
  * @route /projects/:projectId/keywords
  * @description Manage keywords related to a project.
- * @access varies by sub-routes.
+ * @access depends on the specific sub-route.
  */
 router.use('/:projectId/keywords', projectKeywordsRouter);
 
 /**
- * @route /projects/:projectId/search
- * @description Search within a specific project.
- * @access varies by sub-routes.
+ * @route GET /projects/search
+ * @description Search across all projects.
+ * @access any (no authentication required)
  */
 router.use('/search', projectSearchRouter);
 
 /**
  * @route /projects/:projectId/files
  * @description Manage files related to a project (book, presentation, references).
- * @access varies by sub-routes.
+ * @access depends on the specific sub-route.
  */
-router.use('/:projectId', projectFilesRouter);
+router.use('/:projectId/files', projectFilesRouter);
 
 /**
  * @route /projects/:projectId/people
  * @description Manage students and supervisors related to a project.
- * @access varies by sub-routes.
+ * @access depends on the specific sub-route.
  */
-router.use('/:projectId', projectPeopleRouter);
+router.use('/:projectId/people', projectPeopleRouter);
 
 /**
  * @route /projects/:projectId/social
  * @description Manage likes, comments, and ratings for a project.
- * @access varies by sub-routes.
+ * @access depends on the specific sub-route.
  */
-router.use('/:projectId', projectSocialRouter);
+router.use('/:projectId/social', projectSocialRouter);
 
 module.exports = router;

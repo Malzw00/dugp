@@ -1,85 +1,89 @@
+/**
+ * @file collage.routes.js
+ * @description API routes for managing collages and their departments.
+ */
+
 const express = require('express');
 const router = express.Router();
+const controller = require('@controllers/collage.controller');
 
 /**
  * @route GET /collages
- * @description Retrieve a list of all collages with optional pagination.
- * @query {number} offset - Starting index for pagination.
- * @query {number} limit - Number of results to return.
- * @access Public
+ * @description Retrieve all collages with optional pagination.
+ * @access any (no authentication required)
+ * @query {number} [offset] - Number of records to skip.
+ * @query {number} [limit] - Maximum number of records to return.
  */
-router.get('/', );
+router.get('/', controller.getAll);
 
 /**
  * @route GET /collages/:collageId
- * @description Retrieve details of a specific collage by ID.
- * @param {string} collageId - Unique identifier of the collage.
- * @access Public
+ * @description Retrieve a specific collage by ID.
+ * @access any
+ * @param {number} collageId - Unique identifier of the collage.
  */
-router.get('/:collageId', );
+router.get('/:collageId', controller.getByID);
 
 /**
  * @route POST /collages
  * @description Create a new collage.
- * @query {string} collageName - Name of the new collage.
- * @access Admin (requires permission)
+ * @access ahp (admin with permission)
+ * @body {string} name - Name of the new collage.
  */
-router.post('/', );
+router.post('/', controller.create);
 
 /**
  * @route DELETE /collages/:collageId
  * @description Permanently delete a collage by ID.
- * @param {string} collageId - Unique identifier of the collage.
- * @access Admin (requires permission)
+ * @access ahp (admin with permission)
+ * @param {number} collageId - Unique identifier of the collage.
  */
-router.delete('/:collageId', );
+router.delete('/:collageId', controller.deleteByID);
 
 /**
  * @route PUT /collages/:collageId
- * @description Update an existing collage name.
- * @body {string} collageName - New collage name.
- * @param {string} collageId - Unique identifier of the collage.
- * @access Admin (requires permission)
+ * @description Update a collage's name.
+ * @access ahp (admin with permission)
+ * @param {number} collageId - Unique identifier of the collage.
+ * @body {string} name - Updated collage name.
  */
-router.put('/:collageId', );
+router.put('/:collageId', controller.update);
 
 /**
  * @route GET /collages/:collageId/departments
- * @description Retrieve all departments belonging to a collage.
- * @param {string} collageId - Unique identifier of the collage.
- * @param {string} limit
- * @param {string} offset
- * @access Public
+ * @description Retrieve all departments inside a collage.
+ * @access any
+ * @param {number} collageId - Unique identifier of the collage.
+ * @query {number} [offset] - Records to skip.
+ * @query {number} [limit] - Max results to return.
  */
-router.get('/:collageId/departments', );
+router.get('/:collageId/departments', controller.getDepartments);
 
 /**
  * @route GET /collages/:collageId/departments/:departmentId
- * @description Retrieve a specific department by ID within a collage.
- * @param {string} collageId - Unique identifier of the collage.
- * @param {string} departmentId - Unique identifier of the department.
- * @access Public
+ * @description Retrieve a specific department within a collage.
+ * @access any
+ * @param {number} collageId - Collage ID.
+ * @param {number} departmentId - Department ID.
  */
-router.get('/:collageId/departments/:departmentId', );
+router.get('/:collageId/departments/:departmentId', controller.getDepartment);
 
 /**
  * @route POST /collages/:collageId/departments
- * @description Create a new department inside a specific collage.
- * @param {string} collageId - Unique identifier of the collage.
- * @body {string} name - Name of the new department.
- * @access Admin (requires permission)
+ * @description Create a new department inside a collage.
+ * @access ahp (admin with permission)
+ * @param {number} collageId - Collage ID.
+ * @body {string} name - Department name.
  */
-router.post('/:collageId/departments', );
+router.post('/:collageId/departments', controller.addDepartment);
 
 /**
  * @route DELETE /collages/:collageId/departments/:departmentId
  * @description Delete a department from a collage.
- * @param {string} collageId - Unique identifier of the collage.
- * @param {string} departmentId - Unique identifier of the department.
- * @access Admin (requires permission)
+ * @access ahp (admin with permission)
+ * @param {number} collageId - Collage ID.
+ * @param {number} departmentId - Department ID.
  */
-router.delete('/:collageId/departments/:departmentId', );
-
-
+router.delete('/:collageId/departments/:departmentId', controller.removeDepartment);
 
 module.exports = router;

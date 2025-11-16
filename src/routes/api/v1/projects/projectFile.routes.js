@@ -4,93 +4,105 @@ const projectFilesRouter = express.Router();
 const bookRouter  = express.Router();
 const presentationRouter  = express.Router();
 const referencesRouter  = express.Router();
+const controller = require('@controllers/projects/projectFile.controller');
 
 /**
- * @route GET /files/book
- * @description Get the book file of a project.
- * @access any (no authentication required)
+ * ---------------------------------------
+ * BOOK ROUTES
+ * ---------------------------------------
  */
-bookRouter.get('/', );
 
 /**
- * @route POST /files/book
- * @description Upload or replace the book file of a project.
+ * @route GET /projects/:projectId/files/book
+ * @description Get the book file of a specific project.
+ * @access any (no authentication required)
+ * @param {string} projectId - The ID of the project.
+ */
+bookRouter.get('/', controller.getBook);
+
+/**
+ * @route POST /projects/:projectId/files/book
+ * @description Upload or replace the book file of a specific project.
  * @access all (only authenticated users can access)
+ * @param {string} projectId - The ID of the project.
  * @body {File} file - The book file to upload.
  */
-bookRouter.post('/', );
+bookRouter.post('/', controller.setBook);
 
 /**
- * @route DELETE /files/book
- * @description Delete the book file of a project.
+ * @route DELETE /projects/:projectId/files/book
+ * @description Delete the book file of a specific project.
  * @access ahp (admin with permission)
+ * @param {string} projectId - The ID of the project.
  */
-bookRouter.delete('/', );
+bookRouter.delete('/', controller.deleteBook);
 
 
 /**
- * @route GET /files/presentation
- * @description Get the presentation file of a project.
+ * ---------------------------------------
+ * PRESENTATION ROUTES
+ * ---------------------------------------
+ */
+
+/**
+ * @route GET /projects/:projectId/files/presentation
+ * @description Get the presentation file of a specific project.
  * @access any (no authentication required)
+ * @param {string} projectId - The ID of the project.
  */
-presentationRouter.get('/', );
+presentationRouter.get('/', controller.getPresentation);
 
 /**
- * @route POST /files/presentation
- * @description Upload or replace the presentation file of a project.
+ * @route POST /projects/:projectId/files/presentation
+ * @description Upload or replace the presentation file of a specific project.
  * @access all (only authenticated users can access)
+ * @param {string} projectId - The ID of the project.
  * @body {File} file - The presentation file to upload.
  */
-presentationRouter.post('/', );
+presentationRouter.post('/', controller.setPresentation);
 
 /**
- * @route DELETE /files/presentation
- * @description Delete the presentation file of a project.
+ * @route DELETE /projects/:projectId/files/presentation
+ * @description Delete the presentation file of a specific project.
  * @access ahp (admin with permission)
+ * @param {string} projectId - The ID of the project.
  */
-presentationRouter.delete('/', );
+presentationRouter.delete('/', controller.deletePresentation);
 
 
 /**
- * @route GET /files/references
- * @description Get a list of all references linked to a project.
+ * ---------------------------------------
+ * REFERENCES ROUTES
+ * ---------------------------------------
+ */
+
+/**
+ * @route GET /projects/:projectId/files/references
+ * @description Get all references associated with a project.
  * @access any (no authentication required)
+ * @param {string} projectId - The ID of the project.
  */
-referencesRouter.get('/', );
+referencesRouter.get('/', controller.getReferences);
 
 /**
- * @route POST /files/references
+ * @route POST /projects/:projectId/files/references
  * @description Add a new reference to the project.
  * @access all (only authenticated users can access)
+ * @param {string} projectId - The ID of the project.
  * @body {string} title - The title of the reference.
  * @body {string} link - The link of the reference (local:{path} or network:{path}).
- * @body {string} author
+ * @body {string} author - Author of the reference.
  */
-referencesRouter.post('/', );
+referencesRouter.post('/', controller.addReference);
 
 /**
- * @route DELETE /files/references
- * @description Delete all references linked to the project.
- * @access ahp (admin with permission)
- */
-referencesRouter.delete('/', );
-
-/**
- * @route DELETE /files/references/:index
- * @description Delete a reference by its index in the list.
- * @access ahp (admin with permission)
- * @param {number} index - The index of the reference in the list.
- */
-referencesRouter.delete('/:index', );
-
-/**
- * @route DELETE /files/references/:referenceId
+ * @route DELETE /projects/:projectId/files/references/:referenceId
  * @description Delete a specific reference by its ID.
  * @access ahp (admin with permission)
+ * @param {string} projectId - The ID of the project.
  * @param {string} referenceId - The unique identifier of the reference.
  */
-referencesRouter.delete('/:referenceId', );
-
+referencesRouter.delete('/:referenceId', controller.removeReferenceByID);
 
 
 projectFilesRouter.use('/book', bookRouter);
