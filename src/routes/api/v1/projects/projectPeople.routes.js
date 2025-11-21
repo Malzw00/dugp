@@ -1,6 +1,9 @@
 const express = require('express');
 const projectPeopleRouter  = express.Router();
 const controller = require("@controllers/projects/projectPeople.controller");
+const authenticate = require('@middlewares/auth.middleware');
+const requireRole = require('@middlewares/role.middleware');
+const requirePermission = require('@middlewares/permission.middleware');
 
 /**
  * @route GET /projects/:projectId/people/students
@@ -17,7 +20,13 @@ projectPeopleRouter.get('/students', controller.getStudents);
  * @param {string} projectId - The ID of the project.
  * @body {number} studentId - The ID of the student to add.
  */
-projectPeopleRouter.post('/students', controller.addStudent);
+projectPeopleRouter.post(
+    '/students',  
+    authenticate,
+    requireRole('admin'),
+    requirePermission('projects'),
+    controller.addStudent,
+);
 
 /**
  * @route DELETE /projects/:projectId/people/students/:studentId
@@ -26,7 +35,13 @@ projectPeopleRouter.post('/students', controller.addStudent);
  * @param {string} projectId - The ID of the project.
  * @param {string} studentId - The ID of the student to remove.
  */
-projectPeopleRouter.delete('/students/:studentId', controller.removeStudent);
+projectPeopleRouter.delete(
+    '/students/:studentId',  
+    authenticate,
+    requireRole('admin'),
+    requirePermission('projects'),
+    controller.removeStudent,
+);
 
 /**
  * @route GET /projects/:projectId/people/supervisor
@@ -43,7 +58,13 @@ projectPeopleRouter.get('/supervisor', controller.getSupervisor);
  * @param {string} projectId - The ID of the project.
  * @param {string} supervisorId - The ID of the supervisor to set.
  */
-projectPeopleRouter.put('/supervisor/:supervisorId', controller.setSupervisor);
+projectPeopleRouter.put(
+    '/supervisor/:supervisorId',  
+    authenticate,
+    requireRole('admin'),
+    requirePermission('projects'),
+    controller.setSupervisor,
+);
 
 /**
  * @route DELETE /projects/:projectId/people/supervisor/:supervisorId
@@ -52,6 +73,12 @@ projectPeopleRouter.put('/supervisor/:supervisorId', controller.setSupervisor);
  * @param {string} projectId - The ID of the project.
  * @param {string} supervisorId - The ID of the supervisor to remove.
  */
-projectPeopleRouter.delete('/supervisor/:supervisorId', controller.removeSupervisor);
+projectPeopleRouter.delete(
+    '/supervisor/:supervisorId',  
+    authenticate,
+    requireRole('admin'),
+    requirePermission('projects'),
+    controller.removeSupervisor,
+);
 
 module.exports = projectPeopleRouter;

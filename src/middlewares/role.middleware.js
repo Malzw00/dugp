@@ -7,6 +7,7 @@ const AccountService = require("@services/account/account.service");
  * 
  * @usage
  *  router.post('/admin', authenticate, requireRole('manager'), controller);
+ * @param {"admin" | "manager" | "user"} role 
  */
 function requireRole(role) {
     return async (req, res, next) => {
@@ -30,6 +31,9 @@ function requireRole(role) {
         }
 
         const userRole = account.account_role;
+
+        if(userRole === 'manager')
+        return next();
 
         if (userRole !== role) {
             return res.status(403).json({

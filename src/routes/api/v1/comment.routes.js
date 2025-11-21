@@ -6,6 +6,9 @@
 const express = require('express');
 const router = express.Router();
 const controller = require('@controllers/comment.controller');
+const authenticate = require('@middlewares/auth.middleware');
+const requireRole = require('@middlewares/role.middleware');
+const requirePermission = require('@middlewares/permission.middleware');
 
 /* -------------------------------------------------------------------------- */
 /*                                Comment CRUD                                */
@@ -25,7 +28,13 @@ router.get('/:commentId', controller.getByID);
  * @access owner | ahp (comment owner or admin with permission)
  * @param {number} commentId - Unique identifier of the comment.
  */
-router.delete('/:commentId', controller.deleteByID);
+router.delete(
+    '/:commentId', 
+    authenticate,
+    requireRole('admin'),
+    requirePermission('delete_comment'),
+    controller.deleteByID
+);
 
 /**
  * @route PUT /comments/:commentId
@@ -34,7 +43,7 @@ router.delete('/:commentId', controller.deleteByID);
  * @param {number} commentId - Unique identifier of the comment.
  * @body {string} content - Updated comment content.
  */
-router.put('/:commentId', controller.update);
+router.put('/:commentId', authenticate, controller.update);
 
 /* -------------------------------------------------------------------------- */
 /*                                Comment Likes                               */
@@ -64,7 +73,7 @@ router.get('/:commentId/likes/count', controller.getLikesCount);
  * @access owner (authenticated user)
  * @param {number} commentId - Comment ID.
  */
-router.get('/:commentId/likes/me', controller.amILiked);
+router.get('/:commentId/likes/me', authenticate, controller.amILiked);
 
 /**
  * @route POST /comments/:commentId/likes
@@ -72,7 +81,7 @@ router.get('/:commentId/likes/me', controller.amILiked);
  * @access all (authenticated users only)
  * @param {number} commentId - Comment ID.
  */
-router.post('/:commentId/likes', controller.createLike);
+router.post('/:commentId/likes', authenticate, controller.createLike);
 
 /**
  * @route DELETE /comments/:commentId/likes
@@ -80,7 +89,7 @@ router.post('/:commentId/likes', controller.createLike);
  * @access all (authenticated users only)
  * @param {number} commentId - Comment ID.
  */
-router.delete('/:commentId/likes', controller.deleteLike);
+router.delete('/:commentId/likes', authenticate, controller.deleteLike);
 
 
 /* -------------------------------------------------------------------------- */

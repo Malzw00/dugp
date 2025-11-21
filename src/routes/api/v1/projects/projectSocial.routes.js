@@ -1,6 +1,7 @@
 const express = require('express');
 const projectSocialRouter = express.Router({ mergeParams: true });
 const controller = require('@controllers/projects/projectSocial.controller');
+const authenticate = require('@root/src/middlewares/auth.middleware');
 
 /* -------------------------------- Likes Router -------------------------------- */
 const likesRouter = express.Router({ mergeParams: true });
@@ -24,21 +25,33 @@ likesRouter.get('/count', controller.getLikesCount);
  * @description Check if the authenticated user has liked the project.
  * @access all (only authenticated users can access)
  */
-likesRouter.get('/me', controller.amILike);
+likesRouter.get(
+    '/me', 
+    authenticate,
+    controller.amILike,
+);
 
 /**
  * @route POST /projects/:projectId/likes
  * @description Add a like to the project by the authenticated user.
  * @access all (only authenticated users can access)
  */
-likesRouter.post('/', controller.addLike);
+likesRouter.post(
+    '/', 
+    authenticate,
+    controller.addLike,
+);
 
 /**
  * @route DELETE /projects/:projectId/likes/me
  * @description Remove like of the authenticated user.
  * @access all (only authenticated users can access)
  */
-likesRouter.delete('/me', controller.removeLike);
+likesRouter.delete(
+    '/me', 
+    authenticate,
+    controller.removeLike,
+);
 
 
 /* -------------------------------- Comments Router -------------------------------- */
@@ -66,16 +79,24 @@ commentsRouter.get('/count', controller.getCommentsCount);
  * @access all (only authenticated users can access)
  * @body {string} content - The comment text.
  */
-commentsRouter.post('/', controller.addComment);
+commentsRouter.post(
+    '/', 
+    authenticate,
+    controller.addComment,
+);
 
 /**
  * @route DELETE /projects/:projectId/comments/:commentId
  * @description Delete a specific comment. If it's the user's comment → delete directly.
  *              Else → requires delete-comment permission.
- * @access owner | ahp
+ * @access owner
  * @param {string} commentId
  */
-commentsRouter.delete('/:commentId', controller.removeComment);
+commentsRouter.delete(
+    '/:commentId', 
+    authenticate,
+    controller.removeComment
+);
 
 
 /* -------------------------------- Ratings Router -------------------------------- */
@@ -100,7 +121,11 @@ ratingsRouter.get('/average', controller.getRatingAverage);
  * @description Get my own rating for this project.
  * @access all (only authenticated users can access)
  */
-ratingsRouter.get('/me', controller.getMyRating);
+ratingsRouter.get(
+    '/me', 
+    authenticate,
+    controller.getMyRating,
+);
 
 /**
  * @route POST /projects/:projectId/ratings
@@ -108,7 +133,11 @@ ratingsRouter.get('/me', controller.getMyRating);
  * @access all (only authenticated users can access)
  * @body {number} rate - The rating value.
  */
-ratingsRouter.post('/', controller.rateProject);
+ratingsRouter.post(
+    '/', 
+    authenticate,
+    controller.rateProject,
+);
 
 /**
  * @route PUT /projects/:projectId/ratings
@@ -116,7 +145,11 @@ ratingsRouter.post('/', controller.rateProject);
  * @access all (only authenticated users can access)
  * @body {number} rate - The new rating value.
  */
-ratingsRouter.put('/', controller.updateRating);
+ratingsRouter.put(
+    '/', 
+    authenticate,
+    controller.updateRating,
+);
 
 
 /* -------------------------------- Mount Routers -------------------------------- */

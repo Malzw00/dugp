@@ -1,6 +1,9 @@
 const express = require('express');
 const projectCategoriesRouter  = express.Router();
 const controller = require('@controllers/projects/projectCategory.controller');
+const authenticate = require('@middlewares/auth.middleware');
+const requireRole = require('@middlewares/role.middleware');
+const requirePermission = require('@middlewares/permission.middleware');
 
 /**
  * @route GET /projects/:projectId/categories
@@ -17,7 +20,13 @@ projectCategoriesRouter.get('/', controller.getAll);
  * @param {string} projectId - The ID of the project.
  * @body {number} categoryId - The ID of the category to be linked.
  */
-projectCategoriesRouter.post('/', controller.add);
+projectCategoriesRouter.post(
+    '/',  
+    authenticate,
+    requireRole('admin'),
+    requirePermission('projects'),
+    controller.add,
+);
 
 /**
  * @route DELETE /projects/:projectId/categories/:categoryId
@@ -26,6 +35,12 @@ projectCategoriesRouter.post('/', controller.add);
  * @param {string} projectId - The ID of the project.
  * @param {string} categoryId - The ID of the category to remove.
  */
-projectCategoriesRouter.delete('/:categoryId', controller.remove);
+projectCategoriesRouter.delete(
+    '/:categoryId',  
+    authenticate,
+    requireRole('admin'),
+    requirePermission('projects'),
+    controller.remove,
+);
 
 module.exports = projectCategoriesRouter;

@@ -5,6 +5,9 @@ const bookRouter  = express.Router();
 const presentationRouter  = express.Router();
 const referencesRouter  = express.Router();
 const controller = require('@controllers/projects/projectFile.controller');
+const authenticate = require('@middlewares/auth.middleware');
+const requireRole = require('@middlewares/role.middleware');
+const requirePermission = require('@middlewares/permission.middleware');
 
 /**
  * ---------------------------------------
@@ -27,7 +30,13 @@ bookRouter.get('/', controller.getBook);
  * @param {string} projectId - The ID of the project.
  * @body {File} file - The book file to upload.
  */
-bookRouter.post('/', controller.setBook);
+bookRouter.post(
+    '/',  
+    authenticate,
+    requireRole('admin'),
+    requirePermission('projects'),
+    controller.setBook
+);
 
 /**
  * @route DELETE /projects/:projectId/files/book
@@ -35,7 +44,13 @@ bookRouter.post('/', controller.setBook);
  * @access ahp (admin with permission)
  * @param {string} projectId - The ID of the project.
  */
-bookRouter.delete('/', controller.deleteBook);
+bookRouter.delete(
+    '/',  
+    authenticate,
+    requireRole('admin'),
+    requirePermission('projects'),
+    controller.deleteBook,
+);
 
 
 /**
@@ -59,7 +74,13 @@ presentationRouter.get('/', controller.getPresentation);
  * @param {string} projectId - The ID of the project.
  * @body {File} file - The presentation file to upload.
  */
-presentationRouter.post('/', controller.setPresentation);
+presentationRouter.post(
+    '/',  
+    authenticate,
+    requireRole('admin'),
+    requirePermission('projects'),
+    controller.setPresentation
+);
 
 /**
  * @route DELETE /projects/:projectId/files/presentation
@@ -67,7 +88,13 @@ presentationRouter.post('/', controller.setPresentation);
  * @access ahp (admin with permission)
  * @param {string} projectId - The ID of the project.
  */
-presentationRouter.delete('/', controller.deletePresentation);
+presentationRouter.delete(
+    '/',  
+    authenticate,
+    requireRole('admin'),
+    requirePermission('projects'),
+    controller.deletePresentation
+);
 
 
 /**
@@ -93,7 +120,13 @@ referencesRouter.get('/', controller.getReferences);
  * @body {string} link - The link of the reference (local:{path} or network:{path}).
  * @body {string} author - Author of the reference.
  */
-referencesRouter.post('/', controller.addReference);
+referencesRouter.post(
+    '/',  
+    authenticate,
+    requireRole('admin'),
+    requirePermission('projects'),
+    controller.addReference,
+);
 
 /**
  * @route DELETE /projects/:projectId/files/references/:referenceId
@@ -102,7 +135,13 @@ referencesRouter.post('/', controller.addReference);
  * @param {string} projectId - The ID of the project.
  * @param {string} referenceId - The unique identifier of the reference.
  */
-referencesRouter.delete('/:referenceId', controller.removeReferenceByID);
+referencesRouter.delete(
+    '/:referenceId',  
+    authenticate,
+    requireRole('admin'),
+    requirePermission('projects'),
+    controller.removeReferenceByID,
+);
 
 
 projectFilesRouter.use('/book', bookRouter);

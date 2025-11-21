@@ -1,9 +1,9 @@
-// middleware/authenticate.middleware.js
+// middleware/auth.middleware.js
 const { verifyAccessToken } = require("@utils/authToken.util");
 
 /**
  * @middleware authenticate
- * @description Middleware to verify JWT access tokens and attach decoded user data to the request.
+ * @description Middleware to verify JWT access token and attach decoded user data + refreshToken (from cookie) to the request.
  * 
  * @usage
  *  app.use('/protected-route', authenticate, yourController)
@@ -12,7 +12,7 @@ function authenticate(req, res, next) {
     try {
         const authHeader = req.headers["authorization"];
 
-        // Check for Bearer Token format
+        // Check Bearer token format
         if (!authHeader || !authHeader.startsWith("Bearer ")) {
             return res.status(401).json({
                 success: false,
@@ -20,7 +20,7 @@ function authenticate(req, res, next) {
             });
         }
 
-        // Extract Token
+        // Extract Access Token
         const token = authHeader.split(" ")[1];
 
         // Verify Token
@@ -33,16 +33,24 @@ function authenticate(req, res, next) {
             });
         }
 
-        // Attach decoded user info to request object
+        // Attach decoded token data
         req.user = decoded;
+
+        // Extract refresh token from cookies (if present)
+        const refreshToken = req.cookies?.refresh_token || null;
+
+        if (refreshToken) {
+            req.user.refreshToken = refreshToken;
+        }
 
         return next();
 
     } catch (error) {
-
         return res.status(401).json({
             success: false,
-            accessTokenExpired: error.name === 'TokenExpiredError' || error.code === 'TOKEN_EXPIRED',
+            accessTokenExpired:
+                error.name === "TokenExpiredError" ||
+                error.code === "TOKEN_EXPIRED",
             message: "Unauthorized: invalid or expired token",
         });
     }

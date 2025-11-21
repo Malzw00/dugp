@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const controller = require('@controllers/student.controller');
+const authenticate = require('@root/src/middlewares/auth.middleware');
+const requireRole = require('@root/src/middlewares/role.middleware');
+const requirePermission = require('@root/src/middlewares/permission.middleware');
 
 /* -------------------------------------------------------------------------- */
 /*                                   STUDENTS                                 */
@@ -33,7 +36,13 @@ router.get('/:studentId', controller.getByID);
  * @body {number} departmentId
  * @access Admin (requires permission)
  */
-router.post('/', controller.create);
+router.post(
+    '/', 
+    authenticate,
+    requireRole('admin'),
+    requirePermission('people'),
+    controller.create,
+);
 
 /**
  * @route PUT /students/:studentId
@@ -48,7 +57,13 @@ router.post('/', controller.create);
  * @body {number} imageId
  * @access Admin (requires permission)
  */
-router.put('/:studentId', controller.update);
+router.put(
+    '/:studentId', 
+    authenticate,
+    requireRole('admin'),
+    requirePermission('people'),
+    controller.update
+);
 
 /**
  * @route DELETE /students/:studentId
@@ -56,7 +71,13 @@ router.put('/:studentId', controller.update);
  * @param {string} studentId - Unique identifier of the student.
  * @access Admin (requires permission)
  */
-router.delete('/:studentId', controller.delete);
+router.delete(
+    '/:studentId',
+    authenticate,
+    requireRole('admin'),
+    requirePermission('people'), 
+    controller.delete,
+);
 
 /* -------------------------------------------------------------------------- */
 /*                              STUDENT ACCOUNT                               */
@@ -77,7 +98,13 @@ router.get('/:studentId/account', controller.getAccount);
  * @body {number} accountId - ID of the account to link.
  * @access Admin (requires permission)
  */
-router.post('/:studentId/account', controller.addAccount);
+router.post(
+    '/:studentId/account',
+    authenticate,
+    requireRole('admin'),
+    requirePermission('people'), 
+    controller.addAccount,
+);
 
 /**
  * @route DELETE /students/:studentId/account
@@ -85,6 +112,12 @@ router.post('/:studentId/account', controller.addAccount);
  * @param {string} studentId - ID of the student.
  * @access Admin (requires permission)
  */
-router.delete('/:studentId/account', controller.removeAccount);
+router.delete(
+    '/:studentId/account', 
+    authenticate,
+    requireRole('admin'),
+    requirePermission('people'),
+    controller.removeAccount,
+);
 
 module.exports = router;

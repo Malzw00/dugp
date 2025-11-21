@@ -37,7 +37,7 @@ function requirePermission(permission) {
 
             // Check permission in database
             const hasPermission = await AccountPermissionService.hasPermission({
-                permission,
+                permission: permission,
                 account_id: accountID,
             });
 

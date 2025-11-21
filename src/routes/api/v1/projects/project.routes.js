@@ -7,6 +7,9 @@ const projectPeopleRouter = require('./projectPeople.routes');
 const projectSocialRouter = require('./projectSocial.routes');
 const router  = express.Router();
 const controller = require('@controllers/projects/project.controller');
+const requirePermission = require('@middlewares/permission.middleware');
+const authenticate = require('@middlewares/auth.middleware');
+const requireRole = require('@middlewares/role.middleware');
 
 /**
  * @route GET /projects
@@ -41,7 +44,13 @@ router.get('/:projectId', controller.getByID);
  * @body {number} departmentId - Department ID.
  * @body {number} supervisorId - Supervisor ID.
  */
-router.post('/', controller.create);
+router.post(
+    '/', 
+    authenticate,
+    requireRole('admin'),
+    requirePermission('projects'),
+    controller.create,
+);
 
 /**
  * @route DELETE /projects/:projectId
@@ -49,7 +58,13 @@ router.post('/', controller.create);
  * @access ahp (admin with permission)
  * @param {number} projectId - The unique identifier of the project.
  */
-router.delete('/:projectId', controller.delete);
+router.delete(
+    '/:projectId',  
+    authenticate,
+    requireRole('admin'),
+    requirePermission('projects'),
+    controller.delete,
+);
 
 /**
  * @route PUT /projects/:projectId
@@ -66,7 +81,13 @@ router.delete('/:projectId', controller.delete);
  * @body {number} imageId
  * @body {boolean} available
  */
-router.put('/:projectId', controller.update);
+router.put(
+    '/:projectId',  
+    authenticate,
+    requireRole('admin'),
+    requirePermission('projects'),
+    controller.update,
+);
 
 /**
  * @route /projects/:projectId/categories

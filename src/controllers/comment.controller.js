@@ -69,13 +69,17 @@ const commentController = {
      */
     async update(req, res) {
         try {
+            const { accountID } = req.user;
             const { commentId } = req.params;
             const { content } = req.body;
+            
             const commentIdNum = parseInt(commentId);
+            const accountIdNum = parseInt(accountID);
 
             const updated = await CommentService.update({ 
                 comment_id: commentIdNum,
                 comment_content: content,
+                account_id: accountIdNum,
             });
 
             if (!updated) {

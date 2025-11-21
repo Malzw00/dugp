@@ -1,6 +1,9 @@
 const express = require('express');
 const router  = express.Router();
 const controller = require('@controllers/account.contoller');
+const authenticate = require('@middlewares/auth.middleware');
+const requireRole = require('@middlewares/role.middleware');
+const requirePermission = require('@middlewares/permission.middleware');
 
 
 /**
@@ -22,24 +25,24 @@ router.get('/search', controller.search);
  * @description Retrieve details of the authenticated user's account.
  * @access owner (authenticated user)
  */
-router.get('/me', controller.getMe);
+router.get('/me', authenticate, controller.getMe);
 
 /**
  * @route DELETE /accounts/me
  * @description Delete the authenticated user's account.
  * @access owner (authenticated user)
  */
-router.delete('/me', controller.deleteMe);
+router.delete('/me', authenticate, controller.deleteMe);
 
 /**
  * @route PUT /accounts/me
  * @description Update the authenticated user's account.
  * @access owner (authenticated user)
  */
-router.put('/me', controller.updateMe);
+router.put('/me', authenticate, controller.updateMe);
 
 
-/* ------------------------ Account By ID (Admin endpoints) ------------------------ */
+/* ------------------------ Account By ID ------------------------ */
 
 /**
  * @route GET /accounts/:accountId
@@ -55,7 +58,13 @@ router.get('/:accountId', controller.getByID);
  * @access ahp (admin with required permission)
  * @param {string} accountId - The ID of the account to delete.
  */
-router.delete('/:accountId', controller.deleteByID);
+router.delete(
+    '/:accountId', 
+    authenticate, 
+    requireRole('admin'), 
+    requirePermission('delete_account'), 
+    controller.deleteByID
+);
 
 
 module.exports = router;

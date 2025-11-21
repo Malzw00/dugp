@@ -47,16 +47,17 @@ class CommentService {
     /**
      * Update an existing comment.
      * @param {Object} params
+     * @param {number} params.account_id - The account ID.
      * @param {number} params.comment_id - The comment ID.
      * @param {string} params.comment_content - The new content for the comment.
      * @returns {Promise<number>} Number of updated rows (0 or 1).
      * @throws {AppError} If update fails.
      */
-    static async update({ comment_id, comment_content }) {
+    static async update({ account_id, comment_id, comment_content }) {
         try {
             const [affectedRows] = await models.Comment.update(
                 { comment_content: comment_content },
-                { where: { comment_id: comment_id } }
+                { where: { comment_id: comment_id, account_id: account_id } }
             );
 
             return affectedRows;
@@ -150,12 +151,32 @@ class CommentService {
     static async delete({ comment_id }) {
         try {
             const deletedRows = await models.Comment.destroy({
-                where: { comment_id: comment_id }
+                where: { comment_id: comment_id, }
             });
             return deletedRows;
 
         } catch (error) {
             throw this.#logger.log(this.delete.name, error);
+        }
+    }
+
+    /**
+     * Delete a comment by its ID (including replies if cascades are set in DB).
+     * @param {Object} params
+     * @param {number} params.comment_id - The comment ID.
+     * @param {number} params.account_id - The account ID.
+     * @returns {Promise<number>} Number of deleted rows (0 or 1).
+     * @throws {AppError} If deletion fails.
+     */
+    static async deleteUserComment({ comment_id, account_id }) {
+        try {
+            const deletedRows = await models.Comment.destroy({
+                where: { comment_id: comment_id, account_id: account_id, }
+            });
+            return deletedRows;
+
+        } catch (error) {
+            throw this.#logger.log(this.deleteUserComment.name, error);
         }
     }
 

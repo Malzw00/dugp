@@ -1,6 +1,9 @@
 const express = require('express');
 const router  = express.Router();
 const controller = require('@controllers/file.controller');
+const authenticate = require('@middlewares/auth.middleware');
+const requireRole = require('@middlewares/role.middleware');
+const requirePermission = require('@middlewares/permission.middleware');
 
 /* -------------------------------------------------------------------------- */
 /*                                   FILES                                    */
@@ -30,7 +33,13 @@ router.get('/:fileId', controller.getByID);
  * @access ahp (admin must have permission)
  * @param {string} fileId - The unique identifier of the file.
  */
-router.delete('/:fileId', controller.deleteByID);
+router.delete(
+    '/:fileId', 
+    authenticate,
+    requireRole('admin'),
+    requirePermission('files'),
+    controller.deleteByID,
+);
 
 /**
  * @route POST /files
@@ -39,6 +48,12 @@ router.delete('/:fileId', controller.deleteByID);
  * @body {File} file - The file to be uploaded (multipart/form-data).
  * @body {'book'|'presentation'|'reference'|'image'} [category] - Category of the uploaded file.
  */
-router.post('/', controller.uploadFile);
+router.post(
+    '/', 
+    authenticate,
+    requireRole('admin'),
+    requirePermission('files'),    
+    controller.uploadFile,
+);
 
 module.exports = router;

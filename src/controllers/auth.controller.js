@@ -5,6 +5,7 @@
  */
 
 const AuthService = require("@services/account/auth.service");
+const { RefreshTokenExpIn } = require('@utils/authToken.util');
 
 const authController = {
 
@@ -30,9 +31,25 @@ const authController = {
             const account = await AuthService.login({ email, password });
 
             if (account?.account_id) {
+                // --- Here we send a refresh token via cookie ---
+                res.cookie("refresh_token", account.refreshToken, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === "production",
+                    sameSite: "strict",
+                    maxAge: RefreshTokenExpIn * 1000,
+                    path: "/api/v1/auth/refresh", // Excellent for safety if you place it on a specific path.
+                });
+
+                // We only send access token and data
                 res.status(200).json({
                     success: true,
-                    result: account,
+                    result: {
+                        account_id: account.account_id,
+                        fst_name: account.fst_name,
+                        lst_name: account.lst_name,
+                        role: account.role,
+                        accessToken: account.accessToken,
+                    },
                 });
             } else {
                 res.status(401).json({
@@ -48,6 +65,7 @@ const authController = {
             });
         }
     },
+
 
     /**
      * @async
@@ -122,21 +140,31 @@ const authController = {
             const isLogout = await AuthService.logout({ refreshToken });
 
             if (isLogout) {
-                res.status(200).json({ success: true });
-            } else {
-                res.status(400).json({
-                    success: false,
-                    message: "Failed to log out. Invalid or expired token.",
+                // Clear the cookie
+                res.clearCookie("refresh_token", {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === "production",
+                    sameSite: "strict",
+                    path: "/api/v1/auth/refresh",
                 });
+
+                return res.status(200).json({ success: true });
             }
+
+            return res.status(400).json({
+                success: false,
+                message: "Failed to log out. Invalid or expired token.",
+            });
+
         } catch (error) {
-            res.status(400).json({
+            return res.status(400).json({
                 success: false,
                 message: "Logout failed due to invalid data.",
                 error: error.message,
             });
         }
     },
+
 
     /**
      * @async
@@ -230,29 +258,38 @@ const authController = {
      */
     async refresh(req, res) {
         try {
-            const { refreshToken } = req.user;
+            // Read refresh token from cookies directly
+            const refreshToken = req.cookies?.refresh_token;
+
+            if (!refreshToken) {
+                return res.status(401).json({
+                    success: false,
+                    message: "Refresh token missing.",
+                });
+            }
 
             const newAccessToken = await AuthService.refreshAccessToken({ refreshToken });
 
             if (newAccessToken) {
-                res.status(200).json({
+                return res.status(200).json({
                     success: true,
                     accessToken: newAccessToken,
                 });
-            } else {
-                res.status(400).json({
-                    success: false,
-                    message: "Invalid refresh token.",
-                });
             }
+
+            return res.status(400).json({
+                success: false,
+                message: "Invalid or expired refresh token.",
+            });
+
         } catch (error) {
-            res.status(500).json({
+            return res.status(500).json({
                 success: false,
                 message: "Failed to refresh access token.",
                 error: error.message,
             });
         }
-    },
+    }
 };
 
 module.exports = authController;

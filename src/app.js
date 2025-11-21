@@ -30,7 +30,7 @@ expressApp.use('uploads/', express.static(path.resolve('uploads'))); // Serve St
 expressApp.use(history());
 
 
-expressApp.use('/', apiRoute);
+expressApp.use('/api', apiRoute);
 
 
 // Error handler middleware 

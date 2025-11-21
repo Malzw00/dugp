@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const controller = require('@controllers/supervisor.controller');
+const authenticate = require('@middlewares/auth.middleware');
+const requireRole = require('@middlewares/role.middleware');
+const requirePermission = require('@middlewares/permission.middleware');
 
 /* -------------------------------------------------------------------------- */
 /*                                SUPERVISORS                                  */
@@ -43,7 +46,13 @@ router.get('/:supervisorId/projects', controller.getProjects);
  * @body {string} email
  * @access Admin (requires permission)
  */
-router.post('/', controller.create);
+router.post(
+    '/', 
+    authenticate,
+    requireRole('admin'),
+    requirePermission('people'),    
+    controller.create,
+);
 
 /**
  * @route PUT /supervisors/:supervisorId
@@ -60,7 +69,13 @@ router.post('/', controller.create);
  * @body {string} email
  * @access Admin (requires permission)
  */
-router.put('/:supervisorId', controller.update);
+router.put(
+    '/:supervisorId',
+    authenticate,
+    requireRole('admin'),
+    requirePermission('people'), 
+    controller.update,
+);
 
 /**
  * @route DELETE /supervisors/:supervisorId
@@ -68,7 +83,13 @@ router.put('/:supervisorId', controller.update);
  * @param {string} supervisorId - Unique identifier of the supervisor.
  * @access Admin (requires permission)
  */
-router.delete('/:supervisorId', controller.delete);
+router.delete(
+    '/:supervisorId',
+    authenticate,
+    requireRole('admin'),
+    requirePermission('people'), 
+    controller.delete,
+);
 
 /* -------------------------------------------------------------------------- */
 /*                              SUPERVISOR ACCOUNT                             */
@@ -89,7 +110,13 @@ router.get('/:supervisorId/account', controller.getAccount);
  * @body {number} accountId - Platform account ID.
  * @access Admin (requires permission)
  */
-router.post('/:supervisorId/account', controller.addAccount);
+router.post(
+    '/:supervisorId/account', 
+    authenticate,
+    requireRole('admin'),
+    requirePermission('people'),
+    controller.addAccount,
+);
 
 /**
  * @route DELETE /supervisors/:supervisorId/account
@@ -97,6 +124,12 @@ router.post('/:supervisorId/account', controller.addAccount);
  * @param {string} supervisorId - Supervisor ID.
  * @access Admin (requires permission)
  */
-router.delete('/:supervisorId/account', controller.removeAccount);
+router.delete(
+    '/:supervisorId/account',
+    authenticate,
+    requireRole('admin'),
+    requirePermission('people'), 
+    controller.removeAccount,
+);
 
 module.exports = router;

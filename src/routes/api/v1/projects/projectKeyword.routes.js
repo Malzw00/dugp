@@ -1,6 +1,9 @@
 const express = require('express');
 const projectKeywordsRouter  = express.Router();
 const controller = require('@controllers/projects/projectKeyword.controller');
+const authenticate = require('@middlewares/auth.middleware');
+const requireRole = require('@middlewares/role.middleware');
+const requirePermission = require('@middlewares/permission.middleware');
 
 /**
  * @route GET /projects/:projectId/keywords
@@ -17,7 +20,13 @@ projectKeywordsRouter.get('/', controller.getAll);
  * @param {string} projectId - The ID of the project.
  * @body {Array<string>} keywords - A list of keyword strings to be added.
  */
-projectKeywordsRouter.post('/', controller.create);
+projectKeywordsRouter.post(
+    '/',  
+    authenticate,
+    requireRole('admin'),
+    requirePermission('projects'),
+    controller.create,
+);
 
 /**
  * @route DELETE /projects/:projectId/keywords/:keywordId
@@ -26,6 +35,12 @@ projectKeywordsRouter.post('/', controller.create);
  * @param {string} projectId - The ID of the project.
  * @param {string} keywordId - The ID of the keyword to remove.
  */
-projectKeywordsRouter.delete('/:keywordId', controller.delete);
+projectKeywordsRouter.delete(
+    '/:keywordId',  
+    authenticate,
+    requireRole('admin'),
+    requirePermission('projects'),
+    controller.delete,
+);
 
 module.exports = projectKeywordsRouter;

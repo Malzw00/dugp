@@ -7,6 +7,7 @@
 const express = require('express');
 const router  = express.Router();
 const controller = require('@controllers/auth.controller');
+const authenticate = require('@middlewares/auth.middleware');
 
 /**
  * @route POST /auth/register
@@ -33,7 +34,7 @@ router.post('/login', controller.login);
  * @description Log out the authenticated user and invalidate their session/token.
  * @access authenticated users only
  */
-router.post('/logout', controller.logout);
+router.post('/logout', authenticate, controller.logout);
 
 /**
  * @route POST /auth/forgot-password

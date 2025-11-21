@@ -56,5 +56,4 @@ const v1Router = require('@routes/api/v1/index');
 // Mount version 1 of the API
 router.use('/v1', v1Router);
 
-
 module.exports = router;

@@ -383,11 +383,14 @@ const projectSocialController = {
     async removeComment(req, res) {
         try {
             const { commentId } = req.params;
+            const { accountID } = req.user
 
+            const accountIdNum = parseInt(accountID);
             const commentIdNum = parseInt(commentId);
 
-            const deleted = await CommentService.delete({
+            const deleted = await CommentService.deleteUserComment({
                 comment_id: commentIdNum,
+                account_id: accountIdNum,
             });
 
             res.status(200).json({
