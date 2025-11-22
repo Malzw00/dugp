@@ -4,6 +4,7 @@ const controller = require('@controllers/file.controller');
 const authenticate = require('@middlewares/auth.middleware');
 const requireRole = require('@middlewares/role.middleware');
 const requirePermission = require('@middlewares/permission.middleware');
+const { upload } = require('@middlewares/upload.middleware');
 
 /* -------------------------------------------------------------------------- */
 /*                                   FILES                                    */
@@ -53,6 +54,7 @@ router.post(
     authenticate,
     requireRole('admin'),
     requirePermission('files'),    
+    upload,
     controller.uploadFile,
 );
 

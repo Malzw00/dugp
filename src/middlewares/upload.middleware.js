@@ -12,27 +12,14 @@ const UPLOAD_ROOT = path.resolve("uploads");
 
 /**
  * Multer storage configuration.
- * Stores files in a date-based folder (YYYY-MM-DD) and generates unique file names.
  */
 const storage = multer.diskStorage({
-    /**
-     * Determine the destination folder for the uploaded file.
-     * @param {Express.Request} req
-     * @param {Express.Multer.File} file
-     * @param {function(Error|null, string)} cb
-     */
     destination: (req, file, cb) => {
         const folder = path.join(UPLOAD_ROOT, new Date().toISOString().slice(0, 10));
-        fs.mkdirSync(folder, { recursive: true }); // Ensure folder exists
+        fs.mkdirSync(folder, { recursive: true });
         cb(null, folder);
     },
 
-    /**
-     * Generate a unique file name for the uploaded file.
-     * @param {Express.Request} req
-     * @param {Express.Multer.File} file
-     * @param {function(Error|null, string)} cb
-     */
     filename: (req, file, cb) => {
         const ext = path.extname(file.originalname).toLowerCase();
         const storedName = `${Date.now()}-${uuidv4()}${ext}`;
@@ -41,11 +28,11 @@ const storage = multer.diskStorage({
 });
 
 /**
- * Multer upload middleware with file size limit and file type filter.
+ * Multer instance (ORIGINAL)
  */
-const upload = multer({
+const multerUpload = multer({
     storage,
-    limits: { fileSize: 1024 * 1024 * 1024 }, // 1GB max size
+    limits: { fileSize: 1024 * 1024 * 1024 }, // 1GB max
     fileFilter: (req, file, cb) => {
         const allowed = [
             "application/pdf",
@@ -63,4 +50,17 @@ const upload = multer({
     }
 });
 
-module.exports = { upload, UPLOAD_ROOT };
+/**
+ * Safe wrapper so Multer errors go to global error handler
+ */
+const upload = (req, res, next) => {
+    multerUpload.single("file")(req, res, (err) => {
+        if (err) return next(err);
+        next();
+    });
+};
+
+module.exports = {
+    upload,
+    UPLOAD_ROOT
+};

@@ -1,3 +1,4 @@
+// app.js
 const express = require('express');
 const path = require('path');
 const helmet = require('helmet');
@@ -6,34 +7,37 @@ const history = require('connect-history-api-fallback');
 const GeneralRateLimiter = require('@middlewares/generalRateLimiter.middleware');
 const cors = require('cors');
 const corsOptions = require('@config/corsOptions.config');
-const expressApp = express();
 const cookieParser = require('cookie-parser');
 const apiRoute = require('@routes/api/index');
 
+const app = express();
 
-// Middlewares:
-expressApp.use(GeneralRateLimiter());
-expressApp.use(cors(corsOptions));
-expressApp.use(
-    helmet({
-        // حصلت مشكلة عند محاولة فتح الموقع من خلال جهاز آخر على نفس الشبكة المحلية 
-        // وهي أن المتصفح يحمل ملف الإتش تي ام إل بنجاح لاكن لا يمكنه الوصول إلى ملفات سي اس اس
-        // او ملفات جافا سكريب، لحل هذه المشكلة توجب تعطيل هذه الخاصية
-        contentSecurityPolicy: false,
-    })
-);
-expressApp.use(compression());
-expressApp.use(cookieParser());
-expressApp.use(express.json());
-expressApp.use(express.static(path.resolve('build'))); // Serve Static Files
-expressApp.use('uploads/', express.static(path.resolve('uploads'))); // Serve Static Files
-expressApp.use(history());
+// Security, rate limits, etc.
+app.use(GeneralRateLimiter());
 
+app.use(cors(corsOptions));
 
-expressApp.use('/api', apiRoute);
+app.use(helmet({ contentSecurityPolicy: false }));
 
+app.use(compression());
 
-// Error handler middleware 
-expressApp.use(require('@root/src/middlewares/errorHandler.middleware'));
+app.use(cookieParser());
 
-module.exports = expressApp;
+app.use(express.json());
+
+// Serve SPA build
+app.use(express.static(path.resolve('build')));
+
+// SPA Router
+app.use(history());
+
+// Serve uploads
+app.use('/uploads', express.static(path.resolve('uploads')));
+
+// API
+app.use('/api', apiRoute);
+
+// Global Error Handler (last always)
+app.use(require('@middlewares/errorHandler.middleware'));
+
+module.exports = app;

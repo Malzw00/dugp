@@ -8,6 +8,7 @@ const controller = require('@controllers/projects/projectFile.controller');
 const authenticate = require('@middlewares/auth.middleware');
 const requireRole = require('@middlewares/role.middleware');
 const requirePermission = require('@middlewares/permission.middleware');
+const { upload } = require('@middlewares/upload.middleware');
 
 /**
  * ---------------------------------------
@@ -35,6 +36,7 @@ bookRouter.post(
     authenticate,
     requireRole('admin'),
     requirePermission('projects'),
+    upload,
     controller.setBook
 );
 
@@ -79,6 +81,7 @@ presentationRouter.post(
     authenticate,
     requireRole('admin'),
     requirePermission('projects'),
+    upload,
     controller.setPresentation
 );
 
@@ -125,6 +128,7 @@ referencesRouter.post(
     authenticate,
     requireRole('admin'),
     requirePermission('projects'),
+    upload,
     controller.addReference,
 );
 
