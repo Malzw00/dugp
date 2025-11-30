@@ -4,7 +4,7 @@
   "homepage": ".",
   "description": "University graduation projects documentation platform",
   "license": "MIT",
-  "author": "معاذ ابوقطيشة / سعيد بوحليقة / محمد النجمي / علي السنوسي",
+  "author": "معاذ ابوقطيشة، سعيد بوحليقة، محمد النجمي، علي السنوسي",
   "main": "server.js",
   "scripts": {
     "dev": "nodemon main.js",
@@ -40,7 +40,7 @@
     "@middlewares": "src/middlewares",
     "@controllers": "src/controllers",
     "@models": "src/models",
-    "@servies": "src/services",
+    "@services": "src/services",
     "@config": "src/config",
     "@utils": "src/utils",
     "@seeders": "src/seeders",

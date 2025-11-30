@@ -1,7 +1,7 @@
 const ServiceErrorLogger = require("@root/src/utils/serviceErrorLogger.util");
 const nodemailer = require('nodemailer')
 
-class EmailService {
+class EmailUtil {
     
     static logger = new ServiceErrorLogger({ module: 'Service' });
 
@@ -28,4 +28,4 @@ class EmailService {
 }
 
 
-module.exports = EmailService;
+module.exports = EmailUtil;

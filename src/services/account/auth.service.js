@@ -10,7 +10,7 @@ const {
     verifyResetPasswordToken
 } = require("@utils/authToken.util");
 const { models } = require("@config/database.config");
-const EmailService = require("@services/email.service");
+const EmailUtil = require("@utils/email.util");
 const RefreshTokenService = require('@services/account/refrehToken.service');
 
 
@@ -217,7 +217,7 @@ class AuthService {
 
             const resetLink = `${process.env.SERVER_HOST}/reset-password/token?=${token}`;
 
-            await EmailService.send({
+            await EmailUtil.send({
                 to: email,
                 subject: 'Password Reset Requert',
                 text: `Use this link to reset your password: ${resetLink}`,

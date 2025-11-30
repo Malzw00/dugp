@@ -53,7 +53,7 @@ async function initDatabase({
     onSyncSuccess, 
     onInitSeedDataSuccess,
     onDatabaseReady,
-    syncOptions = { alter: false, force: false },
+    syncOptions = { alter: false, force: false, logging: false },
 }) {
     try {
         // Test database connection

@@ -1,38 +1,70 @@
+// main.js
 require('module-alias/register');
 require('dotenv').config();
 
-const { createServer } = require('@root/src/server');
-const { registerSignalHandlers } = require('@root/src/signalHandlers');
-const { createContainer, } = require('@utils/startResultRenderer.util');
-const { initializeDatabaseWithRetry } = require('./src/database.init');
+const { createServer, shutdownServer } = require('@root/src/server');
+const { createContainer } = require('@utils/startResultRenderer.util');
+const { initDatabase } = require('@root/src/utils/initDatabase.util');
 const ConsoleRenderer = require('@root/ConsoleRenderer');
-const { initDatabase } = require('./src/utils/initDatabase.util');
 const DBConfig = require('@config/database.config');
 
+let server = null;
 
 async function main() {
     createContainer('start_server');
 
     try {
-        
-        // 1. Database
+        // 1. Initialize Database
         await initDatabase({
             models: DBConfig.models,
             sequelize: DBConfig.sequelize,
-            syncOptions: { alter: false, force: true },
-            ...ConsoleRenderer.initDB
-        });        
-        
-        // 2. Server
-        const server = await createServer();
+            syncOptions: { alter: false, force: false },
+            ...ConsoleRenderer.initDB // render init db results in console
+        });
 
-        // 3. Signal Handlers
-        registerSignalHandlers(server);
+        // 2. Start Server
+        server = await createServer();
+
+        // 3. Register Graceful Shutdown Signals
+        registerProcessSignals();
 
     } catch (error) {
-        console.error(error);
+        console.error('Fatal error in main:', error);
         process.exit(1);
     }
 }
 
-main();
+/**
+ * Graceful shutdown for SIGINT / SIGTERM
+ */
+function registerProcessSignals() {
+    const sequelize = DBConfig.sequelize;
+
+    const gracefulExit = async (signal) => {
+        console.log(signal);
+        try {
+            if (server) {
+                await shutdownServer(server);
+            }
+
+            if (sequelize) {
+                await sequelize.close();
+            }
+
+        } catch (error) {
+            console.error('Graceful shutdown error:', error);
+        } finally {
+            process.exit(0);
+        }
+    };
+
+    process.on('SIGINT', () => gracefulExit('SIGINT'));
+    process.on('SIGTERM', () => gracefulExit('SIGTERM'));
+}
+
+// Run main only if this file is executed directly
+if (require.main === module) {
+    main();
+}
+
+module.exports = { main };

@@ -5,6 +5,7 @@ const projectKeywordsRouter = require('./projectKeyword.routes');
 const projectSearchRouter = require('./projectSearch.routes');
 const projectPeopleRouter = require('./projectPeople.routes');
 const projectSocialRouter = require('./projectSocial.routes');
+const projectReferenceRouter = require('./projectReference.routes');
 const router  = express.Router();
 const controller = require('@controllers/projects/project.controller');
 const requirePermission = require('@middlewares/permission.middleware');
@@ -112,7 +113,7 @@ router.use('/search', projectSearchRouter);
 
 /**
  * @route /projects/:projectId/files
- * @description Manage files related to a project (book, presentation, references).
+ * @description Manage files related to a project (book, presentation).
  * @access depends on the specific sub-route.
  */
 router.use('/:projectId/files', projectFilesRouter);
@@ -130,5 +131,12 @@ router.use('/:projectId/people', projectPeopleRouter);
  * @access depends on the specific sub-route.
  */
 router.use('/:projectId/social', projectSocialRouter);
+
+/**
+ * @route /projects/:projectId/references
+ * @description Manage references for a project.
+ * @access depends on the specific sub-route.
+ */
+router.use('/:projectId/references', projectReferenceRouter);
 
 module.exports = router;
