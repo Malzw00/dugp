@@ -7,7 +7,7 @@ async function seedManagerAccount(models) {
             lst_name: 'Manager',
             account_email: '',
             verified_email: true,
-            hashed_password: '$2a$12$pe3jk/8VOnSE663VW2rnW.MwphF5wvbtDGqBXPV4pWVstgvYau07K', // manager_password
+            hashed_password: '$2b$10$eh6stj.j.zCnDUQFEw4YKOS0OUZ1CYge.eucxtIoHRz15tN1jxJ3a', // 0000
             account_role: 'manager',
             profile_image_id: null,
         },

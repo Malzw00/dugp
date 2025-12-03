@@ -1,0 +1,976 @@
+const { Model, DataTypes } = require("sequelize");
+
+/**
+ * @class Category
+ * @extends Model
+ * @classdesc Represents categories of graduation projects.  
+ * Each category belongs to a collage and can be associated with multiple projects.
+ * 
+ * 🔑 **Notes:**
+ * - Unique constraint on `(collage_id, category_name)`.
+ * - Supports relations with `Project` (many-to-many) and `Collage` (many-to-one).
+ */
+class Category extends Model {
+    /**
+     * Define associations for the Category model.
+     * @param {object} models - All sequelize models.
+     */
+    static associate(models) {
+        // Many-to-Many: Categories ↔ Projects
+        Category.belongsToMany(models.Project, {
+            through: models.ProjectCategory,
+            foreignKey: "category_id",
+            onDelete: "CASCADE",
+        });
+
+        // Many-to-One: Category ↔ Collage
+        Category.belongsTo(models.Collage, {
+            foreignKey: "collage_id",
+            onDelete: "CASCADE",
+        });
+    }
+}
+
+/**
+ * Initialize the Category model.
+ *
+ * @param {import("sequelize").Sequelize} sequelize - Sequelize instance.
+ * @returns {typeof Category} Category model.
+ */
+function CategoryModel(sequelize) {
+    Category.init(
+        {
+            category_id: {
+                type: DataTypes.INTEGER,
+                autoIncrement: true,
+                primaryKey: true,
+            },
+            category_name: {
+                type: DataTypes.STRING(100),
+                allowNull: false,
+            },
+            collage_id: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+            },
+        },
+        {
+            sequelize,
+            modelName: "Category",
+            tableName: "categories_tb",
+            timestamps: true,
+            underscored: true,
+            indexes: [
+                {
+                    unique: true,
+                    fields: ["collage_id", "category_name"],
+                },
+            ],
+        }
+    );
+
+    return Category;
+}
+
+module.exports = CategoryModel;
+const { Model, DataTypes } = require("sequelize");
+
+/**
+ * @class Project
+ * @extends Model
+ * @classdesc Represents a university graduation project.  
+ * 
+ * 🔑 **Notes:**
+ * - Stores details like title, description, date, semester, grade, and availability.
+ * - Links to Department, Supervisor, Files (Book, Presentation, Cover), Categories, Keywords, Students, References, Comments, Likes, Ratings, and Reports.
+ */
+class Project extends Model {
+    /**
+     * Define associations for the Project model.
+     * @param {object} models - All sequelize models.
+     */
+    static associate(models) {
+        // Many-to-Many: Project ↔ Categories
+        Project.belongsToMany(models.Category, { 
+            through: models.ProjectCategory, 
+            foreignKey: 'project_id', 
+            onDelete: 'CASCADE' 
+        });
+
+        // Many-to-Many: Project ↔ Keywords
+        Project.belongsToMany(models.Keyword, { 
+            through: models.ProjectKeyword, 
+            foreignKey: 'project_id', 
+            onDelete: 'CASCADE' 
+        });
+
+        // One-to-One: Project ↔ Book File
+        Project.belongsTo(models.File, { 
+            foreignKey: 'book_id', 
+            as: 'Book',
+        });
+
+        // One-to-One: Project ↔ Presentation File
+        Project.belongsTo(models.File, { 
+            foreignKey: 'presentation_id', 
+            as: 'Presentation',
+        });
+
+        // Many-to-Many: Project ↔ References
+        Project.belongsToMany(models.Reference, {
+            through: models.ProjectReference,
+            as: 'References',
+            onDelete: 'CASCADE',
+            foreignKey: 'project_id',
+            otherKey: 'reference_id',
+            timestamps: false,
+        });
+
+        // Many-to-Many: Project ↔ Students
+        Project.belongsToMany(models.Student, { 
+            through: models.ProjectStudent, 
+            foreignKey: 'project_id', 
+            onDelete: 'CASCADE',
+            timestamps: false,
+        });
+
+        // One-to-One: Project ↔ Supervisor
+        Project.belongsTo(models.Supervisor, { 
+            foreignKey: 'supervisor_id',
+        });
+
+        // One-to-One: Project ↔ Cover Image
+        Project.belongsTo(models.File, { 
+            foreignKey: 'cover_image_id', 
+            as: 'Cover',
+        });
+
+        // One-to-Many: Project ↔ Comments
+        Project.hasMany(models.Comment, { 
+            foreignKey: 'project_id', 
+            onDelete: 'CASCADE',
+        });
+
+        // One-to-Many: Project ↔ Likes
+        Project.hasMany(models.ProjectLike, { 
+            foreignKey: 'project_id', 
+            onDelete: 'CASCADE',
+        });
+
+        // One-to-Many: Project ↔ Ratings
+        Project.hasMany(models.Rating, { 
+            foreignKey: 'project_id', 
+            onDelete: 'CASCADE',
+        });
+
+        // One-to-Many: Project ↔ Project Reports
+        Project.hasMany(models.ProjectReport, { 
+            foreignKey: 'project_id', 
+            onDelete: 'CASCADE',
+        });
+
+        // Project belongs to Department
+        Project.belongsTo(models.Department, { 
+            foreignKey: 'department_id',
+        });
+    }
+}
+
+/**
+ * Initialize the Project model.
+ *
+ * @param {import("sequelize").Sequelize} sequelize - Sequelize instance.
+ * @returns {typeof Project} Project model.
+ */
+function ProjectModel(sequelize) {
+    Project.init(
+        {
+            /**
+             * Primary key for the project
+             * @type {number}
+             */
+            project_id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
+
+            /**
+             * Project title
+             * @type {string}
+             */
+            project_title: { type: DataTypes.STRING(255), allowNull: false, unique: true },
+
+            /**
+             * Project description
+             * @type {string}
+             */
+            project_description: { type: DataTypes.STRING(512), allowNull: true },
+
+            /**
+             * Project date
+             * @type {string} - Date only (YYYY-MM-DD)
+             */
+            project_date: { type: DataTypes.DATEONLY, allowNull: false },
+
+            /**
+             * Project semester
+             * @type {'Winter'|'Spring'|'Summer'|'Autumn'}
+             */
+            project_semester: { 
+                type: DataTypes.ENUM('Winter', 'Spring', 'Summer', 'Autumn'), 
+                allowNull: false 
+            },
+
+            /**
+             * Project grade (0.00 - 100.00)
+             * @type {number}
+             */
+            project_grade: { 
+                type: DataTypes.DECIMAL(5, 2), 
+                allowNull: true, 
+                validate: { min: 0.00, max: 100.00 } 
+            },
+
+            /**
+             * Foreign key to Department
+             * @type {number}
+             */
+            department_id: { type: DataTypes.INTEGER, allowNull: false },
+
+            /**
+             * Foreign key to Cover Image File
+             * @type {number|null}
+             */
+            cover_image_id: { type: DataTypes.INTEGER, allowNull: true, defaultValue: null },
+
+            /**
+             * Foreign key to Supervisor Account
+             * @type {string|null}
+             */
+            supervisor_id: { type: DataTypes.UUID, allowNull: true },
+
+            /**
+             * Foreign key to Book File
+             * @type {number}
+             */
+            book_id: { type: DataTypes.INTEGER, allowNull: false },
+
+            /**
+             * Foreign key to Presentation File
+             * @type {number}
+             */
+            presentation_id: { type: DataTypes.INTEGER, allowNull: false },
+
+            /**
+             * Project availability status
+             * @type {boolean}
+             */
+            available: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
+        },
+        {
+            sequelize,
+            modelName: "Project",
+            tableName: "projects_tb",
+            timestamps: true,
+            underscored: true,
+            indexes: [
+                {
+                    name: 'ft_project_title_description',
+                    type: 'FULLTEXT',
+                    fields: ['project_title', 'project_description']
+                }
+            ]
+        }
+    );
+
+    return Project;
+}
+
+module.exports = ProjectModel;
+
+const { Model, DataTypes } = require("sequelize");
+
+/**
+ * @class Collage
+ * @extends Model
+ * @classdesc Represents a university collage.  
+ * Each collage can have multiple departments, categories, and permission scopes.
+ * 
+ * 🔑 **Notes:**
+ * - `collage_name` is unique across all collages.
+ * - Relations:
+ *   - One-to-Many with Department (onDelete: RESTRICT)
+ *   - One-to-Many with Category (onDelete: CASCADE)
+ *   - One-to-Many with PermissionScope (onDelete: CASCADE)
+ */
+class Collage extends Model {
+    /**
+     * Define associations for the Collage model.
+     * @param {object} models - All sequelize models.
+     */
+    static associate(models) {
+        // One-to-Many: Collage ↔ Departments
+        Collage.hasMany(models.Department, { 
+            foreignKey: 'collage_id', 
+            onDelete: 'RESTRICT' 
+        });
+
+        // One-to-Many: Collage ↔ Categories
+        Collage.hasMany(models.Category, { 
+            foreignKey: 'collage_id', 
+            onDelete: 'CASCADE' 
+        });
+
+        // One-to-Many: Collage ↔ PermissionScopes
+        Collage.hasMany(models.PermissionScope, { 
+            foreignKey: 'collage_id', 
+            onDelete: 'CASCADE' 
+        });
+    }
+}
+
+/**
+ * Initialize the Collage model.
+ *
+ * @param {import("sequelize").Sequelize} sequelize - Sequelize instance.
+ * @returns {typeof Collage} Collage model.
+ */
+function CollageModel(sequelize) {
+    Collage.init(
+        {
+            /**
+             * Primary key for Collage
+             * @type {number}
+             */
+            collage_id: { 
+                type: DataTypes.INTEGER, 
+                autoIncrement: true, 
+                primaryKey: true 
+            },
+            /**
+             * Collage Name
+             * @type {string}
+             */
+            collage_name: { 
+                type: DataTypes.STRING(255), 
+                allowNull: false, 
+                unique: true 
+            },
+        },
+        {
+            sequelize,
+            modelName: "Collage",
+            tableName: "collages_tb",
+            timestamps: true,
+            underscored: true,
+        }
+    );
+
+    return Collage;
+}
+
+module.exports = CollageModel;
+
+const { Model, DataTypes } = require("sequelize");
+
+/**
+ * @class Keyword
+ * @extends Model
+ * @classdesc Represents keywords associated with projects.  
+ * Used for searching and categorizing projects.
+ * 
+ * 🔑 **Notes:**
+ * - Each keyword is unique.
+ * - Supports many-to-many relation with projects via ProjectKeyword.
+ */
+class Keyword extends Model {
+    /**
+     * Define associations for the Keyword model.
+     * @param {object} models - All sequelize models.
+     */
+    static associate(models) {
+        // Keyword can belong to many projects
+        Keyword.belongsToMany(models.Project, {
+            through: models.ProjectKeyword,
+            foreignKey: 'keyword_id',
+            onDelete: 'CASCADE',
+        });
+    }
+}
+
+/**
+ * Initialize the Keyword model.
+ *
+ * @param {import("sequelize").Sequelize} sequelize - Sequelize instance.
+ * @returns {typeof Keyword} Keyword model.
+ */
+function KeywordModel(sequelize) {
+    Keyword.init(
+        {
+            /**
+             * Primary key for the keyword
+             * @type {number}
+             */
+            keyword_id: {
+                type: DataTypes.INTEGER,
+                autoIncrement: true,
+                primaryKey: true,
+            },
+
+            /**
+             * The keyword text
+             * @type {string}
+             */
+            keyword: {
+                type: DataTypes.STRING(64),
+                allowNull: false,
+                unique: true,
+            },
+        },
+        {
+            sequelize,
+            modelName: "Keyword",
+            tableName: "keywords_tb",
+            timestamps: true,
+            underscored: true,
+            indexes: [
+                {
+                    name: 'ft_keyword',
+                    type: 'FULLTEXT',
+                    fields: ['keyword']
+                }
+            ],
+        }
+    );
+
+    return Keyword;
+}
+
+module.exports = KeywordModel;
+
+const { Model, DataTypes } = require("sequelize");
+
+/**
+ * @class Department
+ * @extends Model
+ * @classdesc Represents academic departments within a collage.  
+ * Each department can have students, projects, and supervisors.
+ * 
+ * 🔑 **Notes:**
+ * - Each department has a unique name within its collage.
+ * - Supports relations with Collage, Students, Projects, and Supervisors.
+ */
+class Department extends Model {
+    /**
+     * Define associations for the Department model.
+     * @param {object} models - All sequelize models.
+     */
+    static associate(models) {
+        // Department belongs to a collage
+        Department.belongsTo(models.Collage, { foreignKey: 'collage_id' });
+
+        // Department has many students
+        Department.hasMany(models.Student, { foreignKey: 'department_id', onDelete: 'CASCADE' });
+
+        // Department has many projects
+        Department.hasMany(models.Project, { foreignKey: 'department_id', onDelete: 'CASCADE' });
+
+        // Department has many supervisors
+        Department.hasMany(models.Supervisor, { foreignKey: 'department_id', onDelete: 'CASCADE' });
+    }
+}
+
+/**
+ * Initialize the Department model.
+ *
+ * @param {import("sequelize").Sequelize} sequelize - Sequelize instance.
+ * @returns {typeof Department} Department model.
+ */
+function DepartmentModel(sequelize) {
+    Department.init(
+        {
+            /**
+             * Primary key for the department
+             * @type {number}
+             */
+            department_id: { 
+                type: DataTypes.INTEGER, 
+                autoIncrement: true, 
+                primaryKey: true 
+            },
+
+            /**
+             * Name of the department
+             * @type {string}
+             */
+            department_name: { 
+                type: DataTypes.STRING(255), 
+                unique: true, 
+                allowNull: false 
+            },
+
+            /**
+             * ID of the collage to which the department belongs
+             * @type {number}
+             */
+            collage_id: { 
+                type: DataTypes.INTEGER, 
+                allowNull: false 
+            },
+        },
+        {
+            sequelize,
+            modelName: "Department",
+            tableName: "departments_tb",
+            timestamps: true,
+            underscored: true,
+            indexes: [
+                { unique: true, fields: ['collage_id', 'department_name'] }
+            ],
+        }
+    );
+
+    return Department;
+}
+
+module.exports = DepartmentModel;
+
+const { DataTypes, Model } = require("sequelize");
+
+/**
+ * @class Student
+ * @extends Model
+ * @classdesc Represents a university student.
+ * 
+ * 🔑 **Notes:**
+ * - Full name is auto-generated by concatenating first, father, grandfather, and family names.
+ * - Linked to Department, Account (optional), Profile Image (optional), and Projects.
+ */
+class Student extends Model {
+    /**
+     * Define associations for the Student model.
+     * @param {object} models - All sequelize models.
+     */
+    static associate(models) {
+        // Student belongs to a Department
+        Student.belongsTo(models.Department, { foreignKey: 'department_id' });
+
+        // Student may have a Profile Image
+        Student.belongsTo(models.File, { foreignKey: 'profile_image_id', as: 'ProfileImage' });
+
+        // Student may be linked to an Account
+        Student.belongsTo(models.Account, { foreignKey: 'account_id' });
+
+        // Student belongs to many Projects
+        Student.belongsToMany(models.Project, { 
+            through: models.ProjectStudent, 
+            foreignKey: 'student_id', 
+            onDelete: 'CASCADE'
+        });
+    }
+}
+
+/**
+ * Initialize the Student model.
+ *
+ * @param {import("sequelize").Sequelize} sequelize - Sequelize instance.
+ * @returns {typeof Student} Student model.
+ */
+function StudentModel(sequelize) {
+    Student.init(
+        {
+            /**
+             * Primary key (UUID)
+             * @type {string}
+             */
+            student_id: {
+                type: DataTypes.UUID,
+                defaultValue: DataTypes.UUIDV4,
+                primaryKey: true,
+            },
+
+            /**
+             * Student's first name
+             * @type {string}
+             */
+            student_name: { type: DataTypes.STRING(50), allowNull: false },
+
+            /**
+             * Student's father name
+             * @type {string}
+             */
+            student_father_name: { type: DataTypes.STRING(50), allowNull: false },
+
+            /**
+             * Student's grandfather name
+             * @type {string}
+             */
+            student_grandfather_name: { type: DataTypes.STRING(50), allowNull: false },
+
+            /**
+             * Student's family name
+             * @type {string}
+             */
+            student_family_name: { type: DataTypes.STRING(50), allowNull: false },
+
+            /**
+             * Full name (auto-generated before save)
+             * @type {string}
+             */
+            student_full_name: { type: DataTypes.STRING(200), allowNull: false },
+
+            /**
+             * Student's email
+             * @type {string}
+             */
+            student_email: { type: DataTypes.STRING(255), allowNull: false },
+
+            /**
+             * Foreign key to Department
+             * @type {number}
+             */
+            department_id: { type: DataTypes.INTEGER, allowNull: false },
+
+            /**
+             * Optional foreign key to Account
+             * @type {string}
+             */
+            account_id: { type: DataTypes.UUID, allowNull: true, defaultValue: null },
+
+            /**
+             * Optional foreign key to Profile Image
+             * @type {number}
+             */
+            profile_image_id: { type: DataTypes.INTEGER, allowNull: true, defaultValue: null },
+        },
+        {
+            sequelize,
+            modelName: "Student",
+            tableName: "students_tb",
+            timestamps: true,
+            underscored: true,
+        }
+    );
+
+    // Hook to auto-generate full name
+    Student.beforeSave((student) => {
+        student.student_full_name = [
+            student.student_name,
+            student.student_father_name,
+            student.student_grandfather_name,
+            student.student_family_name
+        ].filter(Boolean).join(' ');
+    });
+
+    return Student;
+}
+
+module.exports = StudentModel;
+
+const { DataTypes, Model } = require("sequelize");
+
+/**
+ * @class Supervisor
+ * @extends Model
+ * @classdesc Represents a supervisor (faculty member) in a department.
+ * 
+ * 🔑 **Notes:**
+ * - Full name is auto-generated by concatenating first, father, grandfather, and family names.
+ * - May be linked to an Account (optional) and Profile Image (optional).
+ * - Supervises multiple Projects.
+ */
+class Supervisor extends Model {
+    /**
+     * Define associations for the Supervisor model.
+     * @param {object} models - All sequelize models.
+     */
+    static associate(models) {
+        // Optional link to an Account
+        Supervisor.belongsTo(models.Account, { foreignKey: 'account_id' });
+
+        // Optional profile image
+        Supervisor.belongsTo(models.File, { foreignKey: 'profile_image_id', as: 'ProfileImage' });
+
+        // Supervisor has many Projects
+        Supervisor.hasMany(models.Project, { foreignKey: 'supervisor_id', onDelete: 'SET NULL' });
+
+        // Supervisor belongs to a Department
+        Supervisor.belongsTo(models.Department, { foreignKey: 'department_id' });
+    }
+}
+
+/**
+ * Initialize the Supervisor model.
+ *
+ * @param {import("sequelize").Sequelize} sequelize - Sequelize instance.
+ * @returns {typeof Supervisor} Supervisor model.
+ */
+function SupervisorModel(sequelize) {
+    Supervisor.init(
+        {
+            /**
+             * Primary key (UUID)
+             * @type {string}
+             */
+            supervisor_id: {
+                type: DataTypes.UUID,
+                defaultValue: DataTypes.UUIDV4,
+                primaryKey: true,
+            },
+
+            /**
+             * First name
+             * @type {string}
+             */
+            supervisor_name: { type: DataTypes.STRING(50), allowNull: false },
+
+            /**
+             * Father name
+             * @type {string}
+             */
+            supervisor_father_name: { type: DataTypes.STRING(50), allowNull: false },
+
+            /**
+             * Grandfather name
+             * @type {string}
+             */
+            supervisor_grandfather_name: { type: DataTypes.STRING(50), allowNull: false },
+
+            /**
+             * Family name
+             * @type {string}
+             */
+            supervisor_family_name: { type: DataTypes.STRING(50), allowNull: false },
+
+            /**
+             * Full name (auto-generated before save)
+             * @type {string}
+             */
+            supervisor_full_name: { type: DataTypes.STRING(50), allowNull: false },
+
+            /**
+             * Academic title (optional)
+             * @type {string}
+             */
+            supervisor_title: { type: DataTypes.STRING(50), allowNull: true },
+
+            /**
+             * Email
+             * @type {string}
+             */
+            supervisor_email: { type: DataTypes.STRING(255), allowNull: false },
+
+            /**
+             * Foreign key to Department
+             * @type {number}
+             */
+            department_id: { type: DataTypes.INTEGER, allowNull: false },
+
+            /**
+             * Optional foreign key to Account
+             * @type {string}
+             */
+            account_id: { type: DataTypes.UUID, allowNull: true, defaultValue: null },
+
+            /**
+             * Optional foreign key to Profile Image
+             * @type {number}
+             */
+            profile_image_id: { type: DataTypes.INTEGER, allowNull: true, defaultValue: null },
+        },
+        {
+            sequelize,
+            modelName: "Supervisor",
+            tableName: "supervisors_tb",
+            timestamps: true,
+            underscored: true,
+        }
+    );
+
+    // Hook to auto-generate full name
+    Supervisor.beforeSave((supervisor) => {
+        supervisor.supervisor_full_name = [
+            supervisor.supervisor_name,
+            supervisor.supervisor_father_name,
+            supervisor.supervisor_grandfather_name,
+            supervisor.supervisor_family_name
+        ].filter(Boolean).join(' ');
+    });
+
+    return Supervisor;
+}
+
+module.exports = SupervisorModel;
+
+const { Model, DataTypes } = require("sequelize");
+
+/**
+ * @class ProjectCategory
+ * @extends Model
+ * @classdesc Junction table linking Projects with Categories.
+ * 
+ * 🔑 **Notes:**
+ * - Represents a many-to-many relationship between Project and Category.
+ */
+class ProjectCategory extends Model {
+    /**
+     * Define associations for the ProjectCategory model.
+     * @param {object} models - All sequelize models.
+     */
+    static associate(models) {
+        // Associations are handled via belongsToMany in Project and Category
+    }
+}
+
+/**
+ * Initialize the ProjectCategory model.
+ *
+ * @param {import("sequelize").Sequelize} sequelize - Sequelize instance.
+ * @returns {typeof ProjectCategory} ProjectCategory model.
+ */
+function ProjectCategoryModel(sequelize) {
+    ProjectCategory.init(
+        {
+            /**
+             * Foreign key to Project
+             * @type {number}
+             */
+            project_id: { type: DataTypes.INTEGER, allowNull: false },
+
+            /**
+             * Foreign key to Category
+             * @type {number}
+             */
+            category_id: { type: DataTypes.INTEGER, allowNull: false },
+        },
+        {
+            sequelize,
+            modelName: "ProjectCategory",
+            tableName: "project_categories_tb",
+            timestamps: true,
+            underscored: true,
+        }
+    );
+
+    return ProjectCategory;
+}
+
+module.exports = ProjectCategoryModel;
+
+const { Model, DataTypes } = require("sequelize");
+
+/**
+ * @class ProjectKeyword
+ * @extends Model
+ * @classdesc Junction table linking Projects with Keywords.
+ * 
+ * 🔑 **Notes:**
+ * - Represents a many-to-many relationship between Project and Keyword.
+ * - Ensures uniqueness of each (keyword_id, project_id) pair.
+ */
+class ProjectKeyword extends Model {
+    /**
+     * Define associations for the ProjectKeyword model.
+     * @param {object} models - All sequelize models.
+     */
+    static associate(models) {
+        // Associations are handled via belongsToMany in Project and Keyword
+    }
+}
+
+/**
+ * Initialize the ProjectKeyword model.
+ *
+ * @param {import("sequelize").Sequelize} sequelize - Sequelize instance.
+ * @returns {typeof ProjectKeyword} ProjectKeyword model.
+ */
+function ProjectKeywordModel(sequelize) {
+    ProjectKeyword.init(
+        {
+            /**
+             * Foreign key to Keyword
+             * @type {number}
+             */
+            keyword_id: { type: DataTypes.INTEGER, allowNull: false },
+
+            /**
+             * Foreign key to Project
+             * @type {number}
+             */
+            project_id: { type: DataTypes.INTEGER, allowNull: false },
+        },
+        {
+            sequelize,
+            modelName: "ProjectKeyword",
+            tableName: "project_keywords_tb",
+            timestamps: true,
+            underscored: true,
+            indexes: [
+                { fields: ['keyword_id', 'project_id'], unique: true }
+            ]
+        }
+    );
+
+    return ProjectKeyword;
+}
+
+module.exports = ProjectKeywordModel;
+
+const { DataTypes, Model } = require("sequelize");
+
+/**
+ * @class ProjectStudent
+ * @extends Model
+ * @classdesc Represents the association between a Project and a Student.
+ * 
+ * 🔑 **Notes:**
+ * - This is a join table for the many-to-many relation between Projects and Students.
+ */
+class ProjectStudent extends Model {
+    /**
+     * Define associations for the ProjectStudent model.
+     * @param {object} models - All sequelize models.
+     */
+    static associate(models) {
+        // Associations can be defined here if needed
+    }
+}
+
+/**
+ * Initialize the ProjectStudent model.
+ *
+ * @param {import("sequelize").Sequelize} sequelize - Sequelize instance.
+ * @returns {typeof ProjectStudent} ProjectStudent model.
+ */
+function ProjectStudentModel(sequelize) {
+    ProjectStudent.init(
+        {
+            /**
+             * Foreign key to the Project
+             * @type {number}
+             */
+            project_id: { type: DataTypes.INTEGER, allowNull: false },
+
+            /**
+             * Foreign key to the Student
+             * @type {string} UUID
+             */
+            student_id: { type: DataTypes.UUID, allowNull: false },
+        },
+        {
+            sequelize,
+            modelName: 'ProjectStudent',
+            tableName: 'project_students_tb',
+            timestamps: true,
+            underscored: true,
+        }
+    );
+
+    return ProjectStudent;
+}
+
+module.exports = ProjectStudentModel;
+أنشيء seeder كالتالي
+1 - إنشاء 5 collages فيها 5 departments
+2 - إنشاء 5 categories لكل كلية
+3 - إنشاء 30 keyword
+4 - إنشاء 3 supervisors لكل قسم
+5 - إنشاء 3 projects لكل department، وكل مشروع له طالب أو طالبين وله مشرف واحد وله category واحد أو أكثر وله keyword واحدة على الأقل
+* إجعل البيانات واقعية وباللغة العربية.

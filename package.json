@@ -8,6 +8,7 @@
   "main": "server.js",
   "scripts": {
     "dev": "nodemon main.js",
+    "test": "node tests/test.js",
     "db:seed:all": "npx sequelize-cli db:seed:all --config src/config/database.config.js",
     "db:seed:undo:all": "npx sequelize-cli db:seed:undo:all --config src/config/database.config.js"
   },
