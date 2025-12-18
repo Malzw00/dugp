@@ -66,7 +66,7 @@ function ProjectReferenceModel(sequelize) {
             underscored: true,
             indexes: [
                 {
-                    unique: true,
+                    unique: 'unique_referenceid_projectid',
                     fields: ['reference_id', 'project_id']
                 }
             ]

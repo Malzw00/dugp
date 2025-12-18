@@ -19,12 +19,64 @@ const requireRole = require('@middlewares/role.middleware');
  * @query {number} offset - Pagination offset.
  * @query {number} limit - Pagination limit.
  * @query {Array<number>} categories - Filter by category IDs.
- * @query {Array<number>} departments - Filter by department IDs.
- * @query {Array<number>} collages - Filter by collage IDs.
- * @query {"date" | "rating" | "likes" | "grade"} orderBy - Sorting field.
- * @query {"ASC"|"DESC"} orderDir - Sorting direction.
+ * @query {number} departmentId - Filter by department.
+ * @query {number} collageId - Filter by collage ID.
+ * @query {"date" | "rating" | "likes" | "grade"} sortBy - Sorting field.
+ * @query {"ASC"|"DESC"} order - Sorting direction.
+ * @query {"spring"|"autumn"|"winter"|"summer"} semester.
  */
 router.get('/', controller.getAll);
+
+
+/**
+ * @route GET /projects/search
+ * @description Search across all projects.
+ * @access any (no authentication required)
+ */
+router.use('/search', projectSearchRouter);
+
+/**
+ * @route /projects/:projectId/categories
+ * @description Manage categories related to a project.
+ * @access depends on the specific sub-route.
+ */
+router.use('/:projectId/categories', projectCategoriesRouter);
+
+/**
+ * @route /projects/:projectId/keywords
+ * @description Manage keywords related to a project.
+ * @access depends on the specific sub-route.
+ */
+router.use('/:projectId/keywords', projectKeywordsRouter);
+
+/**
+ * @route /projects/:projectId/files
+ * @description Manage files related to a project (book, presentation).
+ * @access depends on the specific sub-route.
+ */
+router.use('/:projectId/files', projectFilesRouter);
+
+/**
+ * @route /projects/:projectId/people
+ * @description Manage students and supervisors related to a project.
+ * @access depends on the specific sub-route.
+ */
+router.use('/:projectId/people', projectPeopleRouter);
+
+/**
+ * @route /projects/:projectId/social
+ * @description Manage likes, comments, and ratings for a project.
+ * @access depends on the specific sub-route.
+ */
+router.use('/:projectId/social', projectSocialRouter);
+
+/**
+ * @route /projects/:projectId/references
+ * @description Manage references for a project.
+ * @access depends on the specific sub-route.
+ */
+router.use('/:projectId/references', projectReferenceRouter);
+
 
 /**
  * @route GET /projects/:projectId
@@ -90,53 +142,5 @@ router.put(
     controller.update,
 );
 
-/**
- * @route /projects/:projectId/categories
- * @description Manage categories related to a project.
- * @access depends on the specific sub-route.
- */
-router.use('/:projectId/categories', projectCategoriesRouter);
-
-/**
- * @route /projects/:projectId/keywords
- * @description Manage keywords related to a project.
- * @access depends on the specific sub-route.
- */
-router.use('/:projectId/keywords', projectKeywordsRouter);
-
-/**
- * @route GET /projects/search
- * @description Search across all projects.
- * @access any (no authentication required)
- */
-router.use('/search', projectSearchRouter);
-
-/**
- * @route /projects/:projectId/files
- * @description Manage files related to a project (book, presentation).
- * @access depends on the specific sub-route.
- */
-router.use('/:projectId/files', projectFilesRouter);
-
-/**
- * @route /projects/:projectId/people
- * @description Manage students and supervisors related to a project.
- * @access depends on the specific sub-route.
- */
-router.use('/:projectId/people', projectPeopleRouter);
-
-/**
- * @route /projects/:projectId/social
- * @description Manage likes, comments, and ratings for a project.
- * @access depends on the specific sub-route.
- */
-router.use('/:projectId/social', projectSocialRouter);
-
-/**
- * @route /projects/:projectId/references
- * @description Manage references for a project.
- * @access depends on the specific sub-route.
- */
-router.use('/:projectId/references', projectReferenceRouter);
 
 module.exports = router;

@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const controller = require('@controllers/student.controller');
-const authenticate = require('@root/src/middlewares/auth.middleware');
-const requireRole = require('@root/src/middlewares/role.middleware');
-const requirePermission = require('@root/src/middlewares/permission.middleware');
+const authenticate = require('@middlewares/auth.middleware');
+const requireRole = require('@middlewares/role.middleware');
+const requirePermission = require('@middlewares/permission.middleware');
 
 /* -------------------------------------------------------------------------- */
 /*                                   STUDENTS                                 */
@@ -17,6 +17,16 @@ const requirePermission = require('@root/src/middlewares/permission.middleware')
  * @access Public
  */
 router.get('/', controller.getAll);
+
+/**
+ * @route GET /students
+ * @description search for students.
+ * @query {string} text.
+ * @query {number} offset - Starting index for pagination.
+ * @query {number} limit - Number of results to return.
+ * @access Public
+ */
+router.get('/search', controller.search);
 
 /**
  * @route GET /students/:studentId

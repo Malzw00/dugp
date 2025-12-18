@@ -16,35 +16,15 @@ const projectSearchController = {
     async search(req, res) {
         try {
             const { 
-                keyword, 
-                categories,
-                collages,
-                departments,
-                orderBy,
-                orderDir,
+                text,
                 offset,
                 limit
-            } = req.filters;
+            } = req.query;
 
-            // تحويل كل القيم إلى أرقام عند الحاجة
-            const categoriesArray = categories.map(Number);
-            const collagesArray = collages.map(Number);
-            const departmentsArray = departments.map(Number);
-
-            // استدعاء خدمة البحث
             const projects = await ProjectService.search({
-                searchText: keyword,
-                filters: {
-                    category_ids: categoriesArray,
-                    collage_ids: collagesArray,
-                    department_ids: departmentsArray,
-                },
-                offset,
-                limit,
-                order: {
-                    by: orderBy,
-                    dir: orderDir,
-                },
+                searchText: text,
+                offset: parseInt(offset) || null,
+                limit: parseInt(limit) || null,
             });
 
             res.status(200).json({

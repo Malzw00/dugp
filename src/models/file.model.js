@@ -111,7 +111,7 @@ function FileModel(sequelize) {
             file_hash: {
                 type: DataTypes.STRING(128),
                 allowNull: false,
-                unique: true,
+                unique: 'unique_file_hash',
             },
 
             /**

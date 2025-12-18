@@ -62,6 +62,7 @@ function CategoryModel(sequelize) {
             underscored: true,
             indexes: [
                 {
+                    name: 'unique_collageid_categoryname',
                     unique: true,
                     fields: ["collage_id", "category_name"],
                 },

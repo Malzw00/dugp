@@ -26,7 +26,8 @@ class Project extends Model {
         Project.belongsToMany(models.Keyword, { 
             through: models.ProjectKeyword, 
             foreignKey: 'project_id', 
-            onDelete: 'CASCADE' 
+            onDelete: 'CASCADE',
+            as: 'Keywords'
         });
 
         // One-to-One: Project ↔ Book File
@@ -74,18 +75,21 @@ class Project extends Model {
         Project.hasMany(models.Comment, { 
             foreignKey: 'project_id', 
             onDelete: 'CASCADE',
+            as: 'Comments',
         });
 
         // One-to-Many: Project ↔ Likes
         Project.hasMany(models.ProjectLike, { 
             foreignKey: 'project_id', 
             onDelete: 'CASCADE',
+            as: 'Likes',
         });
 
         // One-to-Many: Project ↔ Ratings
         Project.hasMany(models.Rating, { 
             foreignKey: 'project_id', 
             onDelete: 'CASCADE',
+            as: 'Ratings',
         });
 
         // One-to-Many: Project ↔ Project Reports
@@ -120,7 +124,7 @@ function ProjectModel(sequelize) {
              * Project title
              * @type {string}
              */
-            project_title: { type: DataTypes.STRING(255), allowNull: false, unique: true },
+            project_title: { type: DataTypes.STRING(255), allowNull: false, unique: 'unique_project_title' },
 
             /**
              * Project description
@@ -175,13 +179,13 @@ function ProjectModel(sequelize) {
              * Foreign key to Book File
              * @type {number}
              */
-            book_id: { type: DataTypes.INTEGER, allowNull: false },
+            book_id: { type: DataTypes.INTEGER, allowNull: true },
 
             /**
              * Foreign key to Presentation File
              * @type {number}
              */
-            presentation_id: { type: DataTypes.INTEGER, allowNull: false },
+            presentation_id: { type: DataTypes.INTEGER, allowNull: true },
 
             /**
              * Project availability status

@@ -29,23 +29,32 @@ const projectController = {
      */
     async getAll(req, res) {
         try {
-            const { offset, limit, orderBy, orderDir, categoryIds, departmentId, collageId } = req.query;
+            const { 
+                offset, 
+                limit, 
+                sortBy, 
+                order, 
+                categoryIds, 
+                departmentId, 
+                collageId, 
+                semester 
+            } = req.query;
 
             const offsetNum = parseInt(offset) || 0;
             const limitNum = parseInt(limit) || 20;
-            const orderByField = orderBy || 'created_at';
-            const orderDirVal = orderDir?.toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
+            const sortByField = sortBy || 'project_date';
+            const orderVal = order?.toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
             const categoryIdsArray = categoryIds ? categoryIds.split(',').map(Number) : [];
 
             const projects = await ProjectService.getAll({
                 offset: offsetNum,
                 limit: limitNum,
-                order: { by: orderByField, dir: orderDirVal },
-                filters: {
-                    category_ids: categoryIdsArray,
-                    collage_id: collageId ? Number(collageId) : undefined,
-                    department_id: departmentId ? Number(departmentId) : undefined,
-                },
+                sortBy: sortByField,
+                order: orderVal,
+                categories: categoryIdsArray,
+                collageId: parseInt(collageId),
+                departmentId: parseInt(departmentId),
+                semester
             });
 
             res.status(200).json({
@@ -77,9 +86,9 @@ const projectController = {
      * @returns {JSON} 500 - Internal server error.
      */
     async getByID(req, res) {
-        try {
+        try {            
             const { projectId } = req.params;
-
+            
             const projectIdNum = parseInt(projectId);
             const project = await ProjectService.get({ project_id: projectIdNum });
 

@@ -15,9 +15,14 @@ const app = express();
 // Security, rate limits, etc.
 app.use(GeneralRateLimiter());
 
-app.use(cors(corsOptions));
+// app.use(function (req, res) {
+//     console.log(req)
+// })
 
-app.use(helmet({ contentSecurityPolicy: false }));
+// app.use(cors(corsOptions));
+app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
+
+// app.use(helmet({ contentSecurityPolicy: false }));
 
 app.use(compression());
 

@@ -50,7 +50,7 @@ function PermissionModel(sequelize) {
             permission_name: {
                 type: DataTypes.STRING(100),
                 allowNull: false,
-                unique: true,
+                unique: 'unique_permission_name',
             },
         },
         {

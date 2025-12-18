@@ -82,7 +82,7 @@ class ProjectCategoryService {
         static async getProjects({ category_id, offset = 0, limit = 10 }) {
             try {
                 const projects = await models.Project.findAll({
-                    attributes: ['project_id', 'project_title', 'cover_image_id'],
+                    attributes: ['project_id', 'project_description', 'project_title'],
                     include: [
                         {
                             model: models.Category,
@@ -90,10 +90,6 @@ class ProjectCategoryService {
                             attributes: [],
                             through: { attributes: [] }
                         },
-                        {
-                            model: models.Image,
-                            attributes: ['image_path']
-                        }
                     ],
                     offset,
                     limit,

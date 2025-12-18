@@ -67,7 +67,7 @@ function CommentLikeModel(sequelize) {
             timestamps: true,
             underscored: true,
             indexes: [
-                { unique: true, fields: ['account_id', 'comment_id'] }
+                { unique: 'unique_accountid_commentid', fields: ['account_id', 'comment_id'] }
             ],
         }
     );

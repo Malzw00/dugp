@@ -74,7 +74,7 @@ function AccountModel(sequelize) {
              * Email (unique) 
              * @type {string}
              */
-            account_email: { type: DataTypes.STRING(255), allowNull: false, unique: true },
+            account_email: { type: DataTypes.STRING(255), allowNull: false, unique: 'unique_account_email' },
 
             /** 
              * Email verified flag 

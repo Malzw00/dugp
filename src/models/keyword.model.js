@@ -21,6 +21,7 @@ class Keyword extends Model {
             through: models.ProjectKeyword,
             foreignKey: 'keyword_id',
             onDelete: 'CASCADE',
+            as: 'Projects'
         });
     }
 }
@@ -51,7 +52,7 @@ function KeywordModel(sequelize) {
             keyword: {
                 type: DataTypes.STRING(64),
                 allowNull: false,
-                unique: true,
+                unique: 'unique_keyword',
             },
         },
         {

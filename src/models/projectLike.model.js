@@ -54,7 +54,7 @@ function ProjectLikeModel(sequelize) {
             timestamps: true,
             underscored: true,
             indexes: [
-                { unique: true, fields: ['account_id', 'project_id'] }
+                { unique: 'unique_accountid_projectid', fields: ['account_id', 'project_id'] }
             ]
         }
     );

@@ -275,24 +275,23 @@ class StudentService {
      * Searches for students by name within a specific department.
      * Looks for matches in the student_full_name field.
      * 
-     * @param {string} keyword - Search term to look for in student names
      * @param {Object} options - Search options
-     * @param {number} options.department_id - Department ID to filter by
+     * @param {number} options.text - Search term to look for in student names
      * @returns {Promise<Array>} Array of student objects matching the search criteria
      * @throws {Error} If database operation fails
      */
-    static async searchByName(keyword, { department_id }) {
+    static async searchByName({ text, }) {
         try {
             const whereOptions = {
-                student_full_name: { [Op.like]: `%${keyword}%` },
+                student_name: { [Op.like]: `%${text}%` },
+                student_grandfather_name: { [Op.like]: `%${text}%` },
+                student_father_name: { [Op.like]: `%${text}%` },
+                student_family_name: { [Op.like]: `%${text}%` },
             };
-
-            if(department_id)
-            whereOptions.department_id = department_id;
 
             const students = await models.Student.findAll({
                 where: whereOptions,
-                attributes: [ 'student_id', 'student_full_name', ]
+                attributes: [ 'student_id', 'student_full_name', 'created_at' ]
             });
 
             return students;
@@ -308,14 +307,29 @@ class StudentService {
      * Retrieves a specific student by their ID.
      * 
      * @param {Object} params - Student retrieval parameters
-     * @param {number} params.student_id - ID of the student to retrieve
+     * @param {string} params.student_id - ID of the student to retrieve
      * @returns {Promise<Object|null>} Student record if found, null otherwise
      * @throws {Error} If database operation fails
      */
     static async get ({ student_id }) {
         try {
             const student = await models.Student.findOne({ 
-                where: { student_id: student_id } 
+                where: { student_id: student_id }, 
+                include: [
+                    {
+                        model: models.Project,
+                        attributes: ['project_id', 'project_title'],
+                    },
+                    {
+                        model: models.Department,
+                        attributes: ['department_id', 'department_name'],
+                        include: {
+                            model: models.Collage,
+                            attributes: ['collage_id', 'collage_name'],
+                            as: 'Collage'
+                        }
+                    },
+                ]
             });
 
             return student;

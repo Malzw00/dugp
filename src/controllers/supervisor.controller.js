@@ -16,11 +16,19 @@ const supervisorController = {
      * @returns {Promise<void>}
      */
     async getAll(req, res) {
-        try {
+       try {
             const { limit, offset } = req.query;
 
-            const offsetNum = parseInt(offset);
-            const limitNum = parseInt(limit);
+            const offsetNum = offset !== undefined ? parseInt(offset) : 0;
+            const limitNum = limit !== undefined ? parseInt(limit) : 10;
+
+            if (isNaN(offsetNum) || isNaN(limitNum) || offsetNum < 0 || limitNum <= 0) {
+                res.status(400).json({
+                    success: false,
+                    message: 'Validation Error',
+                });
+                return;
+            }
 
             const supervisors = await SupervisorService.getAll({
                 offset: offsetNum,
@@ -28,9 +36,9 @@ const supervisorController = {
             });
 
             if (!supervisors) {
-                res.status(400).json({
+                res.status(404).json({
                     success: false,
-                    message: '',
+                    message: 'Supervisors Not Found',
                 });
                 return;
             }
@@ -40,9 +48,52 @@ const supervisorController = {
                 result: supervisors,
             });
         } catch (error) {
+            
             res.status(500).json({
                 success: false,
-                message: '',
+                message: 'Server Error',
+            });
+        }
+    },
+    
+    /**
+     * search for supervisors
+     * @async
+     * @function search
+     * @param {import('express').Request} req - Express request object.
+     * @param {import('express').Response} res - Express response object.
+     * @returns {Promise<void>}
+     */
+    async search(req, res) {
+       try {
+            const { text, limit, offset } = req.query;
+
+            const offsetNum = parseInt(offset) || null;
+            const limitNum = parseInt(limit) || null;
+
+            const supervisors = await SupervisorService.searchByName({
+                text,
+                offset: offsetNum,
+                limit: limitNum,
+            });
+
+            if (!supervisors) {
+                res.status(404).json({
+                    success: false,
+                    message: 'No Result',
+                });
+                return;
+            }
+
+            res.status(200).json({
+                success: true,
+                result: supervisors,
+            });
+        } catch (error) {
+            
+            res.status(500).json({
+                success: false,
+                message: 'Server Error',
             });
         }
     },
@@ -58,9 +109,8 @@ const supervisorController = {
     async getByID(req, res) {
         try {
             const { supervisorId } = req.params;
-            const supervisorIdNum = parseInt(supervisorId);
 
-            const supervisor = await SupervisorService.get({ supervisor_id: supervisorIdNum });
+            const supervisor = await SupervisorService.get({ supervisor_id: supervisorId });
 
             if (!supervisor) {
                 res.status(400).json({ success: false, message: '' });

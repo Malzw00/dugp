@@ -33,6 +33,34 @@ const studentController = {
             res.status(500).json({ success: false, message: error.message });
         }
     },
+    
+    /**
+     * @route GET /students/search
+     * @description search for students
+     * @query {number} [offset] - Number of records to skip (default: 0).
+     * @query {number} [limit] - Number of records to return (default: 20).
+     */
+    async search(req, res) {
+        try {
+            const { offset, limit, text } = req.query;
+            const offsetNum = parseInt(offset) || null;
+            const limitNum  = parseInt(limit) || null;
+
+            const students = await StudentService.searchByName({ 
+                text,
+                offset: offsetNum, 
+                limit: limitNum 
+            });
+
+            if (!students) {
+                return res.status(400).json({ success: false, message: "No Result." });
+            }
+
+            res.status(200).json({ success: true, result: students });
+        } catch (error) {
+            res.status(500).json({ success: false, message: error.message });
+        }
+    },
 
     /**
      * @route GET /students/:studentId
@@ -42,9 +70,8 @@ const studentController = {
     async getByID(req, res) {
         try {
             const { studentId } = req.params;
-            const studentIdNum = parseInt(studentId);
 
-            const student = await StudentService.get({ student_id: studentIdNum });
+            const student = await StudentService.get({ student_id: studentId });
 
             if (!student) {
                 return res.status(404).json({ success: false, message: "Student not found." });

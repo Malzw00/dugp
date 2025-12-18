@@ -16,7 +16,7 @@ async function initializeDatabaseWithRetry(retries = 5, delayMs = 3000) {
         try {
             await initDatabase({
                 sequelize: DatabaseConfig.sequelize,
-                syncOptions: { alter: false, force: false },
+                syncOptions: { alter: true, force: false },
                 ...ConsoleRenderer.initDB
             });
 

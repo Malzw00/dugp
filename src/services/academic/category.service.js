@@ -46,9 +46,9 @@ class CategoryService {
     static async getAll({ collage_id } = {}) {
 
         try {
-            const categories = collage_id !== undefined
-                ? await models.Category.findAll({ where: { collage_id } })
-                : await models.Category.findAll();
+            const categories = collage_id
+                ? await models.Category.findAll({ where: { collage_id }, raw: true })
+                : await models.Category.findAll({ raw: true });
             
             return categories;
 

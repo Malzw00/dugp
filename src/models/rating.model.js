@@ -77,7 +77,7 @@ function RatingModel(sequelize) {
             timestamps: true,
             underscored: true,
             indexes: [
-                { unique: true, fields: ['project_id', 'account_id'] }
+                { unique: 'unique_projectid_accountid', fields: ['project_id', 'account_id'] }
             ]
         }
     );

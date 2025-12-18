@@ -10,12 +10,14 @@ const studentsRoute     = require('@root/src/routes/api/v1/student.routes');
 const supervisorsRoute  = require('@root/src/routes/api/v1/supervisor.routes');
 const commentsRoute     = require('@root/src/routes/api/v1/comment.routes');
 const settingsRoute     = require('@root/src/routes/api/v1/setting.routes');
+const categoriesRoute   = require('@root/src/routes/api/v1/category.routes');
 const referenceRoute    = require('@routes/api/v1/reference.routes');
 
 router.use('/accounts', accountsRoute);
 router.use('/admins', adminsRoute);
 router.use('/auth', authRoute);
 router.use('/collages', collagesRoute);
+router.use('/categories', categoriesRoute);
 router.use('/files', filesRoute);
 router.use('/references', referenceRoute);
 router.use('/projects', projectsRoute);

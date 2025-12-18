@@ -47,7 +47,7 @@ function ProjectKeywordModel(sequelize) {
             timestamps: true,
             underscored: true,
             indexes: [
-                { fields: ['keyword_id', 'project_id'], unique: true }
+                { fields: ['keyword_id', 'project_id'], unique: 'unique_keywordid_projectid' }
             ]
         }
     );

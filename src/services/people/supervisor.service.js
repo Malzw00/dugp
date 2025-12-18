@@ -238,23 +238,26 @@ class SupervisorService {
 
     /**
      * Search supervisors by full name with optional department filter.
-     * @param {string} keyword - Search keyword.
      * @param {Object} options
-     * @param {number} [options.department_id] - Optional department ID filter.
+     * @param {number} [options.text] - Search keyword.
      * @returns {Promise<Object[]>} Array of matching supervisors.
      */
-    static async searchByName(keyword, { department_id }) {
+    static async searchByName({ text, offset, limit }) {
         try {
             const whereOptions = {
-                supervisor_full_name: { [Op.like]: `%${keyword}%` },
+                [Op.or]: {
+                    supervisor_name: { [Op.like]: `%${text}%` },
+                    supervisor_grandfather_name: { [Op.like]: `%${text}%` },
+                    supervisor_father_name: { [Op.like]: `%${text}%` },
+                    supervisor_family_name: { [Op.like]: `%${text}%` },
+                },
             };
-
-            if(department_id)
-                whereOptions.department_id = department_id;
 
             const supervisors = await models.Supervisor.findAll({
                 where: whereOptions,
-                attributes: ['supervisor_id', 'supervisor_full_name']
+                attributes: ['supervisor_id', 'supervisor_full_name', 'updated_at'],
+                offset,
+                limit,
             });
 
             return supervisors;
@@ -273,7 +276,22 @@ class SupervisorService {
     static async get({ supervisor_id }) {
         try {
             const supervisor = await models.Supervisor.findOne({ 
-                where: { supervisor_id: supervisor_id } 
+                where: { supervisor_id: supervisor_id },
+                include: [
+                    {
+                        model: models.Project,
+                        attributes: ['project_id', 'project_title'],
+                    },
+                    {
+                        model: models.Department,
+                        attributes: ['department_id', 'department_name'],
+                        include: {
+                            model: models.Collage,
+                            attributes: ['collage_id', 'collage_name'],
+                            as: 'Collage'
+                        }
+                    },
+                ]
             });
             
             return supervisor;

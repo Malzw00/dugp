@@ -19,6 +19,16 @@ const requirePermission = require('@middlewares/permission.middleware');
 router.get('/', controller.getAll);
 
 /**
+ * @route GET /supervisors/search
+ * @description search for supervisors.
+ * @query {string} text 
+ * @query {number} offset - Starting index for pagination.
+ * @query {number} limit - Number of results to return.
+ * @access Public
+ */
+router.get('/search', controller.search);
+
+/**
  * @route GET /supervisors/:supervisorId
  * @description Retrieve details of a specific supervisor by ID.
  * @param {string} supervisorId - Unique identifier of the supervisor.

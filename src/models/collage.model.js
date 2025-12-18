@@ -22,7 +22,8 @@ class Collage extends Model {
         // One-to-Many: Collage ↔ Departments
         Collage.hasMany(models.Department, { 
             foreignKey: 'collage_id', 
-            onDelete: 'RESTRICT' 
+            onDelete: 'RESTRICT',
+            as: 'Departments',
         });
 
         // One-to-Many: Collage ↔ Categories
@@ -46,6 +47,13 @@ class Collage extends Model {
  * @returns {typeof Collage} Collage model.
  */
 function CollageModel(sequelize) {
+    
+    // قبل التهيئة، تحقق من عدم وجود نموذج مسبقاً
+    if (sequelize.models.Collage) {
+        console.warn('Collage model already initialized!');
+        return sequelize.models.Collage;
+    }
+
     Collage.init(
         {
             /**
@@ -64,7 +72,7 @@ function CollageModel(sequelize) {
             collage_name: { 
                 type: DataTypes.STRING(255), 
                 allowNull: false, 
-                unique: true 
+                unique: 'unique_collage_name'
             },
         },
         {

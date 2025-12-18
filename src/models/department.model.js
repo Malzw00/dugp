@@ -17,7 +17,7 @@ class Department extends Model {
      */
     static associate(models) {
         // Department belongs to a collage
-        Department.belongsTo(models.Collage, { foreignKey: 'collage_id' });
+        Department.belongsTo(models.Collage, { foreignKey: 'collage_id', as: 'Collage' });
 
         // Department has many students
         Department.hasMany(models.Student, { foreignKey: 'department_id', onDelete: 'CASCADE' });
@@ -55,7 +55,6 @@ function DepartmentModel(sequelize) {
              */
             department_name: { 
                 type: DataTypes.STRING(255), 
-                unique: true, 
                 allowNull: false 
             },
 
@@ -75,7 +74,11 @@ function DepartmentModel(sequelize) {
             timestamps: true,
             underscored: true,
             indexes: [
-                { unique: true, fields: ['collage_id', 'department_name'] }
+                { 
+                    name: 'unique_collageid_department_name', 
+                    unique: true, 
+                    fields: ['collage_id', 'department_name'] 
+                }
             ],
         }
     );
