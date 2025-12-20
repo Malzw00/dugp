@@ -93,15 +93,15 @@ function verifyResetPasswordToken(token) {
 // ------------------- PAYLOAD BUILDERS -------------------
 
 function buildATPayload({ accountID, accountRole }) {
-  return { accountID: parseInt(accountID), accountRole };
+  return { accountID: accountID, accountRole };
 }
 
 function buildRTPayload({ accountID }) {
-  return { accountID: parseInt(accountID) };
+  return { accountID: accountID };
 }
 
 function buildRPTPayload({ accountID }) {
-  return { accountID: parseInt(accountID) };
+  return { accountID: accountID };
 }
 
 

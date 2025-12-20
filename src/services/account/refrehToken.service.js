@@ -1,7 +1,7 @@
-const { hash } = require("@utils/hash.util");
+const { hash, compare } = require("@utils/hash.util");
 const { generateRefreshToken, buildRTPayload } = require("@utils/authToken.util");
-const ServiceErrorLogger = require("@root/src/utils/serviceErrorLogger.util");
 const { models } = require("@config/database.config");
+const ServiceErrorLogger = require("@root/src/utils/serviceErrorLogger.util");
 
 class RefreshTokenService {
 
@@ -53,7 +53,7 @@ class RefreshTokenService {
             return accountTokens;
 
         } catch (error) {
-            throw this.#logger.log('GET_ACCOUNT_TOKENS_FAILED')
+            throw this.#logger.log('GET_ACCOUNT_TOKENS_FAILED', error)
         }
     }
 
@@ -68,7 +68,7 @@ class RefreshTokenService {
             }
             return null;
         } catch (error) {
-            throw this.#logger.log('COMPARE_TOKENS_FAILES')
+            throw this.#logger.log('COMPARE_TOKENS_FAILES', error)
         }
     }
 }

@@ -9,6 +9,15 @@ const router  = express.Router();
 const controller = require('@controllers/auth.controller');
 const authenticate = require('@middlewares/auth.middleware');
 
+
+
+/**
+ * @route GET /auth/me
+ * @description check for user.
+ * @access authenticated users only
+ */
+router.get('/me', controller.me);
+
 /**
  * @route POST /auth/register
  * @description Register a new account in the system.
@@ -34,7 +43,7 @@ router.post('/login', controller.login);
  * @description Log out the authenticated user and invalidate their session/token.
  * @access authenticated users only
  */
-router.post('/logout', authenticate, controller.logout);
+router.post('/logout', controller.logout);
 
 /**
  * @route POST /auth/forgot-password
@@ -57,7 +66,6 @@ router.post('/reset-password', controller.resetPassword);
  * @route POST /auth/refresh
  * @description Refresh the access token using a valid refresh token.
  * @access authenticated users only
- * @body {string} refreshToken - A valid refresh token.
  */
 router.post('/refresh', controller.refresh);
 

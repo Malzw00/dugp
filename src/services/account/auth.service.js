@@ -48,7 +48,13 @@ class AuthService {
                 hashed_password: hashedPassword,
             });
 
-            return created;
+            return {
+                account_id: created.account_id,
+                fst_name: created.fst_name,
+                lst_name: created.lst_name,
+                account_role: created.account_role,
+                updated_at: created.updated_at,
+            };
 
         } catch (error) {
             throw this.#logger.log(this.register.name, error);
@@ -88,7 +94,7 @@ class AuthService {
                 account_id:         account.account_id,
                 fst_name:           account.fst_name,
                 lst_name:           account.lst_name,
-                role:               account.account_role,
+                account_role:       account.account_role,
                 profile_image_id:   account.profile_image_id,
                 accessToken:        accessToken.token,
                 refreshToken:       refreshToken.token,
@@ -137,7 +143,7 @@ class AuthService {
             return true;
             
         } catch (error) {
-            throw this.#logger.error(`${this.logout.name}: ${error.message}`, error);
+            throw this.#logger.error(this.logout.name, error);
         }
     }
 
@@ -263,6 +269,63 @@ class AuthService {
             throw this.#logger.log(this.resetPassword.name, error);
         }
     }
+
+
+    /**
+     * Retrieves the currently authenticated user's account information.
+     * Validates the refresh token, ensures it exists and is not expired,
+     * and returns the associated account data.
+     * 
+     * @param {Object} params - Request parameters
+     * @param {string} params.refreshToken - Valid refresh token
+     * @returns {Promise<Object>} Authenticated account information
+     * @throws {Error} TOKEN_NOT_MATCH if refresh token is invalid
+     * @throws {Error} TOKEN_EXPIRED if refresh token has expired
+     * @throws {Error} ACCOUNT_NOT_FOUND if account no longer exists
+     */
+    static async me({ refreshToken }) {
+        try {
+            // 1 - Verify refresh token signature
+            const payload = verifyRefreshToken(refreshToken);
+            const accountID = payload.accountID;
+
+            // 2 - Check token existence in database
+            const accountTokens = await RefreshTokenService.accountTokens(accountID);
+
+            const tokenRecord = await RefreshTokenService.compareHashedTokens({
+                hashedRefreshTokens: accountTokens,
+                refreshToken: refreshToken,
+            });
+
+            if (!tokenRecord)
+                throw new Error('TOKEN_NOT_MATCH');
+
+            // 3 - Check expiration
+            if (new Date(tokenRecord.expires_at) < new Date())
+                throw new Error('TOKEN_EXPIRED');
+
+            // 4 - Fetch fresh account data
+            const account = await AccountService.getByID({ account_id: accountID });
+            if (!account)
+                throw new Error('ACCOUNT_NOT_FOUND');
+
+            // 5 - Return safe account data
+            return {
+                account_id:         account.account_id,
+                fst_name:           account.fst_name,
+                lst_name:           account.lst_name,
+                account_email:      account.account_email,
+                role:               account.account_role,
+                profile_image_id:   account.profile_image_id,
+                created_at:         account.created_at,
+                updated_at:         account.updated_at,
+            };
+
+        } catch (error) {
+            throw this.#logger.log(this.me.name, error);
+        }
+    }
+
 }
 
 

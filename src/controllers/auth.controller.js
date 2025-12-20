@@ -35,9 +35,9 @@ const authController = {
                 res.cookie("refresh_token", account.refreshToken, {
                     httpOnly: true,
                     secure: process.env.NODE_ENV === "production",
-                    sameSite: "strict",
+                    sameSite: "lax",
                     maxAge: RefreshTokenExpIn * 1000,
-                    path: "/api/v1/auth/refresh", // Excellent for safety if you place it on a specific path.
+                    path: "/api/v1/auth", // Excellent for safety if you place it on a specific path.
                 });
 
                 // We only send access token and data
@@ -47,7 +47,9 @@ const authController = {
                         account_id: account.account_id,
                         fst_name: account.fst_name,
                         lst_name: account.lst_name,
-                        role: account.role,
+                        account_role: account.account_role,
+                        account_email: account.account_email,
+                        profile_image_id: account.profile_image_id,
                         accessToken: account.accessToken,
                     },
                 });
@@ -85,11 +87,11 @@ const authController = {
      */
     async register(req, res) {
         try {
-            const { fstname, lstname, email, password } = req.body;
+            const { fst_name, lst_name, email, password } = req.body;
 
             const createdAccount = await AuthService.register({
-                fst_name: fstname,
-                lst_name: lstname,
+                fst_name,
+                lst_name,
                 account_email: email,
                 password,
             });
@@ -135,7 +137,12 @@ const authController = {
      */
     async logout(req, res) {
         try {
-            const { refreshToken } = req.user;
+            const refreshToken = req.cookies?.refresh_token;
+
+            if (!refreshToken) {
+                return res.status(200).json({ success: true });
+            }
+
 
             const isLogout = await AuthService.logout({ refreshToken });
 
@@ -144,8 +151,8 @@ const authController = {
                 res.clearCookie("refresh_token", {
                     httpOnly: true,
                     secure: process.env.NODE_ENV === "production",
-                    sameSite: "strict",
-                    path: "/api/v1/auth/refresh",
+                    sameSite: "lax",
+                    path: "/api/v1/auth",
                 });
 
                 return res.status(200).json({ success: true });
@@ -289,7 +296,54 @@ const authController = {
                 error: error.message,
             });
         }
-    }
+    },
+
+    /**
+     * @async
+     * @function me
+     * @description Retrieves the currently authenticated user's account information.
+     * This endpoint is used to restore authentication state on page reload.
+     * 
+     * @route GET /api/auth/me
+     * @access Authenticated users (via refresh token cookie)
+     * 
+     * @param {import("express").Request} req - Express request object containing:
+     *  - `req.cookies.refresh_token` {string} - Refresh token stored in HttpOnly cookie.
+     * @param {import("express").Response} res - Express response object.
+     * 
+     * @returns {Promise<void>} Sends a JSON response with the authenticated account data.
+     */
+    async me(req, res) {
+        try {
+            // Read refresh token from cookie
+            const refreshToken = req.cookies?.refresh_token;
+
+            console.log(req.cookies);
+            console.log(refreshToken);
+
+            if (!refreshToken) {
+                return res.status(401).json({
+                    success: false,
+                    message: "Not authenticated.",
+                });
+            }
+
+            // Validate session and get account data
+            const account = await AuthService.me({ refreshToken });
+
+            return res.status(200).json({
+                success: true,
+                result: account,
+            });
+
+        } catch (error) {
+            return res.status(401).json({
+                success: false,
+                message: "Invalid or expired session.",
+                error: error.message,
+            });
+        }
+    },
 };
 
 module.exports = authController;

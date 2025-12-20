@@ -283,10 +283,12 @@ class StudentService {
     static async searchByName({ text, }) {
         try {
             const whereOptions = {
-                student_name: { [Op.like]: `%${text}%` },
-                student_grandfather_name: { [Op.like]: `%${text}%` },
-                student_father_name: { [Op.like]: `%${text}%` },
-                student_family_name: { [Op.like]: `%${text}%` },
+                [Op.or]: {        
+                    student_name: { [Op.like]: `%${text}%` },
+                    student_grandfather_name: { [Op.like]: `%${text}%` },
+                    student_father_name: { [Op.like]: `%${text}%` },
+                    student_family_name: { [Op.like]: `%${text}%` },
+                }
             };
 
             const students = await models.Student.findAll({

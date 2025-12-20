@@ -33,21 +33,14 @@ const accountController = {
     async getByID(req, res) {
         try {
             const { accountId } = req.params;
-            const accountIdNum = parseInt(accountId);
 
-            if (isNaN(accountIdNum)) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Invalid accountId parameter.",
-                });
-            }
-
-            const account = await AccountService.getByID({ account_id: accountIdNum });
+            const account = await AccountService.getByID({ account_id: accountId });
 
             res.status(200).json({
                 success: true,
                 result: account,
             });
+            
         } catch (error) {
             res.status(500).json({
                 success: false,

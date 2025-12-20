@@ -14,6 +14,7 @@ module.exports = class ServiceErrorLogger {
         log({ layer: this.#layer, module: this.#module, method, error, });
         error.layer = this.#layer;
         error.module = this.#module;
+
         return error;
     }
 }
