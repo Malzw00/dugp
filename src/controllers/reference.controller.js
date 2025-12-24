@@ -63,8 +63,8 @@ const referenceController = {
         try {
             const { limit, offset } = req.query;
 
-            const limitNum = parseInt(limit);
-            const offsetNum = parseInt(offset);
+            const limitNum = parseInt(limit) || undefined;
+            const offsetNum = parseInt(offset) || undefined;
 
             const references = await ReferenceService.getReferences({ 
                 offset: offsetNum,   
@@ -82,7 +82,10 @@ const referenceController = {
             });
 
         } catch {
-            res.status(500).json({ success: false });
+            res.status(500).json({ 
+                success: false,
+                message: 'Get References Failed' 
+            });
         }
     },
 
@@ -166,6 +169,7 @@ const referenceController = {
         try {
             const { referenceId } = req.params;
             const { title, link, author } = req.body;
+
             const referenceIdNum = parseInt(referenceId);
 
             const updated = await ReferenceService.update({ 
@@ -174,11 +178,6 @@ const referenceController = {
                 link,
                 author
             });
-
-            if (!updated) {
-                res.status(404).json({ success: false });
-                return;
-            }
 
             res.status(200).json({
                 success: true,

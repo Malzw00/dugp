@@ -211,13 +211,13 @@ const accountController = {
     async updateMe(req, res) {
         try {
             const { user } = req;
-            const { fstname, lstname, accountEmail, imageId } = req.body;
+            const { fstname, lstname, email, imageId } = req.body;
 
             const imageIdNum = parseInt(imageId);
 
             await AccountService.update({
                 account_id: user.accountID,
-                account_email: accountEmail,
+                account_email: email,
                 fst_name: fstname,
                 lst_name: lstname,
                 profile_image_id: imageIdNum,

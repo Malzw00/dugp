@@ -343,6 +343,48 @@ const collageController = {
             });
         }
     },
+    
+    
+    /**
+     * @route UPDATE /departments/:departmentId
+     * @description Delete a department by its ID.
+     * @param {number} departmentId - The department ID to delete.
+     * @param {string} name
+     * @access admin
+     */
+    async updateDepartment(req, res) {
+        try {
+            const { departmentId, } = req.params;
+            const { name, collageId, } = req.body;
+
+            const departmentIdNum = parseInt(departmentId);
+            const collageIdNum = parseInt(collageId);
+
+            const updated = await DepartmentService.update(departmentIdNum, {
+                collage_id: collageIdNum,
+                department_name: name,
+            });
+
+            if (!updated) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Failed to update department.',
+                });
+            }
+
+            res.status(200).json({
+                success: true,
+                message: 'Department updated successfully.',
+            });
+            
+        } catch (error) {
+            res.status(500).json({
+                success: false,
+                message: 'Server error while updating department.',
+                error: error.message,
+            });
+        }
+    },
 };
 
 module.exports = collageController;

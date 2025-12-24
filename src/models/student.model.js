@@ -74,7 +74,7 @@ function StudentModel(sequelize) {
              * Student's family name
              * @type {string}
              */
-            student_family_name: { type: DataTypes.STRING(50), allowNull: false },
+            student_family_name: { type: DataTypes.STRING(50), allowNull: true },
 
             /**
              * Full name (auto-generated before save)
@@ -86,7 +86,7 @@ function StudentModel(sequelize) {
              * Student's email
              * @type {string}
              */
-            student_email: { type: DataTypes.STRING(255), allowNull: false },
+            student_email: { type: DataTypes.STRING(255), allowNull: true },
 
             /**
              * Foreign key to Department

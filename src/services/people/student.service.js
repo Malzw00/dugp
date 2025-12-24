@@ -23,7 +23,7 @@ class StudentService {
      * @returns {Promise<Object>} The created student record
      * @throws {Error} If database operation fails or validation errors occur
      */
-    static async create ({ name, father_name, grand_father_name, family_name, department_id, }) {
+    static async create ({ name, father_name, grand_father_name, family_name, department_id, email, full_name }) {
         try {
             const created = await models.Student.create({
                 student_name: name,
@@ -31,6 +31,8 @@ class StudentService {
                 student_grandfather_name: grand_father_name,
                 student_family_name: family_name,
                 department_id: department_id,
+                student_email: email,
+                student_full_name: full_name,
             });
             return created;
         } catch (error) {

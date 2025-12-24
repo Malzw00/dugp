@@ -94,7 +94,7 @@ const studentController = {
      */
     async create(req, res) {
         try {
-            const { name, fatherName, grandFatherName, familyName, departmentId } = req.body;
+            const { name, email, fatherName, grandFatherName, familyName, departmentId, fullName } = req.body;
             const departmentIdNum = parseInt(departmentId);
 
             const created = await StudentService.create({
@@ -103,6 +103,8 @@ const studentController = {
                 grand_father_name: grandFatherName,
                 family_name: familyName,
                 department_id: departmentIdNum,
+                full_name: fullName,
+                email,
             });
 
             if (!created) {
@@ -123,9 +125,8 @@ const studentController = {
     async delete(req, res) {
         try {
             const { studentId } = req.params;
-            const studentIdNum = parseInt(studentId);
 
-            const deleted = await StudentService.delete({ student_id: studentIdNum });
+            const deleted = await StudentService.delete({ student_id: studentId });
 
             if (!deleted) {
                 return res.status(400).json({ success: false, message: "Failed to delete student." });
@@ -157,12 +158,11 @@ const studentController = {
                 familyName, departmentId, imageId, accountId
             } = req.body;
 
-            const studentIdNum = parseInt(studentId);
             const departmentIdNum = parseInt(departmentId);
             const imageIdNum = parseInt(imageId);
 
             const updated = await StudentService.update({
-                student_id: studentIdNum,
+                student_id: studentId,
                 name,
                 father_name: fatherName,
                 grand_father_name: grandFatherName,

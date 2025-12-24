@@ -80,7 +80,7 @@ class AuthService {
 
             if (!checkPassword)
             throw new Error("LOGIN_FAILED");
-                
+            
             const refreshToken = await RefreshTokenService.create({ account_id: account.account_id });
 
             const accessToken = generateAccessToken(
@@ -160,8 +160,18 @@ class AuthService {
      */
     static async refreshAccessToken({ refreshToken }) {
         try {
-            const accountID = verifyRefreshToken(refreshToken).accountID;
+            console.log('(Service) RT:')
+            console.log(refreshToken)
+            console.log('')
+            
+            // 1 - Verify refresh token signature
+            const payload = verifyRefreshToken(refreshToken);
+            const accountID = payload.accountID;
+            
+            console.log(payload)
+            console.log('')
 
+            // 2 - Check token existence in database
             const accountTokens = await RefreshTokenService.accountTokens(accountID);
 
             const tokenRecord = await RefreshTokenService.compareHashedTokens({
@@ -169,18 +179,20 @@ class AuthService {
                 refreshToken: refreshToken,
             });
 
-            if(!tokenRecord) 
-            throw new Error('TOKEN_NOT_MATCH');
+            if (!tokenRecord)
+                throw new Error('TOKEN_NOT_MATCH');
 
-            if(new Date(tokenRecord.expires_at) < new Date())
-            throw new Error("TOKEN_EXPIRED");
+            // 3 - Check expiration
+            if (new Date(tokenRecord.expires_at) < new Date())
+                throw new Error('TOKEN_EXPIRED');
 
-            // Get account data to ensure the role has not changed.
+            // 4 - Fetch fresh account data
             const account = await AccountService.getByID({ account_id: accountID });
-            if (!account) {
-                throw new Error("ACCOUNT_NOT_FOUND");
-            }
+            if (!account)
+                throw new Error('ACCOUNT_NOT_FOUND');
 
+            
+            // 5 - Return Access Token
             return generateAccessToken(
                 buildATPayload({
                     accountID:   account.account_id,
@@ -192,6 +204,44 @@ class AuthService {
             throw this.#logger.log(this.refreshAccessToken.name, error);
         }
     }
+    // static async refreshAccessToken({ refreshToken }) {
+    //     try {
+    //         const accountID = verifyRefreshToken(refreshToken).accountID;
+
+    //         const accountTokens = await RefreshTokenService.accountTokens(accountID);
+
+    //         console.log('(Auth Service) account id: ' + accountID);
+    //         console.log('(Auth Service) Tokens: ');
+    //         console.log(accountTokens);
+
+    //         const tokenRecord = await RefreshTokenService.compareHashedTokens({
+    //             hashedRefreshTokens: accountTokens,
+    //             refreshToken: refreshToken,
+    //         });
+
+    //         if(!tokenRecord) 
+    //         throw new Error('TOKEN_NOT_MATCH');
+
+    //         if(new Date(tokenRecord.expires_at) < new Date())
+    //         throw new Error("TOKEN_EXPIRED");
+
+    //         // Get account data to ensure the role has not changed.
+    //         const account = await AccountService.getByID({ account_id: accountID });
+    //         if (!account) {
+    //             throw new Error("ACCOUNT_NOT_FOUND");
+    //         }
+
+    //         return generateAccessToken(
+    //             buildATPayload({
+    //                 accountID:   account.account_id,
+    //                 accountRole: account.account_role
+    //             }),
+    //         )
+
+    //     } catch (error) {
+    //         throw this.#logger.log(this.refreshAccessToken.name, error);
+    //     }
+    // }
 
     /**
      * Initiates a password reset process by generating a reset token and sending it via email.
@@ -289,6 +339,9 @@ class AuthService {
             const payload = verifyRefreshToken(refreshToken);
             const accountID = payload.accountID;
 
+            console.log('(me Service) payload');
+            console.log(payload);
+
             // 2 - Check token existence in database
             const accountTokens = await RefreshTokenService.accountTokens(accountID);
 
@@ -309,6 +362,13 @@ class AuthService {
             if (!account)
                 throw new Error('ACCOUNT_NOT_FOUND');
 
+            const accessToken = generateAccessToken(
+                buildATPayload({
+                    accountID:   account.account_id,
+                    accountRole: account.account_role
+                }),
+            );
+
             // 5 - Return safe account data
             return {
                 account_id:         account.account_id,
@@ -319,6 +379,7 @@ class AuthService {
                 profile_image_id:   account.profile_image_id,
                 created_at:         account.created_at,
                 updated_at:         account.updated_at,
+                accessToken:        accessToken.token
             };
 
         } catch (error) {

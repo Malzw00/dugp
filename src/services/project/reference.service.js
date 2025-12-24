@@ -50,12 +50,12 @@ class ReferenceService {
      * Retrieve a paginated list of references.
      *
      * @param {Object} params
-     * @param {number} [params.offset=0] - Number of rows to skip.
-     * @param {number} [params.limit=10] - Maximum number of rows to return.
+     * @param {number} [params.offset] - Number of rows to skip.
+     * @param {number} [params.limit] - Maximum number of rows to return.
      * @returns {Promise<Object[]>} List of reference instances.
      * @throws {AppError} Throws if fetching fails.
      */
-    static async getReferences({ offset=0, limit=10 }) {
+    static async getReferences({ offset, limit }) {
         try {
             const references = await models.Reference.findAll({
                 offset,
@@ -82,9 +82,9 @@ class ReferenceService {
     static async update({ reference_id, title, link, author }) {
         try {
             const values = {};
-            if(title)   values.title  = title;
-            if(link)    values.link   = link;
-            if(author)  values.author = author;
+            if(title)   values.reference_title  = title;
+            if(link)    values.reference_link   = link;
+            if(author)  values.reference_author = author;
 
             const [affectedRows] = await models.Reference.update(values, { where: { reference_id } });
             return affectedRows;

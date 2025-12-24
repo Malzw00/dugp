@@ -119,4 +119,20 @@ router.delete(
     controller.removeDepartment
 );
 
+/**
+ * @route UPDATE /collages/:collageId/departments/:departmentId
+ * @description UPDATE a department from a collage.
+ * @access ahp (admin with permission)
+ * @param {number} departmentId - Department ID.
+ * @body {number} collageId - Collage ID.
+ * @body {number} name
+ */
+router.put(
+    '/:collageId/departments/:departmentId',
+    authenticate,
+    requireRole('admin'),
+    requirePermission('collages'), 
+    controller.updateDepartment
+);
+
 module.exports = router;

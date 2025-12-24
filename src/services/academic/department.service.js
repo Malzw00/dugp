@@ -77,9 +77,6 @@ class DepartmentService {
                 where: { department_id },
             });
 
-            if (deletedRows === 0)
-                throw AppError.IDNotExistsError();
-
             return deletedRows;
 
         } catch (error) {
@@ -104,13 +101,28 @@ class DepartmentService {
                 { where: { department_id } },
             );
 
-            if (affectedRows === 0)
-                throw AppError.IDNotExistsError();
-
             return affectedRows;
 
         } catch (error) {
             throw this.#logger.log(this.updateName.name, error);
+        }
+    }
+    
+    static async update(department_id, { collage_id, department_name }) {
+        try {
+            const updates = {};
+            if(collage_id) updates.collage_id = collage_id
+            if(department_name) updates.department_name = department_name
+
+            const [affectedRows] = await models.Department.update(
+                updates,
+                { where: { department_id } },
+            );
+
+            return affectedRows;
+
+        } catch (error) {
+            throw this.#logger.log(this.update.name, error);
         }
     }
 

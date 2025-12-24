@@ -264,6 +264,9 @@ const authController = {
      * @returns {Promise<void>} Sends a JSON response with a new access token.
      */
     async refresh(req, res) {
+        console.log('===============================')
+        console.log('auth/refresh');
+        console.log('===============================')
         try {
             // Read refresh token from cookies directly
             const refreshToken = req.cookies?.refresh_token;
@@ -275,7 +278,21 @@ const authController = {
                 });
             }
 
-            const newAccessToken = await AuthService.refreshAccessToken({ refreshToken });
+            console.log('Contorller RT:')
+            console.log(refreshToken)
+            console.log('')
+
+            const account = await AuthService.me({ refreshToken });
+
+            console.log('(Controller Refresh) account:')
+            console.log(account)
+
+            const newAccessToken = generateAccessToken(
+                buildATPayload({
+                    accountID:   account.account_id,
+                    accountRole: account.account_role
+                }),
+            )
 
             if (newAccessToken) {
                 return res.status(200).json({
@@ -314,12 +331,12 @@ const authController = {
      * @returns {Promise<void>} Sends a JSON response with the authenticated account data.
      */
     async me(req, res) {
+        console.log('===============================')
+        console.log('auth/me');
+        console.log('===============================')
         try {
             // Read refresh token from cookie
             const refreshToken = req.cookies?.refresh_token;
-
-            console.log(req.cookies);
-            console.log(refreshToken);
 
             if (!refreshToken) {
                 return res.status(401).json({
@@ -330,6 +347,9 @@ const authController = {
 
             // Validate session and get account data
             const account = await AuthService.me({ refreshToken });
+
+            console.log('(me Controller) account: ')
+            console.log(account)
 
             return res.status(200).json({
                 success: true,

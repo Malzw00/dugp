@@ -12,6 +12,8 @@ function authenticate(req, res, next) {
     try {
         const authHeader = req.headers["authorization"];
 
+        console.log(authHeader)
+
         // Check Bearer token format
         if (!authHeader || !authHeader.startsWith("Bearer ")) {
             return res.status(401).json({
