@@ -25,13 +25,14 @@ class SupervisorService {
      * @returns {Promise<Object>} The created supervisor instance.
      * @throws {AppError} If creation fails.
      */
-    static async create({ name, father_name, grandfather_name, family_name, email, title, department_id }) {
+    static async create({ name, father_name, grandfather_name, family_name, full_name, email, title, department_id }) {
         try {
             const created = await models.Supervisor.create({
                 supervisor_name: name,
                 supervisor_father_name: father_name,
                 supervisor_grandfather_name: grandfather_name,
                 supervisor_family_name: family_name,
+                supervisor_full_name: full_name,
                 supervisor_title: title,
                 supervisor_email: email,
                 department_id: department_id

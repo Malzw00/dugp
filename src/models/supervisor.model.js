@@ -89,7 +89,7 @@ function SupervisorModel(sequelize) {
              * Email
              * @type {string}
              */
-            supervisor_email: { type: DataTypes.STRING(255), allowNull: false },
+            supervisor_email: { type: DataTypes.STRING(255), allowNull: true },
 
             /**
              * Foreign key to Department

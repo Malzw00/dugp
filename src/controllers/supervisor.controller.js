@@ -25,7 +25,7 @@ const supervisorController = {
             if (isNaN(offsetNum) || isNaN(limitNum) || offsetNum < 0 || limitNum <= 0) {
                 res.status(400).json({
                     success: false,
-                    message: 'Validation Error',
+                    message: 'Invalid pagination parameters. Offset must be a non-negative number and limit must be a positive number.',
                 });
                 return;
             }
@@ -38,7 +38,7 @@ const supervisorController = {
             if (!supervisors) {
                 res.status(404).json({
                     success: false,
-                    message: 'Supervisors Not Found',
+                    message: 'No supervisors found.',
                 });
                 return;
             }
@@ -48,10 +48,10 @@ const supervisorController = {
                 result: supervisors,
             });
         } catch (error) {
-            
+            console.error('Error fetching supervisors:', error);
             res.status(500).json({
                 success: false,
-                message: 'Server Error',
+                message: 'Failed to retrieve supervisors. Please try again later.',
             });
         }
     },
@@ -80,7 +80,7 @@ const supervisorController = {
             if (!supervisors) {
                 res.status(404).json({
                     success: false,
-                    message: 'No Result',
+                    message: 'No supervisors match the search criteria.',
                 });
                 return;
             }
@@ -90,10 +90,10 @@ const supervisorController = {
                 result: supervisors,
             });
         } catch (error) {
-            
+            console.error('Error searching supervisors:', error);
             res.status(500).json({
                 success: false,
-                message: 'Server Error',
+                message: 'Search operation failed. Please try again later.',
             });
         }
     },
@@ -113,7 +113,7 @@ const supervisorController = {
             const supervisor = await SupervisorService.get({ supervisor_id: supervisorId });
 
             if (!supervisor) {
-                res.status(400).json({ success: false, message: '' });
+                res.status(404).json({ success: false, message: 'Supervisor not found.' });
                 return;
             }
 
@@ -122,7 +122,8 @@ const supervisorController = {
                 result: supervisor,
             });
         } catch (error) {
-            res.status(500).json({ success: false, message: '' });
+            console.error('Error fetching supervisor:', error);
+            res.status(500).json({ success: false, message: 'Failed to retrieve supervisor details.' });
         }
     },
 
@@ -149,7 +150,7 @@ const supervisorController = {
             });
 
             if (!projects) {
-                res.status(400).json({ success: false, message: '' });
+                res.status(404).json({ success: false, message: 'No projects found for this supervisor.' });
                 return;
             }
 
@@ -158,7 +159,8 @@ const supervisorController = {
                 result: projects,
             });
         } catch (error) {
-            res.status(500).json({ success: false, message: '' });
+            console.error('Error fetching supervisor projects:', error);
+            res.status(500).json({ success: false, message: 'Failed to retrieve supervisor projects.' });
         }
     },
 
@@ -172,7 +174,7 @@ const supervisorController = {
      */
     async create(req, res) {
         try {
-            const { name, fatherName, grandFatherName, familyName, title, email, departmentId } = req.body;
+            const { name, fatherName, grandFatherName, familyName, title, email, departmentId, fullName } = req.body;
 
             const departmentIdNum = parseInt(departmentId);
 
@@ -184,19 +186,22 @@ const supervisorController = {
                 title,
                 email,
                 department_id: departmentIdNum,
+                full_name: fullName,
             });
 
             if (!supervisor) {
-                res.status(400).json({ success: false, message: '' });
+                res.status(400).json({ success: false, message: 'Failed to create supervisor. Please check your data.' });
                 return;
             }
 
-            res.status(200).json({
+            res.status(201).json({
                 success: true,
                 result: supervisor,
+                message: 'Supervisor created successfully.'
             });
         } catch (error) {
-            res.status(500).json({ success: false, message: '' });
+            console.error('Error creating supervisor:', error);
+            res.status(500).json({ success: false, message: 'Failed to create supervisor.' });
         }
     },
 
@@ -216,13 +221,17 @@ const supervisorController = {
             const deleted = await SupervisorService.delete({ supervisor_id: supervisorIdNum });
 
             if (!deleted) {
-                res.status(400).json({ success: false, message: '' });
+                res.status(404).json({ success: false, message: 'Supervisor not found or already deleted.' });
                 return;
             }
 
-            res.status(200).json({ success: true });
+            res.status(200).json({ 
+                success: true,
+                message: 'Supervisor deleted successfully.' 
+            });
         } catch (error) {
-            res.status(500).json({ success: false, message: '' });
+            console.error('Error deleting supervisor:', error);
+            res.status(500).json({ success: false, message: 'Failed to delete supervisor.' });
         }
     },
 
@@ -242,12 +251,11 @@ const supervisorController = {
             } = req.body;
             const { supervisorId } = req.params;
 
-            const supervisorIdNum = parseInt(supervisorId);
             const imageIdNum = parseInt(imageId);
             const departmentIdNum = parseInt(departmentId);
 
             const updated = await SupervisorService.update({
-                supervisor_id: supervisorIdNum,
+                supervisor_id: supervisorId,
                 name,
                 father_name: fatherName,
                 grandfather_name: grandFatherName,
@@ -260,13 +268,17 @@ const supervisorController = {
             });
 
             if (!updated) {
-                res.status(400).json({ success: false, message: '' });
+                res.status(404).json({ success: false, message: 'Supervisor not found or update failed.' });
                 return;
             }
 
-            res.status(200).json({ success: true });
+            res.status(200).json({ 
+                success: true,
+                message: 'Supervisor updated successfully.' 
+            });
         } catch (error) {
-            res.status(500).json({ success: false, message: '' });
+            console.error('Error updating supervisor:', error);
+            res.status(500).json({ success: false, message: 'Failed to update supervisor.' });
         }
     },
 
@@ -286,14 +298,19 @@ const supervisorController = {
             const supervisor = await SupervisorService.get({ supervisor_id: supervisorIdNum });
 
             if (!supervisor) {
-                res.status(400).json({ success: false, message: '' });
+                res.status(404).json({ success: false, message: 'Supervisor not found.' });
+                return;
+            }
+
+            if (!supervisor.account_id) {
+                res.status(404).json({ success: false, message: 'No account associated with this supervisor.' });
                 return;
             }
 
             const account = await AccountService.getByID({ account_id: supervisor.account_id });
 
             if (!account) {
-                res.status(400).json({ success: false, message: '' });
+                res.status(404).json({ success: false, message: 'Associated account not found.' });
                 return;
             }
 
@@ -302,7 +319,8 @@ const supervisorController = {
                 result: account,
             });
         } catch (error) {
-            res.status(500).json({ success: false, message: '' });
+            console.error('Error fetching supervisor account:', error);
+            res.status(500).json({ success: false, message: 'Failed to retrieve supervisor account.' });
         }
     },
 
@@ -327,13 +345,17 @@ const supervisorController = {
             });
 
             if (!updated) {
-                res.status(400).json({ success: false, message: '' });
+                res.status(400).json({ success: false, message: 'Failed to associate account with supervisor.' });
                 return;
             }
 
-            res.status(200).json({ success: true });
+            res.status(200).json({ 
+                success: true,
+                message: 'Account associated successfully.' 
+            });
         } catch (error) {
-            res.status(500).json({ success: false, message: '' });
+            console.error('Error adding account to supervisor:', error);
+            res.status(500).json({ success: false, message: 'Failed to associate account.' });
         }
     },
 
@@ -356,13 +378,17 @@ const supervisorController = {
             });
 
             if (!updated) {
-                res.status(400).json({ success: false, message: '' });
+                res.status(400).json({ success: false, message: 'Failed to remove account association.' });
                 return;
             }
 
-            res.status(200).json({ success: true });
+            res.status(200).json({ 
+                success: true,
+                message: 'Account association removed successfully.' 
+            });
         } catch (error) {
-            res.status(500).json({ success: false, message: '' });
+            console.error('Error removing account from supervisor:', error);
+            res.status(500).json({ success: false, message: 'Failed to remove account association.' });
         }
     },
 };

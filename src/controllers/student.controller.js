@@ -155,7 +155,7 @@ const studentController = {
             const { studentId } = req.params;
             const {
                 name, fatherName, grandFatherName,
-                familyName, departmentId, imageId, accountId
+                familyName, departmentId, imageId, accountId, email, fullName
             } = req.body;
 
             const departmentIdNum = parseInt(departmentId);
@@ -164,12 +164,14 @@ const studentController = {
             const updated = await StudentService.update({
                 student_id: studentId,
                 name,
+                email,
                 father_name: fatherName,
                 grand_father_name: grandFatherName,
                 family_name: familyName,
                 department_id: departmentIdNum,
                 account_id: accountId,
                 image_id: imageIdNum,
+                full_name: fullName,
             });
 
             if (!updated) {

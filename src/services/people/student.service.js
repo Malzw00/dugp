@@ -117,8 +117,8 @@ class StudentService {
      * @throws {Error} If database operation fails
      */
     static async update ({ 
-        name, father_name, grand_father_name, 
-        family_name, account_id, department_id, image_id, student_id 
+        name, father_name, grand_father_name, fullName,
+        family_name, account_id, department_id, image_id, student_id, email
     }) {
         try {
 
@@ -130,6 +130,8 @@ class StudentService {
             if(family_name) values.student_family_name = family_name;
             if(account_id) values.account_id = account_id;
             if(department_id) values.department_id = department_id;
+            if(email) values.student_email = email;
+            if(fullName) values.student_full_name = fullName;
             if(image_id) values.image_id = image_id;
 
             const [affectedRows] = await models.Student.update(values, { 
