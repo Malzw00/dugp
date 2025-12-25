@@ -661,41 +661,11 @@ class ProjectService {
      * @throws {Error} Throws an error if deletion fails
      */
     static async delete({ project_id }) {
-        const _transaction = await sequelize.transaction();
         try {
-            const project = await models.Project.findByPk(project_id, { 
-                include: [
-                    {
-                        model: models.File,
-                        as: 'References',
-                        attributes: ['file_id'],
-                        through: { attributes: [] },
-                    }
-                ],
-                transaction: _transaction 
-            });
-
-            if (!project) {
-                await _transaction.rollback();
-                return { isDeleted: false, deletedFiles: 0 };
-            }
-            
-            const fileIds = [
-                project.book_id, 
-                project.presentation_id,
-                ...project.References.map(ref => ref.file_id),
-            ].filter(Boolean);
-
-            const deletedFiles = await FileService.bulkDeleteFiles(fileIds, _transaction);
-
-            await project.destroy({ transaction: _transaction });
-
-            await _transaction.commit();
-
-            return { isDeleted: true, deletedFiles };
+            await models.Project.destroy({ where: { project_id } });
+            return true;
 
         } catch (error) {
-            await _transaction.rollback();
             throw this.#logger.log(this.delete.name, error);
         }
     }

@@ -216,9 +216,8 @@ const supervisorController = {
     async delete(req, res) {
         try {
             const { supervisorId } = req.params;
-            const supervisorIdNum = parseInt(supervisorId);
 
-            const deleted = await SupervisorService.delete({ supervisor_id: supervisorIdNum });
+            const deleted = await SupervisorService.delete({ supervisor_id: supervisorId, });
 
             if (!deleted) {
                 res.status(404).json({ success: false, message: 'Supervisor not found or already deleted.' });

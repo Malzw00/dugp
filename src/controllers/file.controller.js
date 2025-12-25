@@ -19,12 +19,22 @@ const fileController = {
         try {
             const { limit, offset } = req.query;
 
-            const limitNum = parseInt(limit);
-            const offsetNum = parseInt(offset);
+            const limitNum = parseInt(limit) || null;
+            const offsetNum = parseInt(offset) || null;
 
             const files = await FileService.getAll({ 
                 offset: offsetNum,   
                 limit: limitNum,
+                attributes: [
+                    'file_id',
+                    'mime_type',
+                    'size',
+                    'category',
+                    'updated_at',
+                    'updated_at',
+                    'original_name',
+                    'stored_name',
+                ]
             });
 
             if (!files) {

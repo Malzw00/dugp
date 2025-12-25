@@ -136,7 +136,6 @@ const projectController = {
             const { title, description, date, semester, departmentId, supervisorId } = req.body;
 
             const departmentIdNum = parseInt(departmentId);
-            const supervisorIdNum = parseInt(supervisorId);
 
             const project = await ProjectService.create({
                 title,
@@ -144,7 +143,7 @@ const projectController = {
                 date,
                 semester,
                 department_id: departmentIdNum,
-                supervisor_id: supervisorIdNum,
+                supervisor_id: supervisorId,
             });
 
             res.status(201).json({
