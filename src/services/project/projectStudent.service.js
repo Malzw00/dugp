@@ -77,24 +77,29 @@ class ProjectStudentService {
          */
         static async getStudents({ project_id }) {
             try {
-                const students = await models.ProjectStudent.findAll({
+                const projectStudents = await models.ProjectStudent.findAll({
                     where: { project_id },
                     include: [
                         { 
                             model: models.Student, 
-                            attributes: ['student_id', 'student_full_name'],
-                            include: [
-                                {
-                                    model: models.Image,
-                                    attributes: ['image_path']
-                                }
+                            as: 'Student',
+                            attributes: [
+                                'student_id', 
+                                'student_name', 
+                                'student_father_name',
+                                'student_grandfather_name',
+                                'student_family_name',
+                                'student_full_name',
                             ]
                         }
                     ],
-                    order: [['student_id', 'ASC']]
+                    order: [['created_at', 'DESC']]
                 });
 
-                return students.map(ps => ps.Student || null);
+                return projectStudents
+                    .map(ps => ps.Student ? ps.Student.get({ plain: true }) : null)
+                    .filter(student => student !== null);
+
             } catch (error) {
                 throw ProjectStudentService.#logger.log(this.getStudents.name, error);
             }

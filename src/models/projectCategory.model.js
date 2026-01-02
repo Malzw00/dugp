@@ -14,7 +14,15 @@ class ProjectCategory extends Model {
      * @param {object} models - All sequelize models.
      */
     static associate(models) {
-        // Associations are handled via belongsToMany in Project and Category
+        ProjectCategory.belongsTo(models.Project, {
+            foreignKey: 'project_id',
+            onDelete: 'CASCADE'
+        });
+        
+        ProjectCategory.belongsTo(models.Category, {
+            foreignKey: 'category_id',
+            onDelete: 'CASCADE'
+        });    
     }
 }
 

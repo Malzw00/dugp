@@ -39,7 +39,8 @@ const projectKeywordController = {
      */
     async getAll(req, res) {
         try {
-            const { projectId } = req.params;
+            const { projectId } = req.query;
+
             const projectIdNum = parseInt(projectId);
 
             const projectKeywords = await ProjectKeywordService.Project.getKeywords({
@@ -48,7 +49,7 @@ const projectKeywordController = {
 
             res.status(200).json({
                 success: true,
-                result: projectKeywords,
+                result: projectKeywords.filter(pk => pk !== null),
             });
         } catch (error) {
             res.status(500).json({
@@ -91,8 +92,7 @@ const projectKeywordController = {
      */
     async create(req, res) {
         try {
-            const { projectId } = req.params;
-            const { keywords } = req.body;
+            const { keywords, projectId } = req.body;
             
             const projectIdNum = parseInt(projectId);
 
@@ -147,7 +147,7 @@ const projectKeywordController = {
      */
     async delete(req, res) {
         try {
-            const { projectId, keywordId } = req.params;
+            const { projectId, keywordId } = req.query;
             const projectIdNum = parseInt(projectId);
             const keywordIdNum = parseInt(keywordId);
 

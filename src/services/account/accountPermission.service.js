@@ -14,16 +14,17 @@ class AccountPermissionService {
      * Links an account with a permission to grant access rights.
      * 
      * @param {Object} params - Permission assignment parameters
-     * @param {string|number} params.permissionId - The permission identifier to assign
+     * @param {string|number} params.permission_id - The permission identifier to assign
      * @param {string|number} params.account_id - The account ID to assign the permission to
      * @returns {Promise<Object>} The created AccountPermission record
      * @throws {Error} If database operation fails or validation errors occur
      */
-    static async create({ permissionId, account_id }) {
+    static async create({ permission_id, account_id }) {
         try {
+
             const created = await models.AccountPermission.create({ 
                 account_id: account_id, 
-                permission_id: permissionId,
+                permission_id: permission_id,
             });
 
             return created;

@@ -19,7 +19,8 @@ class Project extends Model {
         Project.belongsToMany(models.Category, { 
             through: models.ProjectCategory, 
             foreignKey: 'project_id', 
-            onDelete: 'CASCADE' 
+            onDelete: 'CASCADE' ,
+            as: 'Categories',
         });
 
         // Many-to-Many: Project ↔ Keywords
@@ -85,6 +86,14 @@ class Project extends Model {
             as: 'Likes',
         });
 
+        // في Project model، أضف:
+        Project.belongsToMany(models.Account, { 
+            through: models.ProjectLike, 
+            foreignKey: 'project_id',
+            as: 'LikedByAccounts',
+            timestamps: false
+        });
+
         // One-to-Many: Project ↔ Ratings
         Project.hasMany(models.Rating, { 
             foreignKey: 'project_id', 
@@ -101,6 +110,11 @@ class Project extends Model {
         // Project belongs to Department
         Project.belongsTo(models.Department, { 
             foreignKey: 'department_id',
+        });
+
+        Project.hasMany(models.ProjectStudent, {
+            foreignKey: 'project_id',
+            as: 'StudentAssociations'
         });
     }
 }

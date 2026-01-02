@@ -18,11 +18,16 @@ const studentController = {
      */
     async getAll(req, res) {
         try {
-            const { offset, limit } = req.query;
+            const { offset, limit, departmentId } = req.query;
             const offsetNum = parseInt(offset) || 0;
-            const limitNum  = parseInt(limit) || 20;
+            const limitNum = parseInt(limit) || 20;
+            const departmentIdNum = parseInt(departmentId) || null;
 
-            const students = await StudentService.getAll({ offset: offsetNum, limit: limitNum });
+            const students = await StudentService.getAll({ 
+                offset: offsetNum, 
+                limit: limitNum, 
+                department_id: departmentIdNum 
+            });
 
             if (!students) {
                 return res.status(400).json({ success: false, message: "No students found." });

@@ -50,10 +50,6 @@ class RefreshTokenService {
                 where: { account_id: account_id }, raw: true
             });
 
-            console.log('(RT Service) account id: ' + account_id);
-            console.log('(RT Service) Account Tokens:');
-            console.log(accountTokens);
-
             return accountTokens;
 
         } catch (error) {

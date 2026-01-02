@@ -20,11 +20,9 @@ class ProjectLikeService {
      */
     static async create({ project_id, account_id }) {
         try {
-            if (await this.hasLike({ account_id, project_id }))
-                return false;
-
-            const created = await models.ProjectLike.create({ 
-                project_id, account_id 
+            const created = await models.ProjectLike.findOrCreate({ 
+                where: { project_id, account_id },
+                defaults: { project_id, account_id },
             });
 
             return created;
@@ -87,15 +85,17 @@ class ProjectLikeService {
      */
     static async toggle({ project_id, account_id }) {
         try {
-            const hasLike = await this.hasLike({ account_id, project_id });
-            return { 
-                result: (
-                    hasLike
-                        ? await this.delete({ account_id, project_id })
-                        : await this.create({ project_id, account_id })
-                ),
-                hasLike: !hasLike,
-            };
+            const existingLike = await models.ProjectLike.findOne({
+                where: { account_id, project_id }
+            });
+
+            if (existingLike) {
+                await existingLike.destroy();
+                return { result: 1, hasLike: false };
+            } else {
+                const newLike = await models.ProjectLike.create({ account_id, project_id });
+                return { result: newLike, hasLike: true };
+            }
         } catch (error) {
             throw this.#logger.log(this.toggle.name, error);
         }
@@ -135,11 +135,9 @@ class ProjectLikeService {
                 where: { project_id: project_id },
                 include: [{
                     model: models.Account,
-                    attributes: [ 'account_id', 'account_name', 'profile_image_id', ],
                     required: true,
+                    attributes: [ 'account_id', 'fst_name', 'lst_name', ]
                 }],
-                offset: offset ?? 0,
-                limit: limit ?? 20,
             });
 
             return likes;

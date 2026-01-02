@@ -256,7 +256,15 @@ class SupervisorService {
 
             const supervisors = await models.Supervisor.findAll({
                 where: whereOptions,
-                attributes: ['supervisor_id', 'supervisor_full_name', 'updated_at'],
+                attributes: [
+                    'supervisor_id', 
+                    'supervisor_full_name',
+                    'supervisor_name',
+                    'supervisor_grandfather_name',
+                    'supervisor_father_name',
+                    'supervisor_family_name',
+                    'updated_at',
+                ],
                 offset,
                 limit,
             });

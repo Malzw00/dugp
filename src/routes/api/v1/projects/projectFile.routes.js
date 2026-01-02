@@ -35,7 +35,6 @@ bookRouter.post(
     authenticate,
     requireRole('admin'),
     requirePermission('projects'),
-    upload,
     controller.setBook
 );
 
@@ -80,7 +79,6 @@ presentationRouter.post(
     authenticate,
     requireRole('admin'),
     requirePermission('projects'),
-    upload,
     controller.setPresentation
 );
 

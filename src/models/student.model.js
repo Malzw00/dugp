@@ -30,6 +30,11 @@ class Student extends Model {
             foreignKey: 'student_id', 
             onDelete: 'CASCADE'
         });
+
+        Student.hasMany(models.ProjectStudent, {
+            foreignKey: 'student_id',
+            as: 'ProjectAssociations'
+        });
     }
 }
 
@@ -74,7 +79,7 @@ function StudentModel(sequelize) {
              * Student's family name
              * @type {string}
              */
-            student_family_name: { type: DataTypes.STRING(50), allowNull: true },
+            student_family_name: { type: DataTypes.STRING(50), allowNull: false },
 
             /**
              * Full name (auto-generated before save)

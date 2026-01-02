@@ -122,16 +122,8 @@ const accountController = {
     async deleteByID(req, res) {
         try {
             const { accountId } = req.params;
-            const accountIdNum = parseInt(accountId);
 
-            if (isNaN(accountIdNum)) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Invalid accountId parameter.",
-                });
-            }
-
-            await AccountService.delete({ account_id: accountIdNum });
+            await AccountService.delete({ account_id: accountId });
 
             res.status(200).json({ success: true });
         } catch (error) {
@@ -261,7 +253,7 @@ const accountController = {
      */
     async search(req, res) {
         try {
-            const { keyword, limit, offset } = req.query;
+            const { keyword, limit, offset, role } = req.query;
             const limitNum = parseInt(limit);
             const offsetNum = parseInt(offset);
 
@@ -269,7 +261,10 @@ const accountController = {
                 keyword,
                 offset: offsetNum,
                 limit: limitNum,
+                role
             });
+
+            console.log(accounts)
 
             res.status(200).json({
                 success: true,

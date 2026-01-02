@@ -34,17 +34,11 @@ const projectCategoryController = {
      */
     async getAll(req, res) {
         try {
-            const { projectId } = req.params;
-
-            // Validate projectId
-            if (!projectId || isNaN(projectId)) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Invalid projectId.",
-                });
-            }
+            const { projectId } = req.query;
 
             const projectIdNum = parseInt(projectId);
+
+            console.log(projectIdNum)
 
             // Fetch project categories using the service layer
             const projectCategories = await ProjectCategoryService.Project.getCategories({
@@ -54,7 +48,7 @@ const projectCategoryController = {
             // Return success response
             res.status(200).json({
                 success: true,
-                result: projectCategories,
+                result: projectCategories.filter(pc => pc !== null),
             });
 
         } catch (error) {
@@ -92,35 +86,15 @@ const projectCategoryController = {
      */
     async add(req, res) {
         try {
-            const { categoryIds } = req.body;
-            const { projectId } = req.params;
+            const { projectId, categoryId } = req.body;
 
-            // Validate categoryIds
-            if (!Array.isArray(categoryIds) || categoryIds.length === 0) {
-                return res.status(400).json({
-                    success: false,
-                    message: "categoryIds must be a non-empty array.",
-                });
-            }
-
-            // Convert to integers and filter out invalid values
-            const categoryIdsNum = categoryIds
-                .map(id => parseInt(id))
-                .filter(id => !isNaN(id));
-
-            if (categoryIdsNum.length === 0) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Invalid categoryIds provided.",
-                });
-            }
-
+            const categoryIdNum = parseInt(categoryId);
             const projectIdNum = parseInt(projectId);
 
             // Call service layer
             await ProjectCategoryService.Project.addToCategories({
                 project_id: projectIdNum,
-                category_ids: categoryIdsNum,
+                category_ids: [categoryIdNum],
             });
 
             // Respond with 201 Created
@@ -159,7 +133,7 @@ const projectCategoryController = {
      */
     async remove(req, res) {
         try {
-            const { projectId, categoryId } = req.params;
+            const { projectId, categoryId } = req.query;
 
             const projectIdNum = parseInt(projectId);
             const categoryIdNum = parseInt(categoryId);

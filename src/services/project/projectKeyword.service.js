@@ -173,14 +173,17 @@ class ProjectKeywordService {
          */
         static async getKeywords({ project_id }) {
             try {
-                const keywords = await models.ProjectKeyword.findAll({
+                const projectKeywords = await models.ProjectKeyword.findAll({
+                    where: { project_id },
                     include: [{ 
                         model: models.Keyword, 
                         attributes: [ 'keyword_id', 'keyword' ],
+                        as: 'Keyword'
                     }],
-                    where: { project_id }
                 });
-                return keywords;
+                
+                return projectKeywords.map(pk => pk.Keyword);
+
             } catch (error) {
                 throw ProjectKeywordService.#logger.log(this.getKeywords.name, error);
             }

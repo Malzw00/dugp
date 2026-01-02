@@ -25,16 +25,6 @@ const fileController = {
             const files = await FileService.getAll({ 
                 offset: offsetNum,   
                 limit: limitNum,
-                attributes: [
-                    'file_id',
-                    'mime_type',
-                    'size',
-                    'category',
-                    'updated_at',
-                    'updated_at',
-                    'original_name',
-                    'stored_name',
-                ]
             });
 
             if (!files) {
@@ -96,7 +86,7 @@ const fileController = {
         try {
             const { fileId } = req.params;
             const fileIdNum = parseInt(fileId);
-
+            
             const deleted = await FileService.deleteFile(fileIdNum);
 
             if (!deleted) {
@@ -124,31 +114,49 @@ const fileController = {
         try {
             const file = req.file;
             const { category } = req.body;
-            const { accountID } = req.user; // UUID of uploader
+            const { accountID } = req.user;
 
             if (!file) {
-                return res.status(400).json({ success: false });
+                return res.status(400).json({ 
+                    success: false, 
+                    message: "No file uploaded" 
+                });
+            }
+
+            const allowedCategories = ['book', 'presentation', 'image'];
+            if (category && !allowedCategories.includes(category)) {
+                return res.status(400).json({ 
+                    success: false, 
+                    message: `Invalid category. Allowed: ${allowedCategories.join(', ')}` 
+                });
             }
 
             const uploaded = await FileService.uploadFile({
                 filePath: file.path,
                 originalName: file.originalname,
                 mimeType: file.mimetype,
-                category,
+                category: category || 'reference',
                 uploaderId: accountID,
             });
 
             if (!uploaded) {
-                return res.status(400).json({ success: false });
+                return res.status(400).json({ 
+                    success: false, 
+                    message: "Failed to upload file" 
+                });
             }
 
-            res.status(200).json({
+            res.status(201).json({
                 success: true,
+                message: "File uploaded successfully",
                 result: uploaded,
             });
 
-        } catch {
-            res.status(500).json({ success: false });
+        } catch (error) {
+            res.status(500).json({ 
+                success: false, 
+                message: "Internal server error" 
+            });
         }
     },
 };

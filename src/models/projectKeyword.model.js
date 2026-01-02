@@ -10,12 +10,19 @@ const { Model, DataTypes } = require("sequelize");
  * - Ensures uniqueness of each (keyword_id, project_id) pair.
  */
 class ProjectKeyword extends Model {
-    /**
-     * Define associations for the ProjectKeyword model.
-     * @param {object} models - All sequelize models.
-     */
+    
     static associate(models) {
-        // Associations are handled via belongsToMany in Project and Keyword
+        ProjectKeyword.belongsTo(models.Project, {
+            foreignKey: 'project_id',
+            as: 'Project',
+            onDelete: 'CASCADE'
+        });
+        
+        ProjectKeyword.belongsTo(models.Keyword, {
+            foreignKey: 'keyword_id',
+            as: 'Keyword',
+            onDelete: 'CASCADE'
+        });
     }
 }
 
@@ -46,9 +53,6 @@ function ProjectKeywordModel(sequelize) {
             tableName: "project_keywords_tb",
             timestamps: true,
             underscored: true,
-            indexes: [
-                { fields: ['keyword_id', 'project_id'], unique: 'unique_keywordid_projectid' }
-            ]
         }
     );
 

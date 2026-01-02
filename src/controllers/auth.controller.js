@@ -331,9 +331,6 @@ const authController = {
      * @returns {Promise<void>} Sends a JSON response with the authenticated account data.
      */
     async me(req, res) {
-        console.log('===============================')
-        console.log('auth/me');
-        console.log('===============================')
         try {
             // Read refresh token from cookie
             const refreshToken = req.cookies?.refresh_token;
@@ -347,9 +344,6 @@ const authController = {
 
             // Validate session and get account data
             const account = await AuthService.me({ refreshToken });
-
-            console.log('(me Controller) account: ')
-            console.log(account)
 
             return res.status(200).json({
                 success: true,

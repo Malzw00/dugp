@@ -21,16 +21,37 @@ class FileService {
      */
     static async uploadFile({ filePath, originalName, mimeType, category, uploaderId }) {
         try {
-            const buffer = fs.readFileSync(filePath);
-            const fileHash = crypto.createHash("sha256").update(buffer).digest("hex");
 
-            const existing = await models.File.findOne({ where: { file_hash: fileHash } });
-            if (existing) return { message: "File already exists", file: existing };
+            //  حساب hash بدون تحميل الملف كاملًا في الذاكرة
+            const hash = crypto.createHash("sha256");
+            const stream = fs.createReadStream(filePath);
 
+            await new Promise((resolve, reject) => {
+                stream.on("data", chunk => hash.update(chunk));
+                stream.on("end", resolve);
+                stream.on("error", reject);
+            });
+
+            const fileHash = hash.digest("hex");
+
+            //  منع تكرار الملفات
+            const existing = await models.File.findOne({
+                where: { file_hash: fileHash }
+            });
+
+            if (existing) {
+                return { message: "File already exists", file: existing };
+            }
+
+            //  معلومات الملف
             const stats = fs.statSync(filePath);
             const storedName = path.basename(filePath);
-            const relativePath = path.dirname(filePath).replace(process.cwd(), "");
+            const relativePath = path.relative(
+                process.cwd(),
+                path.dirname(filePath)
+            );
 
+            //  حفظ البيانات في DB
             return await models.File.create({
                 original_name: originalName,
                 stored_name: storedName,
@@ -41,10 +62,12 @@ class FileService {
                 file_hash: fileHash,
                 uploader_id: uploaderId,
             });
+
         } catch (error) {
             throw this.#logger.log(this.uploadFile.name, error);
         }
     }
+
 
     /**
      * Get file by ID
@@ -68,7 +91,15 @@ class FileService {
      */
     static async getAll({ limit, offset }) {
         try {
-            return await models.File.findAll({ limit, offset });
+            return await models.File.findAll({ limit, offset, attributes: [
+                'file_id',
+                'mime_type',
+                'size',
+                'category',
+                'updated_at',
+                'original_name',
+                'stored_name',
+            ]});
         } catch (error) {
             throw this.#logger.log(this.getAll.name, error);
         }
@@ -79,9 +110,7 @@ class FileService {
      * @param {number} fileId 
      * @returns {Promise<boolean|null>} Returns true if deleted, null if file not found
      */
-    static async deleteFile(fileId, { transaction }) {
-        const ownTransaction = !transaction;
-        const _transaction   = transaction?? await sequelize.transaction();
+    static async deleteFile(fileId) {
         try {
             const file = await models.File.findByPk(fileId);
             if (!file) return null;
@@ -89,9 +118,8 @@ class FileService {
             const fullPath = path.join(process.cwd(), file.path, file.stored_name);
             if (fs.existsSync(fullPath)) fs.unlinkSync(fullPath);
 
-            await file.destroy({ transaction: _transaction });
 
-            if(ownTransaction) await _transaction.commit();
+            await file.destroy();
 
             return true;
 

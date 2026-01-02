@@ -130,26 +130,27 @@ class ProjectCategoryService {
     static Project = class {
 
         /**
-         * Get categories associated with a project.
-         * @static
-         * @param {Object} params
-         * @param {number} params.project_id - The project ID.
-         * @returns {Promise<Array<{category_id: number, category_name: string}>>}  
-         *   Array of category objects.
-         * @throws {AppError} If fetching fails.
+         * Get categories for a specific project
+         * @param {number} projectId - Project ID
+         * @returns {Promise<Array>} Array of categories
          */
         static async getCategories({ project_id }) {
             try {
-                const categories = await models.ProjectCategory.findAll({
-                    include: [{
-                        model: models.Category,
-                        attributes: ['category_id', 'category_name']
-                    }],
-                    where: { project_id },
+                const projectCategories = await models.ProjectCategory.findAll({
+                    where: { project_id, },
+                    include: [
+                        {
+                            model: models.Category,
+                            attributes: ['category_id', 'category_name']
+                        }
+                    ]
                 });
-                return categories;
+
+                return projectCategories.map(pc => pc.Category);
+                
             } catch (error) {
-                throw ProjectCategoryService.#logger.log(this.getCategories.name, error);
+                console.error('Error fetching project categories:', error);
+                throw error;
             }
         }
 
@@ -166,11 +167,8 @@ class ProjectCategoryService {
         static async addToCategories({ project_id, category_ids = [] }) {
             if (!category_ids.length) return null;
             try {
-                const categoryProjects = category_ids.map(category_id => {
-                    return { project_id, category_id };
-                });
-                const created = await models.ProjectCategory.bulkCreate(
-                    categoryProjects,
+                const created = await models.ProjectCategory.create(
+                    { project_id, category_id: category_ids[0] },
                     { ignoreDuplicates: true }
                 );
                 return created?.length;

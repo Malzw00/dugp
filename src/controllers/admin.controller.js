@@ -168,11 +168,9 @@ const adminController = {
             const { accountId } = req.params;
             const { permissionId } = req.body;
             
-            const permissionIdNum = parseInt(permissionId);
-            
             await AccountPermissionService.create({
                 account_id: accountId,
-                permission_id: permissionIdNum,
+                permission_id: permissionId,
             });
             
             res.status(200).json({

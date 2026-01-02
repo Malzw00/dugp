@@ -14,7 +14,17 @@ class ProjectStudent extends Model {
      * @param {object} models - All sequelize models.
      */
     static associate(models) {
-        // Associations can be defined here if needed
+        // العلاقة مع Student
+        ProjectStudent.belongsTo(models.Student, {
+            foreignKey: 'student_id',
+            as: 'Student'
+        });
+
+        // العلاقة مع Project
+        ProjectStudent.belongsTo(models.Project, {
+            foreignKey: 'project_id',
+            as: 'Project'
+        });
     }
 }
 

@@ -297,7 +297,15 @@ class StudentService {
 
             const students = await models.Student.findAll({
                 where: whereOptions,
-                attributes: [ 'student_id', 'student_full_name', 'created_at' ]
+                attributes: [ 
+                    'student_id', 
+                    'student_full_name', 
+                    'student_name',
+                    'student_grandfather_name',
+                    'student_father_name',
+                    'student_family_name',
+                    'created_at',
+                ]
             });
 
             return students;
@@ -355,10 +363,13 @@ class StudentService {
      * @returns {Promise<Object[]|null>} Student record if found, null otherwise
      * @throws {Error} If database operation fails
      */
-    static async getAll ({ offset, limit }) {
+    static async getAll ({ offset, limit, department_id }) {
         try {
+            const where = {}
+            if(department_id) where.department_id = department_id;
+
             const students = await models.Student.findAll({ 
-                offset, limit,
+                offset, limit, where,
             });
 
             return students;

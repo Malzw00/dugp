@@ -63,11 +63,11 @@ const projectSocialController = {
      */
     async getLikesCount(req, res) {
         try {
-            const { projectId } = req.params;
+            const { projectId } = req.query;
 
             // Retrieve likes count from service
             const likesCount = await ProjectLikeService.getProjectLikesCount({
-                project_id: projectIdNum,
+                project_id: parseInt(projectId) || null,
             });
 
             // Return the count in a success response
@@ -102,7 +102,7 @@ const projectSocialController = {
     async amILike(req, res) {
         try {
             const { user } = req;
-            const { projectId } = req.params;
+            const { projectId } = req.query;
 
             const projectIdNum = parseInt(projectId);
 
@@ -139,24 +139,26 @@ const projectSocialController = {
      * 
      * @returns {Promise<void>} Sends a JSON response with the created like record.
      */
-    async addLike(req, res) {
+    async like(req, res) {
         try {
             const { user } = req;
-            const { projectId } = req.params;
+            const { projectId } = req.body;
 
             const projectIdNum = parseInt(projectId);
 
             // Create like record (if not already exists)
-            const created = await ProjectLikeService.create({
+            const created = await ProjectLikeService.toggle({
                 project_id: projectIdNum,
                 account_id: user.accountID,
             });
 
             res.status(201).json({
                 success: true,
-                result: created,
+                result: created, // { result: affectedRows|Object, hasLike: boolean }
             });
+
         } catch (error) {
+            console.log(error)
             res.status(500).json({
                 success: false,
                 message: "Failed to add like.",
@@ -473,7 +475,7 @@ const projectSocialController = {
      */
     async getRatingAverage(req, res) {
         try {
-            const { projectId } = req.params;
+            const { projectId } = req.query;
 
             const projectIdNum = parseInt(projectId);
 
@@ -522,7 +524,7 @@ const projectSocialController = {
 
             res.status(200).json({
                 success: true,
-                result: rating,
+                result: rating.rate,
             });
         } catch (error) {
             res.status(500).json({
@@ -547,14 +549,13 @@ const projectSocialController = {
      */
     async rateProject(req, res) {
         try {
-            const { rate } = req.body;
-            const { projectId } = req.params;
+            const { projectId, rate } = req.body;
             const { user } = req;
 
             const projectIdNum = parseInt(projectId);
             const rateNum = parseInt(rate);
 
-            const created = await RatingService.create({
+            const created = await RatingService.rate({
                 project_id: projectIdNum,
                 account_id: user.accountID,
                 rate: rateNum,
@@ -587,8 +588,7 @@ const projectSocialController = {
      */
     async updateRating(req, res) {
         try {
-            const { rate } = req.body;
-            const { projectId } = req.params;
+            const { rate, projectId } = req.body;
             const { user } = req;
 
             const projectIdNum = parseInt(projectId);

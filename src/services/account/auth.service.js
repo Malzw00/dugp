@@ -339,9 +339,6 @@ class AuthService {
             const payload = verifyRefreshToken(refreshToken);
             const accountID = payload.accountID;
 
-            console.log('(me Service) payload');
-            console.log(payload);
-
             // 2 - Check token existence in database
             const accountTokens = await RefreshTokenService.accountTokens(accountID);
 

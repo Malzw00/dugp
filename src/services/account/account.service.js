@@ -114,8 +114,9 @@ class AccountService {
         try {
             const admins = await models.Account.findAll({
                 where: { account_role: 'admin' },
-                offset, limit,
+                attributes: ['account_id', 'fst_name', 'lst_name', 'account_email', 'updated_at']
             });
+            
             return admins;
         } catch (error) {
             throw this.#logger.log(this.getAdmins.name, error);
@@ -131,7 +132,10 @@ class AccountService {
      */
     static async getByEmail ({ account_email }) {
         try {
-            const account = await models.Account.findOne({ where: { account_email: account_email } });
+            const account = await models.Account.findOne({ 
+                where: { account_email: account_email },
+                // attributes: ['account_id', 'fst_name', 'lst_name', 'account_email', 'updated_at']
+            });
             return account;
         } catch (error) {
             throw this.#logger.log(this.getByEmail.name, error);
@@ -147,16 +151,25 @@ class AccountService {
      * @returns {Promise<Object[]>} An array of accounts that match the keyword.
      * @throws {Error} If search fails.
      */
-    static async searchByName ({ keyword, limit = 0, offset = 20 }) {
+    static async searchByName ({ keyword, limit = 0, offset = 20, role }) {
         try {
-            const accounts = await models.Account.findAll({
-                where: {
-                    account_name: {
+            const where = {
+                [Op.or]: {
+                    fst_name: {
+                    [Op.like]: `%${keyword}%`
+                    },
+                    lst_name: {
                         [Op.like]: `%${keyword}%`
                     }
                 },
-                offset,
-                limit,
+            };
+
+            if(role) where.account_role = role;
+
+            const accounts = await models.Account.findAll({
+                where,
+                attributes: ['account_id', 'fst_name', 'lst_name', 'account_email', 'updated_at'],
+                raw: true,
             });
             return accounts;
         } catch (error) {

@@ -18,11 +18,10 @@ const projectPeopleController = {
      */
     async getStudents(req, res) {
         try {
-            const { projectId } = req.params;
+            const { projectId } = req.query;
 
-            const projectIdNum = parseInt(projectId);
             const projectStudents = await ProjectStudentService.Project.getStudents({
-                project_id: projectIdNum,
+                project_id: parseInt(projectId),
             });
 
             res.status(200).json({
@@ -32,7 +31,7 @@ const projectPeopleController = {
         } catch (error) {
             res.status(500).json({
                 success: false,
-                message: "Failed to retrieve project students.",
+                message: "Failed to retrieve project students.",    
                 
             });
         }
@@ -46,12 +45,11 @@ const projectPeopleController = {
      */
     async addStudent(req, res) {
         try {
-            const { projectId } = req.params;
-            const { studentId } = req.body;
+            const { studentId, projectId } = req.body;
 
             const created = await ProjectStudentService.Project.addStudent({
                 project_id: parseInt(projectId),
-                student_id: parseInt(studentId),
+                student_id: studentId,
             });
 
             res.status(201).json({
@@ -75,19 +73,11 @@ const projectPeopleController = {
      */
     async removeStudent(req, res) {
         try {
-            const { projectId, studentId } = req.params;
-
-            // Validation
-            if (!projectId || isNaN(projectId) || !studentId || isNaN(studentId)) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Invalid projectId or studentId.",
-                });
-            }
+            const { projectId, studentId } = req.query;
 
             await ProjectStudentService.Project.removeStudent({
                 project_id: parseInt(projectId),
-                student_id: parseInt(studentId),
+                student_id: studentId,
             });
 
             res.status(200).json({
@@ -198,27 +188,12 @@ const projectPeopleController = {
      */
     async setSupervisor(req, res) {
         try {
-            const { projectId } = req.params;
-            const { supervisorId } = req.body;
-
-            // Validation
-            if (!projectId || isNaN(projectId)) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Invalid projectId.",
-                });
-            }
-
-            if (!supervisorId || isNaN(supervisorId)) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Invalid supervisorId.",
-                });
-            }
+            // const { projectId } = req.params;
+            const { supervisorId, projectId } = req.body;
 
             await ProjectService.update({
-                project_id: parseInt(projectId),
-                supervisor_id: parseInt(supervisorId),
+                project_id: parseInt(projectId) || null,
+                supervisor_id: supervisorId,
             });
 
             res.status(200).json({

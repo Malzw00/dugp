@@ -9,6 +9,7 @@ const cors = require('cors');
 const corsOptions = require('@config/corsOptions.config');
 const cookieParser = require('cookie-parser');
 const apiRoute = require('@routes/api/index');
+const requestLogger = require('./logMid.js')
 
 const app = express();
 
@@ -38,6 +39,8 @@ app.use(history());
 
 // Serve uploads
 app.use('/uploads', express.static(path.resolve('uploads')));
+
+app.use(requestLogger);
 
 // API
 app.use('/api', apiRoute);

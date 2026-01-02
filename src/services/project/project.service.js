@@ -43,7 +43,8 @@ class ProjectService {
                 project_date: date,
                 project_semester: semester,
                 department_id,
-                supervisor_id
+                supervisor_id,
+                available: true,
             });
             return created;
         } catch (error) {
@@ -156,16 +157,6 @@ class ProjectService {
                             ] 
                         },
                         { 
-                            model: models.File,
-                            attributes: [
-                                'file_id', 
-                                'original_name', 
-                                'stored_name', 
-                                'path'
-                            ],
-                            as: 'Cover', 
-                        },
-                        { 
                             model: models.Department,
                             include: { 
                                 model: models.Collage,
@@ -180,8 +171,24 @@ class ProjectService {
                         },
                         {
                             model: models.Category,
-                            attributes: ['category_id', 'collage_id', 'category_name']
-                        }
+                            attributes: ['category_id', 'collage_id', 'category_name'],
+                            as: 'Categories'
+                        },
+                        {
+                            model: models.File,
+                            attributes: ['file_id', 'stored_name', 'path'],
+                            as: 'Book',
+                        },
+                        {
+                            model: models.File,
+                            attributes: ['file_id', 'stored_name', 'path'],
+                            as: 'Presentation',
+                        },
+                        {
+                            model: models.Reference,
+                            attributes: ['reference_id', 'reference_title', 'reference_link'],
+                            as: 'References'
+                        },
                     ]
                 }
             );

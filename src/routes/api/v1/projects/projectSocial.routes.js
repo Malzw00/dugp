@@ -39,7 +39,7 @@ likesRouter.get(
 likesRouter.post(
     '/', 
     authenticate,
-    controller.addLike,
+    controller.like,
 );
 
 /**

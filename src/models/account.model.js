@@ -34,6 +34,14 @@ class Account extends Model {
         Account.hasMany(models.RefreshToken, { foreignKey: 'account_id', onDelete: 'CASCADE', hooks: true });
         Account.hasMany(models.AccountReport, { as: 'ReceivedReports', foreignKey: 'account_id', onDelete: 'CASCADE' });
 
+        // في Account model، أضف:
+        Account.belongsToMany(models.Project, { 
+            through: models.ProjectLike, 
+            foreignKey: 'account_id',
+            as: 'LikedProjects',
+            timestamps: false
+        });
+
         // One-to-One relationships
         Account.hasOne(models.Student, { foreignKey: 'account_id', onDelete: 'SET NULL' });
         Account.hasOne(models.Supervisor, { foreignKey: 'account_id', onDelete: 'SET NULL' });

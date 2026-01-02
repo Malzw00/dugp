@@ -28,14 +28,22 @@ class RatingService {
      * @returns {Promise<Object>} The created Rating instance.
      * @throws {AppError} If creation fails.
      */
-    static async create({ project_id, account_id, rate }) {
+    static async rate({ project_id, account_id, rate }) {
         try {
-            const created = await models.Rating.create({ 
-                project_id, account_id, rate 
+            const created = await models.Rating.findOrCreate({ 
+                where: { project_id, account_id },
+                defaults: { project_id, account_id, rate: rate || 1 },
+                raw: true
             });
-            return created;       
+
+            const id = created[0].rate_id;
+            
+            await models.Rating.update({ rate }, { where: { rate_id: id } });
+
+            return created;
+
         } catch (error) {
-            throw this.#logger.log(this.create.name, error);   
+            throw this.#logger.log(this.rate.name, error);   
         }
     }
 
@@ -114,7 +122,8 @@ class RatingService {
             const rating = await models.Rating.findOne({
                 where: { project_id, account_id }
             });
-            return rating;       
+            console.log(account_id)
+            return rating;
         } catch (error) {
             throw this.#logger.log(this.getAccountProjectRating.name, error);   
         }
@@ -138,17 +147,30 @@ class RatingService {
      * @throws {Error} Throws an error if the database query fails or 
      *                 an unexpected issue occurs during execution.
      */
-    static async getProjectRating(project_id) {
+    static async getProjectRating({ project_id }) {
         try {
             const projectRating = await models.Rating.findOne({
-                attributes: [
-                    [fn('AVG', col('rate')), 'rating']
-                ],
                 where: { project_id },
-                raw: true // return a plain object instead of a Sequelize instance
+                attributes: [
+                    [fn('AVG', col('rate')), 'rating'],
+                    [fn('COUNT', col('rate')), 'total_ratings']
+                ],
+                raw: true
             });
 
-            return projectRating ? projectRating.rating : null;
+            if (!projectRating || projectRating.rating === null) {
+                return {
+                    rating: 0,
+                    total_ratings: 0,
+                    has_ratings: false
+                };
+            }
+
+            return {
+                rating: parseFloat(projectRating.rating).toFixed(1),
+                total_ratings: parseInt(projectRating.total_ratings),
+                has_ratings: true
+            };
 
         } catch (error) {
             throw this.#logger.log(this.getProjectRating.name, error);

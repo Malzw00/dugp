@@ -17,8 +17,10 @@ const projectReferenceController = {
      */
     async getReferences(req, res) {
         try {
-            const { projectId } = req.params;
+            const { projectId } = req.query;
+
             const projectIdNum = parseInt(projectId);
+
             const references = await ProjectReferenceService.Project.getReferences({ 
                 project_id: projectIdNum 
             });
@@ -45,7 +47,7 @@ const projectReferenceController = {
      */
     async addReference(req, res) {
         try {
-            const { projectId, referenceId } = req.params;
+            const { projectId, referenceId } = req.body;
             const projectIdNum = parseInt(projectId);
             const referenceIdNum = parseInt(referenceId);
 
@@ -54,17 +56,9 @@ const projectReferenceController = {
                 reference_id: referenceIdNum,
             });
 
-            if (!addedRef) {
-                return res.status(404).json({
-                    success: false,
-                    message: "Failed to link reference to project.",
-                });
-            }
-
             res.status(201).json({
                 success: true,
                 message: "Reference added successfully.",
-                reference: createdRef,
             });
 
         } catch (error) {
@@ -85,7 +79,7 @@ const projectReferenceController = {
      */
     async removeReferenceByID(req, res) {
         try {
-            const { projectId, referenceId } = req.params;
+            const { projectId, referenceId } = req.query;
 
             const referenceIdNum = parseInt(referenceId);
             const projectIdNum = parseInt(projectId);
@@ -95,16 +89,10 @@ const projectReferenceController = {
                 project_id: projectIdNum,
             });
 
-            if (!deleted) {
-                return res.status(404).json({
-                    success: false,
-                    message: "Reference not found or already removed.",
-                });
-            }
-
             res.status(200).json({
-                success: true,
-                message: "Reference removed successfully.",
+                success: !!deleted,
+                message: deleted && 
+                    "Reference not found or already removed." || "Reference removed successfully.",
             });
 
             // Background check: delete reference if unused
