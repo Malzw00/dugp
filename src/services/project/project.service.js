@@ -220,6 +220,7 @@ class ProjectService {
             sortBy = 'date',
             order = 'DESC',
             semester,
+            year,
         } = options;
 
         try {
@@ -246,6 +247,17 @@ class ProjectService {
                 where.project_semester = semester;
             }
 
+            const yearInt = parseInt(year) || 0;
+            
+            if(yearInt) {
+                where.project_date = {
+                    [Op.between]: [
+                        new Date(`${year}-01-01`),
+                        new Date(`${year}-12-31`)
+                    ]
+                }
+            }
+
             // Handle category filter
             let includeCategories = [];
             if (categories && categories.length > 0) {
@@ -268,7 +280,6 @@ class ProjectService {
                 case 'date':
                     orderClause = [['project_date', order.toUpperCase()]];
                     break;
-                // بالنسبة لـ likes و rate، سنرتب بعد الحصول على النتائج
                 default:
                     orderClause = [['project_date', order.toUpperCase()]];
             }

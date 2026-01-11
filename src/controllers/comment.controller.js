@@ -74,12 +74,11 @@ const commentController = {
             const { content } = req.body;
             
             const commentIdNum = parseInt(commentId);
-            const accountIdNum = parseInt(accountID);
 
             const updated = await CommentService.update({ 
                 comment_id: commentIdNum,
                 comment_content: content,
-                account_id: accountIdNum,
+                account_id: accountID,
             });
 
             if (!updated) {

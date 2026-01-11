@@ -77,41 +77,29 @@ class CommentService {
      * @returns {Promise<Object[]>} An array of Comment instances with nested replies.
      * @throws {AppError} If fetching fails.
      */
-    static async getProjectComments({ project_id, offset = 0, limit = 10 }) {
+    static async getProjectComments({ project_id, }) {
         try {
             const comments = await models.Comment.findAll({
-                where: { project_id: project_id, parent_id: null },
+                where: { project_id },
                 attributes: [ 
                     'comment_id', 
-                    'comment_content', 
-                    'parent_id', 
+                    'comment_content',
                     'account_id',
-                    [fn("COUNT", col('CommentLike.comment_like_id')), 'likes_count']
+                    'created_at',
+                    'updated_at',
                 ],
                 include: [
                     {
-                        model: models.Comment,
-                        as: 'Replies',
-                        required: false,
-                        include: [{
-                            model: models.Account,
-                            required: true,
-                            attributes: [ 'account_id', 'account_name', 'profile_image_id', 'created_at' ],
-                        }]
-                    },
-                    { 
-                        model: models.CommentLike, 
-                        attributes: [] 
-                    },
-                    {
                         model: models.Account,
                         required: true,
-                        attributes: [ 'account_id', 'account_name', 'profile_image_id', 'created_at' ],
+                        attributes: [ 
+                            'account_id', 
+                            'fst_name', 
+                            'lst_name', 
+                        ],
                     }
                 ],
-                offset: offset,
-                limit: limit,
-                order: [ [ 'created_at', 'DESC' ] ],
+                order: [[ 'created_at', 'DESC' ]],
             });
 
             return comments;

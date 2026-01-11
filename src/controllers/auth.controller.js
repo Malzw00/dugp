@@ -6,6 +6,7 @@
 
 const AuthService = require("@services/account/auth.service");
 const { RefreshTokenExpIn } = require('@utils/authToken.util');
+const { Sequelize } = require("sequelize");
 
 const authController = {
 
@@ -108,10 +109,10 @@ const authController = {
                 });
             }
         } catch (error) {
-            if (error.message === "EMAIL_EXISTS") {
+            if (error instanceof Sequelize.UniqueConstraintError) {
                 res.status(409).json({
                     success: false,
-                    message: "This email is already registered.",
+                    message: "البريد الإلكتروني مستخدم بالفعل",
                 });
             } else {
                 res.status(500).json({

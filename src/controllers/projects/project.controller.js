@@ -37,7 +37,8 @@ const projectController = {
                 categoryIds, 
                 departmentId, 
                 collageId, 
-                semester 
+                semester,
+                year
             } = req.query;
 
             const offsetNum = parseInt(offset) || 0;
@@ -54,7 +55,8 @@ const projectController = {
                 categories: categoryIdsArray,
                 collageId: parseInt(collageId),
                 departmentId: parseInt(departmentId),
-                semester
+                semester,
+                year
             });
 
             res.status(200).json({

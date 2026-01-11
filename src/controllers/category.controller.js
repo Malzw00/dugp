@@ -187,16 +187,11 @@ const categoryController = {
     async getProjects(req, res) {
         try {
             const { categoryId } = req.params;
-            const { limit, offset } = req.query;
 
             const categoryIdNum = parseInt(categoryId);
-            const limitNum = limit ? parseInt(limit) : null;
-            const offsetNum = offset ? parseInt(offset) : null;
 
             const projects = await ProjectCategoryService.Category.getProjects({
                 category_id: categoryIdNum,
-                offset: offsetNum,
-                limit: limitNum,
             });
 
             if (!projects) {

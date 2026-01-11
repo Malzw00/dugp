@@ -79,24 +79,23 @@ class ProjectCategoryService {
          *   - Images {Array<{ image_path: string }>}  
          * @throws {AppError} If fetching fails.
          */
-        static async getProjects({ category_id, offset = 0, limit = 10 }) {
+        static async getProjects({ category_id }) {
             try {
-                const projects = await models.Project.findAll({
-                    attributes: ['project_id', 'project_description', 'project_title'],
-                    include: [
-                        {
-                            model: models.Category,
-                            where: { category_id },
-                            attributes: [],
-                            through: { attributes: [] }
-                        },
-                    ],
-                    offset,
-                    limit,
-                    order: [['project_id', 'ASC']]
+                const Category = await models.Category.findByPk(category_id, {
+                    include: {
+                        model: models.Project,
+                        attributes: [
+                            'project_title',
+                            'project_description',
+                            'project_date',
+                            'project_id',
+                            'project_semester',
+                            'updated_at',
+                        ]
+                    },
                 });
 
-                return projects;
+                return Category;
             } catch (error) {
                 throw ProjectCategoryService.#logger.log(this.getProjects.name, error);
             }

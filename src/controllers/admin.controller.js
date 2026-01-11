@@ -211,11 +211,9 @@ const adminController = {
         try {
             const { accountId, permissionId } = req.params;
 
-            const permissionIdNum = parseInt(permissionId);
-
             await AccountPermissionService.delete({
                 account_id: accountId,
-                permission_id: permissionIdNum,
+                permission_id: permissionId,
             });
 
             res.status(200).json({

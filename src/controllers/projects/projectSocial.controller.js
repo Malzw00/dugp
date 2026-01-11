@@ -228,27 +228,13 @@ const projectSocialController = {
      */
     async getAllComments(req, res) {
         try {
-            const { projectId } = req.params;
-            const { offset, limit } = req.query;
+            const { projectId } = req.query;
 
             // Convert values to numbers safely
             const projectIdNum = parseInt(projectId);
-            const offsetNum = parseInt(offset);
-            const limitNum = parseInt(limit);
-
-            // Validate input
-            if (!projectIdNum || isNaN(projectIdNum)) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Invalid projectId parameter.",
-                });
-            }
-
             // Fetch comments from service
             const comments = await CommentService.getProjectComments({
                 project_id: projectIdNum,
-                limit: limitNum,
-                offset: offsetNum,
             });
 
             // Return success response
@@ -329,18 +315,9 @@ const projectSocialController = {
     async addComment(req, res) {
         try {
             const { user } = req;
-            const { projectId } = req.params;
-            const { content } = req.body;
+            const { content, projectId } = req.body;
 
             const projectIdNum = parseInt(projectId);
-
-            // Validate user and project ID
-            if (!user?.accountID || !projectId || isNaN(projectIdNum)) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Invalid user or project ID.",
-                });
-            }
 
             if (!content || typeof content !== "string") {
                 return res.status(400).json({
@@ -384,15 +361,14 @@ const projectSocialController = {
      */
     async removeComment(req, res) {
         try {
-            const { commentId } = req.params;
+            const { commentId } = req.query;
             const { accountID } = req.user
 
-            const accountIdNum = parseInt(accountID);
             const commentIdNum = parseInt(commentId);
 
             const deleted = await CommentService.deleteUserComment({
+                account_id: accountID,
                 comment_id: commentIdNum,
-                account_id: accountIdNum,
             });
 
             res.status(200).json({
